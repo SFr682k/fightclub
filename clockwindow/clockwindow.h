@@ -39,6 +39,9 @@ public:
     void setID(uint);
     void openAboutDialog();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     Ui::ClockWindow *ui;
     QTimer *refreshtimer;

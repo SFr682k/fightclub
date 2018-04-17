@@ -21,7 +21,7 @@
 #include "aboutdialog.h"
 #include "broadcastclient.h"
 
-#include <QDebug>
+
 
 ClockWindow::ClockWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,10 +30,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
     ui->setupUi(this);
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
-        ui->problabel->setText(QApplication::applicationName());
-
-    if(ui->perflabel->text().startsWith("<Version>"))
-        ui->perflabel->setText("Version " + QApplication::applicationVersion());
+        ui->problabel->setText(QApplication::applicationName() + ", Version " + QApplication::applicationVersion());
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
@@ -112,4 +109,20 @@ void ClockWindow::updateTime() {
     if((now.second() % 2) != 0) displayNow[3] = ' ';
 
     ui->lcdtimedisplay->display(displayNow);
+}
+
+
+
+void ClockWindow::resizeEvent(QResizeEvent *event) {
+    QFont phaselabelfont = ui->phaselabel->font();
+    phaselabelfont.setPointSize(2 + height()*0.03);
+
+    QFont infolabelfont = ui->perflabel->font();
+    infolabelfont.setPointSize(2 + height()*0.02);
+
+    ui->phaselabel->setFont(phaselabelfont);
+    ui->problabel->setFont(infolabelfont);
+    ui->perflabel->setFont(infolabelfont);
+
+    QWidget::resizeEvent(event);
 }
