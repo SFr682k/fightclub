@@ -1,0 +1,17 @@
+# Install dependencies:
+# At least version 5.2 of Qt and a small number of other packages.
+#
+# The list of dependencies might be incomplete and some packages are missing.
+# Feel free to contact me if you are not able to build binary files due to missing packages.
+
+apt install build-essential qt5-default qt5-qmake libqt5svg5-dev
+
+
+
+
+# Build the clock window and install the binary on the local system
+
+cd clockwindow
+qmake fightclub-client-clockwindow.pro
+make
+sudo cp fightclubclient-clockwindow /usr/local/bin
