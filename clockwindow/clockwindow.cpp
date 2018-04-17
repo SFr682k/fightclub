@@ -32,6 +32,9 @@ ClockWindow::ClockWindow(QWidget *parent) :
     if(ui->problabel->text().startsWith("<ApplicationName>"))
         ui->problabel->setText(QApplication::applicationName() + ", Version " + QApplication::applicationVersion());
 
+    if(ui->perflabel->text().startsWith("<empty>"))
+        ui->perflabel->setText(" ");
+
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
     acttimer->start(30);
@@ -87,7 +90,9 @@ void ClockWindow::toggleRoomclock(bool showRClock) {
 
 void ClockWindow::updateElapsedTime(int elTime) {
     if (roomclock) return;
-    ui->lcdtimedisplay->display(this->timeToString(elTime));
+    QString displayedTime = timeToString(elTime);
+    ui->lcdtimedisplay->display(displayedTime);
+    ui->lcdtimedisplay->setDigitCount(displayedTime.length());
 }
 
 
@@ -97,7 +102,7 @@ QString ClockWindow::timeToString(int time) {
 
     QString res;
     if(temp.hour() != 0) res = temp.toString("H:mm:ss");
-    else                 res = ' ' + temp.toString("mm:ss") + ' ';
+    else                 res = temp.toString("mm:ss");
 
     return res;
 }
@@ -105,10 +110,11 @@ QString ClockWindow::timeToString(int time) {
 
 void ClockWindow::updateTime() {
     QTime now = QTime::currentTime();
-    QString displayNow = ' ' + now.toString("HH:mm") + ' ';
-    if((now.second() % 2) != 0) displayNow[3] = ' ';
+    QString displayNow = now.toString("HH:mm");
+    if((now.second() % 2) != 0) displayNow[2] = ' ';
 
     ui->lcdtimedisplay->display(displayNow);
+    ui->lcdtimedisplay->setDigitCount(displayNow.length());
 }
 
 
@@ -118,7 +124,7 @@ void ClockWindow::resizeEvent(QResizeEvent *event) {
     phaselabelfont.setPointSize(2 + height()*0.03);
 
     QFont infolabelfont = ui->perflabel->font();
-    infolabelfont.setPointSize(2 + height()*0.02);
+    infolabelfont.setPointSize(4 + height()*0.015);
 
     ui->phaselabel->setFont(phaselabelfont);
     ui->problabel->setFont(infolabelfont);
