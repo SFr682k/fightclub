@@ -21,6 +21,9 @@
 #include "aboutdialog.h"
 #include "broadcastclient.h"
 
+#include <QDebug>
+
+
 
 ClockWindow::ClockWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -108,4 +111,21 @@ void ClockWindow::updateTime() {
     if((now.second() % 2) != 0) displayNow[3] = ' ';
 
     ui->lcdtimedisplay->display(displayNow);
+}
+
+
+
+void ClockWindow::resizeEvent(QResizeEvent *event) {
+    // height();
+    QFont phaselabelfont = ui->phaselabel->font();
+    phaselabelfont.setPointSize(2 + height()*0.03);
+
+    QFont infolabelfont = ui->perflabel->font();
+    infolabelfont.setPointSize(2 + height()*0.02);
+
+    ui->phaselabel->setFont(phaselabelfont);
+    ui->problabel->setFont(infolabelfont);
+    ui->perflabel->setFont(infolabelfont);
+
+    QWidget::resizeEvent(event);
 }
