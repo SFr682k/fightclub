@@ -21,7 +21,6 @@
 #include "aboutdialog.h"
 #include "broadcastclient.h"
 
-#include <QDebug>
 
 ClockWindow::ClockWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,10 +29,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
     ui->setupUi(this);
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
-        ui->problabel->setText(QApplication::applicationName());
-
-    if(ui->perflabel->text().startsWith("<Version>"))
-        ui->perflabel->setText("Version " + QApplication::applicationVersion());
+        ui->problabel->setText(QApplication::applicationName() + ", Version " + QApplication::applicationVersion());
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
