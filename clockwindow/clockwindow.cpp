@@ -21,8 +21,6 @@
 #include "aboutdialog.h"
 #include "broadcastclient.h"
 
-#include <QDebug>
-
 
 
 ClockWindow::ClockWindow(QWidget *parent) :
@@ -116,7 +114,6 @@ void ClockWindow::updateTime() {
 
 
 void ClockWindow::resizeEvent(QResizeEvent *event) {
-    // height();
     QFont phaselabelfont = ui->phaselabel->font();
     phaselabelfont.setPointSize(2 + height()*0.03);
 
