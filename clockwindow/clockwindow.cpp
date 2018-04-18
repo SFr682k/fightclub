@@ -18,9 +18,10 @@
 
 #include "clockwindow.h"
 #include "ui_clockwindow.h"
+
 #include "aboutdialog.h"
 #include "broadcastclient.h"
-
+#include "setupbroadcastdialog.h"
 
 
 ClockWindow::ClockWindow(QWidget *parent) :
@@ -31,6 +32,14 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
         ui->problabel->setText(QApplication::applicationName() + ", Version " + QApplication::applicationVersion());
+
+    if(ui->perflabel->text().startsWith("<empty>"))
+        ui->perflabel->setText(" ");
+
+
+    aboutDialogOpen = false;
+    bcastSettingsOpen = false;
+
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
@@ -66,14 +75,31 @@ ClockWindow::~ClockWindow() {
 }
 
 
+void ClockWindow::openAboutDialog() {
+    if(!aboutDialogOpen) {
+        aboutDialogOpen = true;
+        AboutDialog *ad = new AboutDialog(this);
+        ad->exec();
+        aboutDialogOpen = false;
+    }
+}
+
+
+void ClockWindow::openSetupBCastDialog() {
+    bcastSettingsOpen = true;
+    SetupBroadcastDialog *setupbcastdial = new SetupBroadcastDialog(this);
+    int finished = setupbcastdial->exec();
+    bcastSettingsOpen = false;
+
+    if(finished == QDialog::Accepted) {
+        emit newPort(setupbcastdial->getBroadcastPort());
+        emit newID(setupbcastdial->getBroadcastID());
+    }
+}
+
+
 void ClockWindow::setPort(uint newport) { emit newPort(newport); }
 void ClockWindow::setID(uint newid)     { emit newID(newid); }
-
-
-void ClockWindow::openAboutDialog() {
-    AboutDialog *aboutdialog = new AboutDialog(this);
-    aboutdialog->exec();
-}
 
 
 void ClockWindow::toggleRoomclock(bool showRClock) {
@@ -87,7 +113,9 @@ void ClockWindow::toggleRoomclock(bool showRClock) {
 
 void ClockWindow::updateElapsedTime(int elTime) {
     if (roomclock) return;
-    ui->lcdtimedisplay->display(this->timeToString(elTime));
+    QString displayedTime = timeToString(elTime);
+    ui->lcdtimedisplay->display(displayedTime);
+    ui->lcdtimedisplay->setDigitCount(displayedTime.length());
 }
 
 
@@ -97,7 +125,7 @@ QString ClockWindow::timeToString(int time) {
 
     QString res;
     if(temp.hour() != 0) res = temp.toString("H:mm:ss");
-    else                 res = ' ' + temp.toString("mm:ss") + ' ';
+    else                 res = temp.toString("mm:ss");
 
     return res;
 }
@@ -105,10 +133,11 @@ QString ClockWindow::timeToString(int time) {
 
 void ClockWindow::updateTime() {
     QTime now = QTime::currentTime();
-    QString displayNow = ' ' + now.toString("HH:mm") + ' ';
-    if((now.second() % 2) != 0) displayNow[3] = ' ';
+    QString displayNow = now.toString("HH:mm");
+    if((now.second() % 2) != 0) displayNow[2] = ' ';
 
     ui->lcdtimedisplay->display(displayNow);
+    ui->lcdtimedisplay->setDigitCount(displayNow.length());
 }
 
 
@@ -118,11 +147,41 @@ void ClockWindow::resizeEvent(QResizeEvent *event) {
     phaselabelfont.setPointSize(2 + height()*0.03);
 
     QFont infolabelfont = ui->perflabel->font();
-    infolabelfont.setPointSize(2 + height()*0.02);
+    infolabelfont.setPointSize(4 + height()*0.015);
 
     ui->phaselabel->setFont(phaselabelfont);
     ui->problabel->setFont(infolabelfont);
     ui->perflabel->setFont(infolabelfont);
 
     QWidget::resizeEvent(event);
+}
+
+
+void ClockWindow::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_F1:
+            openAboutDialog();
+            break;
+
+        case Qt::Key_B:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                openSetupBCastDialog();
+            break;
+
+        case Qt::Key_F:
+            setWindowState(Qt::WindowFullScreen);
+            break;
+
+        case Qt::Key_Escape:
+            setWindowState(Qt::WindowMaximized);
+            break;
+
+        case Qt::Key_Q:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                this->close();
+            break;
+
+        default:
+            QWidget::keyPressEvent(event);
+    }
 }

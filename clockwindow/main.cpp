@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Client Clock Window");
-    a.setApplicationVersion("0.4");
+    a.setApplicationVersion("0.5");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("Clock window for the Fightclub Client. May be used on remote machines.");
@@ -49,11 +49,11 @@ int main(int argc, char *argv[])
     ClockWindow w;
     w.show();
 
-
     if(port > 0) w.setPort(port);
     if(id > 0)   w.setID(id);
 
     w.openAboutDialog();
+    w.openSetupBCastDialog();
 
     return a.exec();
 }

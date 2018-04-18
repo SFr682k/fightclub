@@ -20,6 +20,7 @@
 #define CLOCKWINDOW_H
 
 #include <QMainWindow>
+#include <QKeyEvent>
 #include <QString>
 #include <QTime>
 #include <QTimer>
@@ -38,12 +39,16 @@ public:
     void setPort(uint);
     void setID(uint);
     void openAboutDialog();
+    void openSetupBCastDialog();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Ui::ClockWindow *ui;
+    bool aboutDialogOpen;
+    bool bcastSettingsOpen;
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;
