@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
     ClockWindow w;
     w.show();
 
-
     if(port > 0) w.setPort(port);
     if(id > 0)   w.setID(id);
 

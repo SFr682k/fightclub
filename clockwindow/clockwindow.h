@@ -19,7 +19,10 @@
 #ifndef CLOCKWINDOW_H
 #define CLOCKWINDOW_H
 
+#include "aboutdialog.h"
+
 #include <QMainWindow>
+#include <QKeyEvent>
 #include <QString>
 #include <QTime>
 #include <QTimer>
@@ -41,9 +44,11 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Ui::ClockWindow *ui;
+    bool aboutDialogOpen;
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;

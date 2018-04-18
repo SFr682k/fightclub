@@ -18,7 +18,6 @@
 
 #include "clockwindow.h"
 #include "ui_clockwindow.h"
-#include "aboutdialog.h"
 #include "broadcastclient.h"
 
 
@@ -34,6 +33,10 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
     if(ui->perflabel->text().startsWith("<empty>"))
         ui->perflabel->setText(" ");
+
+
+    aboutDialogOpen = false;
+
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
@@ -69,14 +72,18 @@ ClockWindow::~ClockWindow() {
 }
 
 
+void ClockWindow::openAboutDialog() {
+    if(!aboutDialogOpen) {
+        aboutDialogOpen = true;
+        AboutDialog *ad = new AboutDialog(this);
+        ad->exec();
+        aboutDialogOpen = false;
+    }
+}
+
+
 void ClockWindow::setPort(uint newport) { emit newPort(newport); }
 void ClockWindow::setID(uint newid)     { emit newID(newid); }
-
-
-void ClockWindow::openAboutDialog() {
-    AboutDialog *aboutdialog = new AboutDialog(this);
-    aboutdialog->exec();
-}
 
 
 void ClockWindow::toggleRoomclock(bool showRClock) {
@@ -131,4 +138,27 @@ void ClockWindow::resizeEvent(QResizeEvent *event) {
     ui->perflabel->setFont(infolabelfont);
 
     QWidget::resizeEvent(event);
+}
+
+
+void ClockWindow::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_F1:
+            openAboutDialog();
+            break;
+
+        case Qt::Key_B:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+                // FIXME: Open broadcast client settings
+            }
+            break;
+
+        case Qt::Key_Q:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                this->close();
+            break;
+
+        default:
+            QWidget::keyPressEvent(event);
+    }
 }
