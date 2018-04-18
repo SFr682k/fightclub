@@ -153,6 +153,14 @@ void ClockWindow::keyPressEvent(QKeyEvent *event) {
             }
             break;
 
+        case Qt::Key_F:
+            setWindowState(Qt::WindowFullScreen);
+            break;
+
+        case Qt::Key_Escape:
+            setWindowState(Qt::WindowMaximized);
+            break;
+
         case Qt::Key_Q:
             if(QApplication::keyboardModifiers() & Qt::ControlModifier)
                 this->close();
