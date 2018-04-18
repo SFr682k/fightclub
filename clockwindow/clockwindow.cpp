@@ -18,8 +18,10 @@
 
 #include "clockwindow.h"
 #include "ui_clockwindow.h"
-#include "broadcastclient.h"
 
+#include "aboutdialog.h"
+#include "broadcastclient.h"
+#include "setupbroadcastdialog.h"
 
 
 ClockWindow::ClockWindow(QWidget *parent) :
@@ -36,6 +38,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
 
     aboutDialogOpen = false;
+    bcastSettingsOpen = false;
 
 
     QTimer *acttimer = new QTimer();
@@ -78,6 +81,19 @@ void ClockWindow::openAboutDialog() {
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
+    }
+}
+
+
+void ClockWindow::openSetupBCastDialog() {
+    bcastSettingsOpen = true;
+    SetupBroadcastDialog *setupbcastdial = new SetupBroadcastDialog(this);
+    int finished = setupbcastdial->exec();
+    bcastSettingsOpen = false;
+
+    if(finished == QDialog::Accepted) {
+        emit newPort(setupbcastdial->getBroadcastPort());
+        emit newID(setupbcastdial->getBroadcastID());
     }
 }
 
@@ -148,9 +164,8 @@ void ClockWindow::keyPressEvent(QKeyEvent *event) {
             break;
 
         case Qt::Key_B:
-            if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
-                // FIXME: Open broadcast client settings
-            }
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                openSetupBCastDialog();
             break;
 
         case Qt::Key_F:

@@ -19,8 +19,6 @@
 #ifndef CLOCKWINDOW_H
 #define CLOCKWINDOW_H
 
-#include "aboutdialog.h"
-
 #include <QMainWindow>
 #include <QKeyEvent>
 #include <QString>
@@ -41,6 +39,7 @@ public:
     void setPort(uint);
     void setID(uint);
     void openAboutDialog();
+    void openSetupBCastDialog();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -49,6 +48,7 @@ protected:
 private:
     Ui::ClockWindow *ui;
     bool aboutDialogOpen;
+    bool bcastSettingsOpen;
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;

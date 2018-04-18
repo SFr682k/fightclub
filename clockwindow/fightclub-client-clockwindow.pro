@@ -27,16 +27,19 @@ SOURCES += \
     main.cpp \
     clockwindow.cpp \
     broadcastclient.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    setupbroadcastdialog.cpp
 
 HEADERS += \
     clockwindow.h \
     broadcastclient.h \
-    aboutdialog.h
+    aboutdialog.h \
+    setupbroadcastdialog.h
 
 FORMS += \
     clockwindow.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    setupbroadcastdialog.ui
 
 OTHER_FILES += \
     gpl_v3_logo.png
