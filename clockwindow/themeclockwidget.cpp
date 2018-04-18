@@ -185,7 +185,8 @@ void ThemeClockWidget::actRoomclock() {
 
     QTime now = QTime::currentTime();
 
-    hourHand->setRotation(180.0 + 30.0 * (now.hour() + now.minute()/60.0));
+    if(now.second()==59) hourHand->setRotation(180.0 + 30.0 * (now.hour() + (now.minute()+(0.5-0.5*cos(now.msec()/1000.0*3.14159)))/60.0));
+    else                 hourHand->setRotation(180.0 + 30.0 * (now.hour() + now.minute()/60.0));
     
     if(now.second()==59) minuteHand->setRotation(180.0 + now.minute()*6.0 + 6.0*(0.5-0.5*cos(now.msec()/1000.0*3.14159)));
     else                 minuteHand->setRotation(180.0 + now.minute()*6.0);
