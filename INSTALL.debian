@@ -13,6 +13,14 @@ git clone https://github.com/sfr682k/fightclub
 cd fightclub
 
 
+# Build the client and install the binary on the local system
+
+cd client
+qmake fightclub-client.pro
+make
+sudo cp fightclubclient /usr/local/bin
+cd ..
+
 # Build the clock window and install the binary on the local system
 
 cd clockwindow
