@@ -1,0 +1,20 @@
+<FightclubExchangeFile>phases</>
+<ExchangeProtocolVersion>1</>
+<ExchangeFileTitle>Phases for one PF of the IYPT</>
+<ExchangeFileContentDescr>Phases for a physics fight of the IYPT, according to the IYPT Regulations accepted in Singapore 2017</>
+60	0	The Opponent challenges the Reporter for the problem	opp	n
+60	0	The Reporter accepts or rejects the challenge	rep	n
+300	0	Preparation of the Reporter	rep	n
+720	0	Presentation of the report	rep	n
+120	0	Questions of the Opponent to the Reporter	opp	n
+180	0	Preparation of the Opponent	opp	n
+240	0	The Opponent takes the floor	opp	c
+840	0	Discussion between the Reporter and the Opponent	repopp	n
+60	0	The Opponent summarizes the discussion	opp	n
+180	0	Questions of the Reviewer to the Reporter and the Opponent	rev	n
+120	0	Preparation of the Reviewer	rev	n
+240	0	The Reviewer takes the floor	rev	n
+120	0	Concluding remarks of the reporter	rep	n
+300	0	Questions of the Jury	nll	n
+300	0	Grading and Feedback	nll	n
+600	0	Break	nll	r
