@@ -412,3 +412,20 @@ void FightclubClient::openPhasesFile() {
 
 void FightclubClient::unloadStagesFile() { if(continueAndInit()) lstadapt->unloadStagesList(); }
 void FightclubClient::unloadPhasesFile() { if(continueAndInit()) lstadapt->unloadPhasesList(); }
+
+
+
+
+
+
+
+// CLOSE EVENT --------------------------------------------------------------------------
+
+void FightclubClient::closeEvent(QCloseEvent *event) {
+    if(QMessageBox::warning(this,
+            "Close Fightclub Client?",
+            "Do you <i>really</i> want to close Fightclub Client?",
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+        event->accept();
+    else event->ignore();
+}

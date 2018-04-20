@@ -54,6 +54,9 @@ private:
 
     bool continueAndInit();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private slots:
     void openClockWindow();
     void clockWindowClosed();
