@@ -138,3 +138,6 @@ void ClockWindow::keyPressEvent(QKeyEvent *event) {
 
 
 void ClockWindow::closeEvent(QCloseEvent *event) { emit clockwindowClosed(); }
+
+
+void ClockWindow::kill() { this->close(); }

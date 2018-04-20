@@ -36,8 +36,7 @@ class ClockWindow : public QMainWindow
 public:
     explicit ClockWindow(QWidget *parent = 0);
     ~ClockWindow();
-    void setPort(uint);
-    void setID(uint);
+    void kill();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

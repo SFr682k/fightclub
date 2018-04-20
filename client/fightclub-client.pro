@@ -33,7 +33,8 @@ SOURCES += \
     phaselistmodel.cpp \
     stagelistmodel.cpp \
     broadcastserver.cpp \
-    clockwindow.cpp
+    clockwindow.cpp \
+    filepropertyparser.cpp
 
 HEADERS += \
     fightclubclient.h \
@@ -44,7 +45,8 @@ HEADERS += \
     phaselistmodel.h \
     stagelistmodel.h \
     broadcastserver.h \
-    clockwindow.h
+    clockwindow.h \
+    filepropertyparser.h
 
 FORMS += \
     fightclubclient.ui \

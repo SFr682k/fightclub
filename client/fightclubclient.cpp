@@ -19,6 +19,8 @@
 #include "fightclubclient.h"
 #include "ui_fightclubclient.h"
 
+#include "filepropertyparser.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QModelIndex>
@@ -185,6 +187,8 @@ FightclubClient::FightclubClient(QWidget *parent) :
 FightclubClient::~FightclubClient() {
     delete ui;
     delete aboutdlg;
+    delete clockwindow;
+    delete settimedlg;
 }
 
 
@@ -388,9 +392,12 @@ void FightclubClient::openStagesFile() {
                 = new QFileDialog(this, "Select a stages file", previousPath, "Fightclub stages files (*.fcstages)");
 
         if(selectStagesFileDialog->exec()) {
+            FilePropertyParser *fpp = new FilePropertyParser(selectStagesFileDialog->selectedFiles().value(0));
+
             lstadapt->loadStagesListFromFile(selectStagesFileDialog->selectedFiles().value(0));
             previousPath = selectStagesFileDialog->directory().absolutePath();
-            ui->stagesFileTitle->setText(selectStagesFileDialog->selectedFiles().value(0));
+            ui->stagesFileTitle->setText(fpp->getTitle());
+            ui->stagesFileDescr->setText(fpp->getDescription());
         }
     }
 }
@@ -402,9 +409,12 @@ void FightclubClient::openPhasesFile() {
                 = new QFileDialog(this, "Select a phases file", previousPath, "Fightclub phases files (*.fcphases)");
 
         if(selectPhasesFileDialog->exec()) {
+            FilePropertyParser *fpp = new FilePropertyParser(selectPhasesFileDialog->selectedFiles().value(0));
+
             lstadapt->loadPhasesListFromFile(selectPhasesFileDialog->selectedFiles().value(0));
             previousPath = selectPhasesFileDialog->directory().absolutePath();
-            ui->phasesFileTitle->setText(selectPhasesFileDialog->selectedFiles().value(0));
+            ui->phasesFileTitle->setText(fpp->getTitle());
+            ui->phasesFileDescr->setText(fpp->getDescription());
         }
     }
 }
@@ -425,7 +435,8 @@ void FightclubClient::closeEvent(QCloseEvent *event) {
     if(QMessageBox::warning(this,
             "Close Fightclub Client?",
             "Do you <i>really</i> want to close Fightclub Client?",
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
+        clockwindow->kill();
         event->accept();
-    else event->ignore();
+    } else event->ignore();
 }

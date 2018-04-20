@@ -317,7 +317,10 @@ int ListAdapter::loadStagesListFromFile(QString path) {
 
             if(entry.length() > 0
                     && !(entry.startsWith(' ', Qt::CaseInsensitive))
-                    && !(entry.contains("</>")))
+                    && !(entry.contains("<FightclubExchangeFile>", Qt::CaseInsensitive))
+                    && !(entry.contains("<ExchangeProtocolVersion>", Qt::CaseInsensitive))
+                    && !(entry.contains("<ExchangeFileTitle>", Qt::CaseInsensitive))
+                    && !(entry.contains("<ExchangeFileContentDescr>", Qt::CaseInsensitive)))
                 tmplist.append(Stage(splitline.value(0)));
         } else if(splitline.size() > 2) {
             QString label = splitline.value(0);
