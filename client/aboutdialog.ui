@@ -324,8 +324,8 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>508</width>
-            <height>194</height>
+            <width>488</width>
+            <height>234</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -344,7 +344,7 @@ p, li { white-space: pre-wrap; }
            <item>
             <widget class="QLabel" name="label_4">
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sebastian Friedl&lt;/span&gt; &amp;lt;sfr682k@t-online.de&amp;gt;&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Main developer&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Jan Binder&lt;/span&gt; &amp;lt;jan.binder@sfz-bw.de&amp;gt;&lt;br/&gt;Broadcast Server&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Simeon Völkel&lt;/span&gt; &amp;lt;simeon.voelkel@sfz-bw.de&amp;gt;&lt;br/&gt;Broadcast Server&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sebastian Friedl&lt;/span&gt; &amp;lt;sfr682k@t-online.de&amp;gt;&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Main developer&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Jan Binder&lt;/span&gt; &amp;lt;jan.binder@sfz-bw.de&amp;gt;&lt;br/&gt;Broadcast Server, Clock theme&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Felix Engelmann&lt;/span&gt; &amp;lt;felix.engelmann@sfz-bw.de&amp;gt;&lt;br/&gt;Clock theme&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Simeon Völkel&lt;/span&gt; &amp;lt;simeon.voelkel@sfz-bw.de&amp;gt;&lt;br/&gt;Broadcast Server, Clock theme&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
