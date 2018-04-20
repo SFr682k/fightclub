@@ -1,7 +1,7 @@
-<FightclubExchangeFile>phases</>
-<ExchangeProtocolVersion>1</>
-<ExchangeFileTitle>Phases for one PF of the IYPT</>
-<ExchangeFileContentDescr>Phases for a physics fight of the IYPT, according to the IYPT Regulations accepted in Singapore 2017</>
+<FightclubExchangeFile>phases</FightclubExchangeFile>
+<ExchangeProtocolVersion>1</ExchangeProtocolVersion>
+<ExchangeFileTitle>Phases for one PF of the IYPT</ExchangeFileTitle>
+<ExchangeFileContentDescr>Phases for a physics fight of the IYPT, according to the IYPT Regulations accepted in Singapore 2017</ExchangeFileContentDescr>
 60	0	The Opponent challenges the Reporter for the problem	opp	n
 60	0	The Reporter accepts or rejects the challenge	rep	n
 300	0	Preparation of the Reporter	rep	n
