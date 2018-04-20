@@ -19,10 +19,7 @@
 #include "filepropertyparser.h"
 
 #include <QFile>
-#include <QXmlStreamReader>
-
-
-#include <QDebug>
+#include <QTextStream>
 
 
 FilePropertyParser::FilePropertyParser(QString path) {

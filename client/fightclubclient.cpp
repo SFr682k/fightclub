@@ -392,9 +392,17 @@ void FightclubClient::openStagesFile() {
                 = new QFileDialog(this, "Select a stages file", previousPath, "Fightclub stages files (*.fcstages)");
 
         if(selectStagesFileDialog->exec()) {
-            FilePropertyParser *fpp = new FilePropertyParser(selectStagesFileDialog->selectedFiles().value(0));
+            QString file = selectStagesFileDialog->selectedFiles().value(0);
 
-            lstadapt->loadStagesListFromFile(selectStagesFileDialog->selectedFiles().value(0));
+            FilePropertyParser *fpp = new FilePropertyParser(file);
+
+            if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("stages", Qt::CaseInsensitive))) {
+                QMessageBox::critical(this, "Wrong file format",
+                                      "You requested a stages file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+                return;
+            }
+
+            lstadapt->loadStagesListFromFile(file);
             previousPath = selectStagesFileDialog->directory().absolutePath();
             ui->stagesFileTitle->setText(fpp->getTitle());
             ui->stagesFileDescr->setText(fpp->getDescription());
@@ -409,9 +417,17 @@ void FightclubClient::openPhasesFile() {
                 = new QFileDialog(this, "Select a phases file", previousPath, "Fightclub phases files (*.fcphases)");
 
         if(selectPhasesFileDialog->exec()) {
-            FilePropertyParser *fpp = new FilePropertyParser(selectPhasesFileDialog->selectedFiles().value(0));
+            QString file = selectPhasesFileDialog->selectedFiles().value(0);
 
-            lstadapt->loadPhasesListFromFile(selectPhasesFileDialog->selectedFiles().value(0));
+            FilePropertyParser *fpp = new FilePropertyParser(file);
+
+            if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("phases", Qt::CaseInsensitive))) {
+                QMessageBox::critical(this, "Wrong file format",
+                                      "You requested a phases file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+                return;
+            }
+
+            lstadapt->loadPhasesListFromFile(file);
             previousPath = selectPhasesFileDialog->directory().absolutePath();
             ui->phasesFileTitle->setText(fpp->getTitle());
             ui->phasesFileDescr->setText(fpp->getDescription());
