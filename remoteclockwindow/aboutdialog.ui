@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About Fightclub Client Clock Window</string>
+   <string>About Fightclub Remote Clock Window</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -142,8 +142,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>488</width>
-            <height>208</height>
+            <width>508</width>
+            <height>195</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -162,7 +162,7 @@
            <item>
             <widget class="QLabel" name="appdescr">
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub Client Clock Window&lt;/span&gt; provides a clock window for use with &lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub Client&lt;/span&gt;. It can be used either on the machine executing &lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub Client&lt;/span&gt; or any other computer inside the local network.&lt;br/&gt;This application is part of the &lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub &lt;/span&gt;bundle.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub&lt;/span&gt; and related software is designed for use with the International Young Physicists' Tournament (IYPT) as well as national and regional qualifiers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub Remote Clock Window&lt;/span&gt; provides a clock window for use with &lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub Client&lt;/span&gt;. It is designed to run on any other computer inside the local network.&lt;br/&gt;This application is part of the &lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub &lt;/span&gt;bundle.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub&lt;/span&gt; and related software is designed for use with the International Young Physicists' Tournament (IYPT) as well as national and regional qualifiers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -185,7 +185,7 @@
            <item>
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parts of the &lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub Client Clock Window&lt;/span&gt; are based on the &lt;span style=&quot; font-style:italic;&quot;&gt;QIYPTClock Client:&lt;/span&gt;&lt;br/&gt;&lt;a href=&quot;http://github.com/drogenlied/QIYPTClock&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;http://github.com/drogenlied/QIYPTClock&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parts of the &lt;span style=&quot; font-style:italic;&quot;&gt;Fightclub Remote Clock Window&lt;/span&gt; are based on the &lt;span style=&quot; font-style:italic;&quot;&gt;QIYPTClock Client:&lt;/span&gt;&lt;br/&gt;&lt;a href=&quot;http://github.com/drogenlied/QIYPTClock&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;http://github.com/drogenlied/QIYPTClock&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="textInteractionFlags">
               <set>Qt::NoTextInteraction</set>
@@ -334,50 +334,18 @@ p, li { white-space: pre-wrap; }
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QScrollArea" name="authorScrollArea">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+        <widget class="QTextBrowser" name="authorslist">
+         <property name="html">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sebastian Friedl&lt;/span&gt; &amp;lt;sfr682k@t-online.de&amp;gt;&lt;br /&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Main developer&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Jan Binder&lt;/span&gt; &amp;lt;jan.binder@sfz-bw.de&amp;gt;&lt;br /&gt;Broadcast Client, Clock Theme&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Felix Engelmann&lt;/span&gt; &amp;lt;felix.engelmann@sfz-bw.de&amp;gt;&lt;br /&gt;Clock Theme&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Simeon Völkel&lt;/span&gt; &amp;lt;simeon.voelkel@sfz-bw.de&amp;gt;&lt;br /&gt;Broadcast Client, Clock Theme&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-         <property name="lineWidth">
-          <number>0</number>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="authorScrollAreaContent">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>488</width>
-            <height>228</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="listofauthors">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sebastian Friedl&lt;/span&gt; &amp;lt;sfr682k@t-online.de&amp;gt;&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Main developer&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Jan Binder&lt;/span&gt; &amp;lt;jan.binder@sfz-bw.de&amp;gt;&lt;br/&gt;Broadcast Client, Clock Theme&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Felix Engelmann&lt;/span&gt; &amp;lt;felix.engelmann@sfz-bw.de&amp;gt;&lt;br/&gt;Clock Theme&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Simeon Völkel&lt;/span&gt; &amp;lt;simeon.voelkel@sfz-bw.de&amp;gt;&lt;br/&gt;Broadcast Client, Clock Theme&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
         </widget>
        </item>
       </layout>

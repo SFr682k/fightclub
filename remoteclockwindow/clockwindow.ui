@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Fightclub Client Clock Window</string>
+   <string>Fightclub Remote Clock Window</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -127,7 +127,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Waiting for the first stage</string>
+       <string>Waiting for a broadcast</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
