@@ -16,27 +16,25 @@
 ****************************************************************************/
 
 
-#include "fightclubclient.h"
-#include <QApplication>
-#include <QCommandLineParser>
+#ifndef FILEPROPERTYPARSER_H
+#define FILEPROPERTYPARSER_H
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
 
-    a.setApplicationName("Fightclub Client");
-    a.setApplicationVersion("0.2");
+#include <QString>
 
-    QCommandLineParser cmdparser;
-    cmdparser.setApplicationDescription("An enhanced clock system for the IYPT and similar tournaments");
+class FilePropertyParser {
+private:
+    QString fileType;
+    int protocolVersion;
+    QString title;
+    QString description;
 
-    cmdparser.addHelpOption();
-    cmdparser.addVersionOption();
+public:
+    FilePropertyParser(QString);
+    QString getFileType();
+    int getProtocolVersion();
+    QString getTitle();
+    QString getDescription();
+};
 
-    cmdparser.process(a);
-
-    FightclubClient w;
-    w.show();
-
-    return a.exec();
-}
+#endif // FILEPROPERTYPARSER_H

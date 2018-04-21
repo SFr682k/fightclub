@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui svg network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -32,7 +32,9 @@ SOURCES += \
     listadapter.cpp \
     phaselistmodel.cpp \
     stagelistmodel.cpp \
-    broadcastserver.cpp
+    broadcastserver.cpp \
+    clockwindow.cpp \
+    filepropertyparser.cpp
 
 HEADERS += \
     fightclubclient.h \
@@ -42,15 +44,20 @@ HEADERS += \
     listadapter.h \
     phaselistmodel.h \
     stagelistmodel.h \
-    broadcastserver.h
+    broadcastserver.h \
+    clockwindow.h \
+    filepropertyparser.h
 
 FORMS += \
     fightclubclient.ui \
     aboutdialog.ui \
-    settimedialog.ui
+    settimedialog.ui \
+    clockwindow.ui
 
 OTHER_FILES += \
     gpl_v3_logo.png
 
 RESOURCES += \
     resources.qrc
+
+include(themeclockwidget.pri)

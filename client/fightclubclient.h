@@ -24,6 +24,7 @@
 
 #include "aboutdialog.h"
 #include "broadcastserver.h"
+#include "clockwindow.h"
 #include "listadapter.h"
 #include "phasepbar.h"
 #include "settimedialog.h"
@@ -44,6 +45,7 @@ private:
     Ui::FightclubClient *ui;
     AboutDialog *aboutdlg;
     BroadcastServer *bcastsrv;
+    ClockWindow *clockwindow;
     ListAdapter *lstadapt;
     PhasePBar *phpbar;
     SetTimeDialog *settimedlg;
@@ -52,7 +54,13 @@ private:
 
     bool continueAndInit();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private slots:
+    void openClockWindow();
+    void clockWindowClosed();
+
     void toggleStartStopBttn();
     void openSetTimeDialog();
     void propagateStagesList(QAbstractTableModel*);

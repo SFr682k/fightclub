@@ -37,6 +37,7 @@ signals:
     void bcastRequest();
 
 public slots:
+    void enableBroadcast(bool);
     void updatePhaseName(QString);
     void updateProblem(QString);
     void updateElapsedTime(int);
@@ -50,6 +51,7 @@ private slots:
     void broadcast();
 
 private:
+    bool broadcastEnabled;
     QUdpSocket *udpSocket;
     QHostAddress broadcastAddress;
     QString phasename, problem, performers;

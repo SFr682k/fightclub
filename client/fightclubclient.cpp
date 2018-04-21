@@ -19,6 +19,8 @@
 #include "fightclubclient.h"
 #include "ui_fightclubclient.h"
 
+#include "filepropertyparser.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QModelIndex>
@@ -67,9 +69,14 @@ FightclubClient::FightclubClient(QWidget *parent) :
     ui->resettimebttn->setEnabled(false);
     ui->settimebttn->setEnabled(false);
 
+
+
     aboutdlg = new AboutDialog(this);
 
     bcastsrv = new BroadcastServer(this, QHostAddress("127.0.0.1"), 45454, 12345);
+    ui->bcastActivated->setChecked(false);
+    ui->bcastips->setEnabled(false);
+    ui->bcastsettings->setEnabled(false);
     ui->localhost->setChecked(true);
     ui->bcastportsel->setValue(45454);
     ui->bcastidsel->setValue(12345);
@@ -78,6 +85,9 @@ FightclubClient::FightclubClient(QWidget *parent) :
     phpbar = new PhasePBar();
     settimedlg = new SetTimeDialog(this);
 
+    clockwindow = new ClockWindow();
+    connect(ui->openClockWindowBttn, SIGNAL(clicked(bool)), this, SLOT(openClockWindow()));
+    connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
 
 
     connect(lstadapt, SIGNAL(forceInit()), this, SLOT(initialize()));
@@ -129,15 +139,18 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), ui->phaselabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), bcastsrv, SLOT(updatePhaseName(QString)));
+    connect(lstadapt, SIGNAL(phaseNameChanged(QString)), clockwindow, SLOT(phaseNameChanged(QString)));
 
     connect(phpbar, SIGNAL(elapsedTimeUpdate(QString)), ui->elapsedtime, SLOT(display(QString)));
     connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), bcastsrv, SLOT(updateElapsedTime(int)));
+    connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), clockwindow, SLOT(updateElapsedTime(int)));
     connect(lstadapt, SIGNAL(elapsedTimeChanged(int)), phpbar, SLOT(setElapsedTime(int)));
 
     connect(phpbar, SIGNAL(phaseProgressUpdate(double)), this, SLOT(setPhaseProgress(double)));
 
     connect(lstadapt, SIGNAL(maximumTimeChanged(int)), phpbar, SLOT(setMaximumTime(int)));
     connect(lstadapt, SIGNAL(maximumTimeChanged(int)), bcastsrv, SLOT(updateMaximumTime(int)));
+    connect(lstadapt, SIGNAL(maximumTimeChanged(int)), clockwindow, SLOT(updateMaximumTime(int)));
     connect(phpbar, SIGNAL(maximumTimeUpdate(QString)), ui->maxtime, SLOT(display(QString)));
 
     connect(phpbar, SIGNAL(overtimed(int)), lstadapt, SLOT(handleOvertime(int)));
@@ -147,11 +160,16 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), phpbar, SLOT(setRoomclock(bool)));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), bcastsrv, SLOT(updateRClockState(bool)));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), clockwindow, SLOT(toggleRoomclock(bool)));
 
 
 
 
     // BROADCAST TAB --------------------------------------------------------------------
+
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), bcastsrv, SLOT(enableBroadcast(bool)));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastips, SLOT(setEnabled(bool)));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastsettings, SLOT(setEnabled(bool)));
 
     connect(ui->bcastipapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastIP()));
     connect(ui->bcastportapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastPort()));
@@ -177,6 +195,8 @@ FightclubClient::FightclubClient(QWidget *parent) :
 FightclubClient::~FightclubClient() {
     delete ui;
     delete aboutdlg;
+    delete clockwindow;
+    delete settimedlg;
 }
 
 
@@ -216,6 +236,12 @@ bool FightclubClient::continueAndInit() {
 }
 
 
+void FightclubClient::openClockWindow() {
+    clockwindow->show();
+    ui->openClockWindowBttn->setEnabled(false);
+}
+
+void FightclubClient::clockWindowClosed() { ui->openClockWindowBttn->setEnabled(true); }
 
 
 
@@ -374,9 +400,20 @@ void FightclubClient::openStagesFile() {
                 = new QFileDialog(this, "Select a stages file", previousPath, "Fightclub stages files (*.fcstages)");
 
         if(selectStagesFileDialog->exec()) {
-            lstadapt->loadStagesListFromFile(selectStagesFileDialog->selectedFiles().value(0));
+            QString file = selectStagesFileDialog->selectedFiles().value(0);
+
+            FilePropertyParser *fpp = new FilePropertyParser(file);
+
+            if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("stages", Qt::CaseInsensitive))) {
+                QMessageBox::critical(this, "Wrong file format",
+                                      "You requested a stages file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+                return;
+            }
+
+            lstadapt->loadStagesListFromFile(file);
             previousPath = selectStagesFileDialog->directory().absolutePath();
-            ui->stagesFileTitle->setText(selectStagesFileDialog->selectedFiles().value(0));
+            ui->stagesFileTitle->setText(fpp->getTitle());
+            ui->stagesFileDescr->setText(fpp->getDescription());
         }
     }
 }
@@ -388,9 +425,20 @@ void FightclubClient::openPhasesFile() {
                 = new QFileDialog(this, "Select a phases file", previousPath, "Fightclub phases files (*.fcphases)");
 
         if(selectPhasesFileDialog->exec()) {
-            lstadapt->loadPhasesListFromFile(selectPhasesFileDialog->selectedFiles().value(0));
+            QString file = selectPhasesFileDialog->selectedFiles().value(0);
+
+            FilePropertyParser *fpp = new FilePropertyParser(file);
+
+            if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("phases", Qt::CaseInsensitive))) {
+                QMessageBox::critical(this, "Wrong file format",
+                                      "You requested a phases file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+                return;
+            }
+
+            lstadapt->loadPhasesListFromFile(file);
             previousPath = selectPhasesFileDialog->directory().absolutePath();
-            ui->phasesFileTitle->setText(selectPhasesFileDialog->selectedFiles().value(0));
+            ui->phasesFileTitle->setText(fpp->getTitle());
+            ui->phasesFileDescr->setText(fpp->getDescription());
         }
     }
 }
@@ -398,3 +446,21 @@ void FightclubClient::openPhasesFile() {
 
 void FightclubClient::unloadStagesFile() { if(continueAndInit()) lstadapt->unloadStagesList(); }
 void FightclubClient::unloadPhasesFile() { if(continueAndInit()) lstadapt->unloadPhasesList(); }
+
+
+
+
+
+
+
+// CLOSE EVENT --------------------------------------------------------------------------
+
+void FightclubClient::closeEvent(QCloseEvent *event) {
+    if(QMessageBox::warning(this,
+            "Close Fightclub Client?",
+            "Do you <i>really</i> want to close Fightclub Client?",
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
+        clockwindow->kill();
+        event->accept();
+    } else event->ignore();
+}

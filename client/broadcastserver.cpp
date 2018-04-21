@@ -26,7 +26,9 @@
 BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned int prt, unsigned int sig) :
     QObject(parent)
 {
-    udpSocket = new QUdpSocket(this);
+    udpSocket = nullptr;
+    broadcastEnabled = false;
+
     if(prt > 0) port = prt%65536;
     else        port = 45454;
 
@@ -42,6 +44,12 @@ BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned in
 
 BroadcastServer::~BroadcastServer(){
     delete udpSocket;
+}
+
+
+void BroadcastServer::enableBroadcast(bool enable) {
+    broadcastEnabled = enable;
+    if(broadcastEnabled) bcastRequest();
 }
 
 
@@ -94,6 +102,10 @@ void BroadcastServer::setSignature(unsigned int sig) {
 
 
 void BroadcastServer::broadcast() {
+    if(!broadcastEnabled) return;
+
+    if(udpSocket == nullptr) udpSocket = new QUdpSocket(this);
+
     QByteArray datagram;
     QDataStream dgstream(&datagram, QIODevice::ReadWrite);
     dgstream << (quint32)signature;
