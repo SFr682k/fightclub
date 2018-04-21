@@ -1,3 +1,20 @@
+## About Fightclub
+Fightclub aims to get an enhanced clock system for the [International Young Physicist's Tournament (IYPT)](http://iypt.org).  
+Currently, heavy development is in progress, so design, workflow and requirements may change between two version.
+
+
+Fightclub currently consists of the following components:
+
+ - *Fightclub Client*, an application for timing a physics fight.
+ - *Fightclub Client Clock Window*, a remote clock window for use on remote machines inside the local network.
+
+
+It is planned to add these components:
+
+ - A remote clock window displaying the state of multiple clients
+
+
+
 ## Fightclub Client
 
 ### Screenshots
@@ -23,9 +40,9 @@ Please review the following information to ensure the GNU General Public License
 ### Third party libraries
 Fightclub Client uses:
 
-  - the Qt framework,
-  - the “Breeze” icon theme and
-  - some components of the [QIYPTClock](https://github.com/drogenlied/QIYPTClock)
+ - the Qt framework,
+ - the “Breeze” icon theme and
+ - some components of the [QIYPTClock](https://github.com/drogenlied/QIYPTClock)
 
 The respective copyright holders are listed in the headers of the source files and in the application's “About” dialog.
   
