@@ -976,9 +976,9 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
-         <widget class="QLabel" name="bcastdescr">
+         <widget class="QCheckBox" name="bcastActivated">
           <property name="text">
-           <string>Settings for broadcasts to the Fightclub Client Clock Window:</string>
+           <string>Activate broadcast</string>
           </property>
          </widget>
         </item>

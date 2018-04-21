@@ -69,9 +69,14 @@ FightclubClient::FightclubClient(QWidget *parent) :
     ui->resettimebttn->setEnabled(false);
     ui->settimebttn->setEnabled(false);
 
+
+
     aboutdlg = new AboutDialog(this);
 
     bcastsrv = new BroadcastServer(this, QHostAddress("127.0.0.1"), 45454, 12345);
+    ui->bcastActivated->setChecked(false);
+    ui->bcastips->setEnabled(false);
+    ui->bcastsettings->setEnabled(false);
     ui->localhost->setChecked(true);
     ui->bcastportsel->setValue(45454);
     ui->bcastidsel->setValue(12345);
@@ -81,7 +86,6 @@ FightclubClient::FightclubClient(QWidget *parent) :
     settimedlg = new SetTimeDialog(this);
 
     clockwindow = new ClockWindow();
-
     connect(ui->openClockWindowBttn, SIGNAL(clicked(bool)), this, SLOT(openClockWindow()));
     connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
 
@@ -162,6 +166,10 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
 
     // BROADCAST TAB --------------------------------------------------------------------
+
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), bcastsrv, SLOT(enableBroadcast(bool)));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastips, SLOT(setEnabled(bool)));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastsettings, SLOT(setEnabled(bool)));
 
     connect(ui->bcastipapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastIP()));
     connect(ui->bcastportapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastPort()));
