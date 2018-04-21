@@ -1466,6 +1466,7 @@
                 <widget class="QLabel" name="phasesFileDescr">
                  <property name="font">
                   <font>
+                   <pointsize>10</pointsize>
                    <italic>true</italic>
                   </font>
                  </property>
@@ -1557,6 +1558,7 @@
                 <widget class="QLabel" name="stagesFileDescr">
                  <property name="font">
                   <font>
+                   <pointsize>10</pointsize>
                    <italic>true</italic>
                   </font>
                  </property>
