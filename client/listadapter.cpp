@@ -267,6 +267,11 @@ void ListAdapter::setPhaseProperties() {
 
 
 void ListAdapter::handleOvertime(int overtimed) {
+    if(currentPhase < 0) {
+        emit overtimeCountdownChanged("    ");
+        return;
+    }
+
     Phase phase = phaselistmodel->getPhasesList().value(currentPhase);
 
     if(!phase.getAutoadvance() || overtimed < -60000) {
