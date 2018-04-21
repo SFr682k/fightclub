@@ -1,37 +1,31 @@
-## Welcome to GitHub Pages
+## Fightclub Client
 
-You can use the [editor on GitHub](https://github.com/SFr682k/fightclub/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+### Screenshots
+Fightclub Client is equipped with a clear, intuitive interface for managing the physics fight.  
+![Fightclub Client control interface](docs/screenshot-client.png)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+During a physics fight, the embedded clock window displays elapsed time as well as the well-known “progress pie-chart.”  
+![The clock window during a physics fight](docs/screenshot-clockwindow.png)
 
-### Markdown
+For other points of order, the current time may be displayed.  
+![The clock window during a break](docs/screenshot-roomclock.png)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+## Legal Notes
+### License
+Fightclub is licensed under version 3 of the GNU General Public License.  
+Please review the following information to ensure the GNU General Public License version 3.0 requirements will be met:
+[http://www.gnu.org/copyleft/gpl.html](http://www.gnu.org/copyleft/gpl.html)
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
+### Third party libraries
+Fightclub Client uses:
 
-[Link](url) and ![Image](src)
-```
+  - the Qt framework,
+  - the “Breeze” icon theme and
+  - some components of the [QIYPTClock](https://github.com/drogenlied/QIYPTClock)
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/SFr682k/fightclub/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+The respective copyright holders are listed in the headers of the source files and in the application's “About” dialog.
+  
