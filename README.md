@@ -1,10 +1,11 @@
-*Current stable, distributed versions:*  
-Client 0.2, Remote Clock Window 0.6
+#### Current stable, distributed versions:
+ - Client 0.2
+ - Remote Clock Window 0.6
 
 
 ## About Fightclub
-Fightclub aims to get an enhanced clock system for the [International Young Physicist's Tournament (IYPT)](http://iypt.org).  
-Currently, heavy development is in progress, so design, workflow and requirements may change between two versions.
+Fightclub aims to become an enhanced clock system for the [International Young Physicist's Tournament (IYPT)](http://iypt.org).
+Currently, heavy development is in progress, so design, workflow and requirements may change between two versions and result in incompatibilities.
 
 
 Fightclub currently consists of the following components:
@@ -13,7 +14,7 @@ Fightclub currently consists of the following components:
  - *Fightclub Remote Clock Window*, a remote clock window for use on remote machines inside the local network.
 
 
-It is planned to add these components:
+Following components are planned to be added:
 
  - A remote clock window displaying the state of multiple clients
 
@@ -59,9 +60,25 @@ File extension | `.fcstages`
 `<ExchangeProtocolVersion>` | `1`
 
 
-##### General Syntax
 
+
+#### Files specifying phases
+
+File extension | `.fcphases`
+`<FightclubExchangeFile>` | `phases`
+`<ExchangeProtocolVersion>` | `1`
+
+
+##### General Syntax
     duration [sec] \t overtime [sec] \t title [string] \t performances [string] \t options [string]
+    
+    
+ - `duration`: the maximum duration of the phase in seconds
+ - `overtime`: the maximum allowed overtime in seconds
+ - `title`: the title of the phase as displayed
+ - `performances`: the roles performing during this phase
+ - `options`: futher configuration of the phase
+    
 
 You may omit
 
@@ -72,24 +89,22 @@ Lines consisting of less than three tabular-separated columns are treated as com
 
     
 ##### Allowed values for `performances`
+ - `rep`: the Reporter is performing during the current phase
+ - `opp`: the Opponent is performing during the current phase
+ - `rev`: the Reviewer is performing during the curr
+ - `nll`: none of the three listed above are performing in the current phase
 
-    rep   reporter
-    opp   opponent
-    rev   reviewer
-    nll   none of the three listed above
-
-You have to specify *at least one* of these values or `nll`
+You have to specify *at least one* of these values, including `nll`. Values can be combined, e.g. one may use `repopp`
+for the discussion phase.
     
 ##### Available `options`
-One of the following available options has to be specified:
+ - `a`: Autoadvance to the next phase, if maximum duration *and* allowed overtime have elapsed
+ - `c`: Carry the *whole elapsed* time to the next phase
+ - `o`: Only carry the elapsed overtime to the next phase
+ - `r`: Show the roomclock. Use this option only for phases with no maximum duration.
+ - `n`: Do not use any options and behave like a “normal” phase.
 
-    a     autoadvance
-    c     carry time (including overtime)
-    o     carry overtime, but not passed time
-    r     roomclock
-    n     no special options
-
-Again, you have to specify *at least one* of these values or `n`
+Again, you have to specify *at least one* of these values, including `n`.
 
 ##### Examples
 The following lines represent only single lines of a `phases` file. As above, `\t` represents a tabstopp:
@@ -104,11 +119,7 @@ For further examples see the phases files inside the `sample-files` directory.
 
 
 
-#### Files specifying phases
 
-File extension | `.fcphases`
-`<FightclubExchangeFile>` | `phases`
-`<ExchangeProtocolVersion>` | `1`
 
 
 
