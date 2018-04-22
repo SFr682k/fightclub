@@ -1,4 +1,4 @@
-*Current stable, distributed versions:*
+*Current stable, distributed versions:*  
 Client 0.2, Remote Clock Window 0.6
 
 
@@ -44,10 +44,12 @@ to the first lines of a data file:
     <ExchangeFileTitle>Stages for some tournament</ExchangeFileTitle>
     <ExchangeFileContentDescr>This is only an example with metasyntactical values</ExchangeFileContentDescr>
     
-*Note:*  
+*Note:*
  - The tags are *case sensitive*: `<FightclubExchangeFile>` gets recognized, while `<FIGHTCLUBexchangefile>` does not.
- - Line breaks inside a tag are *not* allowed; the whole tag must be on the same line.
+ - Line breaks inside a tag are *not* allowed; the whole tag must be opened and closed on the same line.
  - The “proper” values for `<FightclubExchangeFile>` and `<ExchangeProtocolVersion>` depend on the exchange file and are listed below
+
+As long as not being stated otherwise, `\t` represents a tabstopp. It is *not* possible to use spaces for indentation.
 
 
 #### Files specifying stages
@@ -55,6 +57,51 @@ to the first lines of a data file:
 File extension | `.fcstages`
 `<FightclubExchangeFile>` | `stages`
 `<ExchangeProtocolVersion>` | `1`
+
+
+##### General Syntax
+
+    duration [sec] \t overtime [sec] \t title [string] \t performances [string] \t options [string]
+
+You may omit
+
+ - the `options` column or
+ - the `performances` column together with the `options` column, but *not* the `performances` column alone.
+
+Lines consisting of less than three tabular-separated columns are treated as comments and ignored.
+
+    
+##### Allowed values for `performances`
+
+    rep   reporter
+    opp   opponent
+    rev   reviewer
+    nll   none of the three listed above
+
+You have to specify *at least one* of these values or `nll`
+    
+##### Available `options`
+One of the following available options has to be specified:
+
+    a     autoadvance
+    c     carry time (including overtime)
+    o     carry overtime, but not passed time
+    r     roomclock
+    n     no special options
+
+Again, you have to specify *at least one* of these values or `n`
+
+##### Examples
+The following lines represent only single lines of a `phases` file. As above, `\t` represents a tabstopp:
+
+    720000  \t 0  \t Presentation of the report                        \t rep     \t n
+    240000  \t 0  \t The Opponent takes the floor                      \t opp     \t c
+    840000  \t 0  \t Discussion between the Reporter and the Opponent  \t repopp  \t n
+    120000  \t 0  \t Preparation of the Reviewer                       \t rev     \t n
+    1000    \t 0  \t Pause                                             \t nll     \t r
+
+For further examples see the phases files inside the `sample-files` directory.
+
 
 
 #### Files specifying phases
