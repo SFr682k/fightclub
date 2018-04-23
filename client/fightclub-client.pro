@@ -35,7 +35,8 @@ SOURCES += \
     broadcastserver.cpp \
     clockwindow.cpp \
     filepropertyparser.cpp \
-    problemadapter.cpp
+    problemadapter.cpp \
+    problemitemlistmodel.cpp
 
 HEADERS += \
     fightclubclient.h \
@@ -48,7 +49,8 @@ HEADERS += \
     broadcastserver.h \
     clockwindow.h \
     filepropertyparser.h \
-    problemadapter.h
+    problemadapter.h \
+    problemitemlistmodel.h
 
 FORMS += \
     fightclubclient.ui \

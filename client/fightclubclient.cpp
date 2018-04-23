@@ -88,6 +88,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     lstadapt = new ListAdapter();
     phpbar = new PhasePBar();
+    probadapt = new ProblemAdapter();
     settimedlg = new SetTimeDialog(this);
 
     clockwindow = new ClockWindow();
@@ -466,7 +467,7 @@ void FightclubClient::openProblemsFile() {
                 return;
             }
 
-            // TODO: Actually *load* the problems file
+            probadapt->loadProblemsFromFile(file);
             previousPath = selectPhasesFileDialog->directory().absolutePath();
             ui->problemsFileTitle->setText(fpp->getTitle());
             ui->problemsFileDescr->setText(fpp->getDescription());

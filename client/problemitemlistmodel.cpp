@@ -16,24 +16,13 @@
 ****************************************************************************/
 
 
-#ifndef PROBLEMADAPTER_H
-#define PROBLEMADAPTER_H
+#include "problemitemlistmodel.h"
 
-#include <problemitemlistmodel.h>
 
-#include <QObject>
+Problem::Problem(int problemnr, QString problemtitle) {}
 
-class ProblemAdapter : public QObject
+
+ProblemItemListModel::ProblemItemListModel(QObject *parent) : QAbstractItemModel(parent)
 {
-    Q_OBJECT
 
-public:
-    explicit ProblemAdapter(QObject *parent = nullptr);
-    int loadProblemsFromFile(QString);
-
-signals:
-
-public slots:
-};
-
-#endif // PROBLEMADAPTER_H
+}

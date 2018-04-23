@@ -27,6 +27,7 @@
 #include "clockwindow.h"
 #include "listadapter.h"
 #include "phasepbar.h"
+#include "problemadapter.h"
 #include "settimedialog.h"
 
 namespace Ui {
@@ -48,6 +49,7 @@ private:
     ClockWindow *clockwindow;
     ListAdapter *lstadapt;
     PhasePBar *phpbar;
+    ProblemAdapter *probadapt;
     SetTimeDialog *settimedlg;
 
     QString previousPath;
