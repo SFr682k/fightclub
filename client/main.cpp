@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Client");
-    a.setApplicationVersion("0.2");
+    a.setApplicationVersion("0.3alpha");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("An enhanced clock system for the IYPT and similar tournaments");

@@ -57,13 +57,18 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     ui->listofstages->setEnabled(false);
     ui->listofphases->setEnabled(false);
+    ui->problemcombobox->setEnabled(false);
+    ui->problemaccepted->setEnabled(false);
+    ui->problemrejected->setEnabled(false);
 
     ui->unloadStagesFile->setEnabled(false);
     ui->unloadPhasesFile->setEnabled(false);
+    ui->unloadProblemsFile->setEnabled(false);
 
     ui->dataSetDescr->setText(" ");
     ui->stagesFileDescr->setText(" ");
     ui->phasesFileDescr->setText(" ");
+    ui->problemsFileDescr->setText(" ");
 
     ui->startstopbttn->setEnabled(false);
     ui->resettimebttn->setEnabled(false);
@@ -189,6 +194,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(ui->unloadStagesFile, SIGNAL(clicked(bool)), this, SLOT(unloadStagesFile()));
     connect(ui->loadPhasesFile, SIGNAL(clicked(bool)), this, SLOT(openPhasesFile()));
     connect(ui->unloadPhasesFile, SIGNAL(clicked(bool)), this, SLOT(unloadPhasesFile()));
+    connect(ui->loadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(openProblemsFile()));
 }
 
 
@@ -439,6 +445,31 @@ void FightclubClient::openPhasesFile() {
             previousPath = selectPhasesFileDialog->directory().absolutePath();
             ui->phasesFileTitle->setText(fpp->getTitle());
             ui->phasesFileDescr->setText(fpp->getDescription());
+        }
+    }
+}
+
+
+void FightclubClient::openProblemsFile() {
+    if(continueAndInit()) {
+        QFileDialog *selectPhasesFileDialog
+                = new QFileDialog(this, "Select a phases file", previousPath, "Fightclub problems files (*.fcproblems)");
+
+        if(selectPhasesFileDialog->exec()) {
+            QString file = selectPhasesFileDialog->selectedFiles().value(0);
+
+            FilePropertyParser *fpp = new FilePropertyParser(file);
+
+            if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("problems", Qt::CaseInsensitive))) {
+                QMessageBox::critical(this, "Wrong file format",
+                                      "You requested a problems file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+                return;
+            }
+
+            // TODO: Actually *load* the problems file
+            previousPath = selectPhasesFileDialog->directory().absolutePath();
+            ui->problemsFileTitle->setText(fpp->getTitle());
+            ui->problemsFileDescr->setText(fpp->getDescription());
         }
     }
 }
