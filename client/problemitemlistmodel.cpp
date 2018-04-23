@@ -19,10 +19,59 @@
 #include "problemitemlistmodel.h"
 
 
-Problem::Problem(int problemnr, QString problemtitle) {}
+#include <QDebug>
+
+Problem::Problem(int problemnr, QString problemtitle) {
+    number = problemnr;
+    title = problemtitle;
+}
 
 
-ProblemItemListModel::ProblemItemListModel(QObject *parent) : QAbstractItemModel(parent)
-{
+int Problem::getNumber() { return number; }
+QString Problem::getTitle() { return title; }
 
+
+
+
+
+ProblemItemListModel::ProblemItemListModel(QObject *parent) : QAbstractTableModel(parent) { }
+
+ProblemItemListModel::ProblemItemListModel(QList<Problem> problems, QObject *parent) : QAbstractTableModel(parent)
+    { listofproblems = problems; }
+
+
+
+int ProblemItemListModel::rowCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return listofproblems.length();
+}
+
+
+int ProblemItemListModel::columnCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return 3;
+}
+
+
+QVariant ProblemItemListModel::data(const QModelIndex &index, int role) const {
+    if(!index.isValid()) return QVariant();
+    if(index.row() >= listofproblems.size() || index.row() < 0) return QVariant();
+
+    if(role == Qt::DisplayRole) {
+        Problem problem = listofproblems.at(index.row());
+
+        switch(index.column()) {
+            default:
+                return QString::number(problem.getNumber()) + ". " + problem.getTitle();
+                break;
+            case 1:
+                return problem.getNumber();
+                break;
+            case 2:
+                return problem.getTitle();
+                break;
+        }
+    }
+
+    return QVariant();
 }

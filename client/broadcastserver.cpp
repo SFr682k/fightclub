@@ -23,6 +23,8 @@
 #include <QDataStream>
 #include <QtNetwork/QUdpSocket>
 
+#include <QDebug>
+
 BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned int prt, unsigned int sig) :
     QObject(parent)
 {

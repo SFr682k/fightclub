@@ -19,11 +19,13 @@
 #ifndef PROBLEMITEMLISTMODEL_H
 #define PROBLEMITEMLISTMODEL_H
 
-#include <QAbstractItemModel>
+#include <QAbstractTableModel>
 
 class Problem {
 public:
     Problem(int, QString);
+    int getNumber();
+    QString getTitle();
 
 private:
     int number;
@@ -31,10 +33,21 @@ private:
 };
 
 
-class ProblemItemListModel : public QAbstractItemModel {
+
+class ProblemItemListModel : public QAbstractTableModel {
     Q_OBJECT
+
 public:
     explicit ProblemItemListModel(QObject *parent = nullptr);
+    explicit ProblemItemListModel(QList<Problem>, QObject *parent = nullptr);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+
+private:
+    QList<Problem> listofproblems;
+
+
 };
 
 #endif // PROBLEMITEMLISTMODEL_H

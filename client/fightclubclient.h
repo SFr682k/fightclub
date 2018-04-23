@@ -20,7 +20,7 @@
 #define FIGHTCLUBCLIENT_H
 
 #include <QMainWindow>
-#include <QStringListModel>
+#include <QAbstractTableModel>
 
 #include "aboutdialog.h"
 #include "broadcastserver.h"
@@ -75,6 +75,8 @@ private slots:
     void setCurrPhaseAAdv(bool);
     void setCurrPhaseCarry(bool);
     void setCurrPhaseOCarry(bool);
+
+    void propagateProblemsList(int);
 
     void setBroadcastIP();
     void setBroadcastPort();

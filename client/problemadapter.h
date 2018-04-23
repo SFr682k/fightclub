@@ -23,6 +23,8 @@
 
 #include <QObject>
 
+#include <QAbstractTableModel>
+
 class ProblemAdapter : public QObject
 {
     Q_OBJECT
@@ -30,10 +32,12 @@ class ProblemAdapter : public QObject
 public:
     explicit ProblemAdapter(QObject *parent = nullptr);
     int loadProblemsFromFile(QString);
+    QAbstractTableModel* getProblemList(int);
 
-signals:
+private:
+    ProblemItemListModel *problemlist;
 
-public slots:
+
 };
 
 #endif // PROBLEMADAPTER_H

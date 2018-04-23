@@ -54,6 +54,8 @@ signals:
     void enableNextPhaseButton(bool);
     void currentStageIsRCS(bool);
 
+    void currentProblemChanged(int);
+
     void prevPhaseAAdv(bool);
     void prevPhaseCarry(bool);
     void prevPhaseOCarry(bool);

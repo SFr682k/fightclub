@@ -168,6 +168,9 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), bcastsrv, SLOT(updateRClockState(bool)));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), clockwindow, SLOT(toggleRoomclock(bool)));
 
+    connect(lstadapt, SIGNAL(currentProblemChanged(int)), this, SLOT(propagateProblemsList(int)));
+    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), bcastsrv, SLOT(updateProblem(QString)));
+    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clockwindow, SLOT(problemChanged(QString)));
 
 
 
@@ -368,6 +371,14 @@ void FightclubClient::setPhaseProgress(double progress) {
 }
 
 
+void FightclubClient::propagateProblemsList(int problem) {
+    QAbstractTableModel* model = probadapt->getProblemList(problem);
+
+    ui->problemcombobox->setEnabled(model->rowCount() > 1);
+    ui->problemcombobox->setModel(model);
+}
+
+
 
 
 
@@ -453,11 +464,11 @@ void FightclubClient::openPhasesFile() {
 
 void FightclubClient::openProblemsFile() {
     if(continueAndInit()) {
-        QFileDialog *selectPhasesFileDialog
-                = new QFileDialog(this, "Select a phases file", previousPath, "Fightclub problems files (*.fcproblems)");
+        QFileDialog *selectProblemsFileDialog
+                = new QFileDialog(this, "Select a problems file", previousPath, "Fightclub problems files (*.fcproblems)");
 
-        if(selectPhasesFileDialog->exec()) {
-            QString file = selectPhasesFileDialog->selectedFiles().value(0);
+        if(selectProblemsFileDialog->exec()) {
+            QString file = selectProblemsFileDialog->selectedFiles().value(0);
 
             FilePropertyParser *fpp = new FilePropertyParser(file);
 
@@ -468,9 +479,11 @@ void FightclubClient::openProblemsFile() {
             }
 
             probadapt->loadProblemsFromFile(file);
-            previousPath = selectPhasesFileDialog->directory().absolutePath();
+            previousPath = selectProblemsFileDialog->directory().absolutePath();
             ui->problemsFileTitle->setText(fpp->getTitle());
             ui->problemsFileDescr->setText(fpp->getDescription());
+
+            lstadapt->initialize();
         }
     }
 }

@@ -25,7 +25,7 @@
 #include <QDebug>
 
 ProblemAdapter::ProblemAdapter(QObject *parent) : QObject(parent) {
-
+    problemlist = new ProblemItemListModel();
 }
 
 
@@ -44,12 +44,23 @@ int ProblemAdapter::loadProblemsFromFile(QString path) {
 
         if(splitline.size() > 1)
             tmplist.append(Problem(splitline.value(0).toInt(), splitline.value(1)));
-
-
     }
 
+    problemlist = new ProblemItemListModel(tmplist);
     file.close();
 
 
     return 0;
 }
+
+
+
+QAbstractTableModel* ProblemAdapter::getProblemList(int nr) {
+    if(nr == -1) return problemlist;
+
+    QList<Problem> tmplist;
+    return new ProblemItemListModel(tmplist);
+}
+
+
+
