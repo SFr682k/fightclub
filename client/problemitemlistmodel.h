@@ -24,7 +24,7 @@
 class Problem {
 public:
     Problem(int, QString);
-    int getNumber();
+    int getNumber() const;
     QString getTitle();
 
 private:
@@ -43,6 +43,7 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
+    Problem getProblem(int);
 
 private:
     QList<Problem> listofproblems;

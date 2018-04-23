@@ -374,8 +374,9 @@ void FightclubClient::setPhaseProgress(double progress) {
 void FightclubClient::propagateProblemsList(int problem) {
     QAbstractTableModel* model = probadapt->getProblemList(problem);
 
-    ui->problemcombobox->setEnabled(model->rowCount() > 1);
+    ui->problemcombobox->setEnabled(model->rowCount() >= 0);
     ui->problemcombobox->setModel(model);
+    if(problem < 0) ui->problemcombobox->setCurrentIndex(-1);
 }
 
 

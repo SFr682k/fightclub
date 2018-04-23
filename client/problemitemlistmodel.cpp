@@ -27,7 +27,7 @@ Problem::Problem(int problemnr, QString problemtitle) {
 }
 
 
-int Problem::getNumber() { return number; }
+int Problem::getNumber() const { return number; }
 QString Problem::getTitle() { return title; }
 
 
@@ -74,4 +74,13 @@ QVariant ProblemItemListModel::data(const QModelIndex &index, int role) const {
     }
 
     return QVariant();
+}
+
+
+Problem ProblemItemListModel::getProblem(int nr) {
+    for(int i = 0; i < listofproblems.length(); i++) {
+        if(listofproblems.at(i).getNumber() == nr) return listofproblems.at(i);
+    }
+
+    return Problem(nr, QString("???"));
 }
