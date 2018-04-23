@@ -34,7 +34,8 @@ SOURCES += \
     stagelistmodel.cpp \
     broadcastserver.cpp \
     clockwindow.cpp \
-    filepropertyparser.cpp
+    filepropertyparser.cpp \
+    problemadapter.cpp
 
 HEADERS += \
     fightclubclient.h \
@@ -46,7 +47,8 @@ HEADERS += \
     stagelistmodel.h \
     broadcastserver.h \
     clockwindow.h \
-    filepropertyparser.h
+    filepropertyparser.h \
+    problemadapter.h
 
 FORMS += \
     fightclubclient.ui \
