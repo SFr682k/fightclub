@@ -18,7 +18,7 @@ cd fightclub
 cd client
 qmake fightclub-client.pro
 make
-sudo cp fightclubclient /usr/local/bin
+sudo cp fightclub-client /usr/local/bin
 cd ..
 
 # Build the clock window and install the binary on the local system
