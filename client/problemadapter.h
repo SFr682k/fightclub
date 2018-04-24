@@ -32,7 +32,9 @@ class ProblemAdapter : public QObject
 public:
     explicit ProblemAdapter(QObject *parent = nullptr);
     int loadProblemsFromFile(QString);
+    void unloadProblemsList();
     QAbstractTableModel* getProblemList(int);
+    int getProblemCount();
 
 private:
     ProblemItemListModel *problemlist;

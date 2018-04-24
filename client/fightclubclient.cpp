@@ -199,6 +199,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(ui->loadPhasesFile, SIGNAL(clicked(bool)), this, SLOT(openPhasesFile()));
     connect(ui->unloadPhasesFile, SIGNAL(clicked(bool)), this, SLOT(unloadPhasesFile()));
     connect(ui->loadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(openProblemsFile()));
+    connect(ui->unloadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(unloadProblemsFile()));
 }
 
 
@@ -374,7 +375,7 @@ void FightclubClient::setPhaseProgress(double progress) {
 void FightclubClient::propagateProblemsList(int problem) {
     QAbstractTableModel* model = probadapt->getProblemList(problem);
 
-    ui->problemcombobox->setEnabled(model->rowCount() >= 0);
+    ui->problemcombobox->setEnabled(model->rowCount() > 0);
     ui->problemcombobox->setModel(model);
     if(problem < 0) ui->problemcombobox->setCurrentIndex(-1);
 }
@@ -481,8 +482,15 @@ void FightclubClient::openProblemsFile() {
 
             probadapt->loadProblemsFromFile(file);
             previousPath = selectProblemsFileDialog->directory().absolutePath();
-            ui->problemsFileTitle->setText(fpp->getTitle());
-            ui->problemsFileDescr->setText(fpp->getDescription());
+            if(probadapt->getProblemCount() > 0) {
+                ui->problemsFileTitle->setText(fpp->getTitle());
+                ui->problemsFileDescr->setText(fpp->getDescription());
+                ui->unloadProblemsFile->setEnabled(true);
+            } else {
+                ui->problemsFileTitle->setText("No problems loaded");
+                ui->problemsFileDescr->setText(" ");
+                ui->unloadProblemsFile->setEnabled(false);
+            }
 
             lstadapt->initialize();
         }
@@ -490,8 +498,18 @@ void FightclubClient::openProblemsFile() {
 }
 
 
-void FightclubClient::unloadStagesFile() { if(continueAndInit()) lstadapt->unloadStagesList(); }
-void FightclubClient::unloadPhasesFile() { if(continueAndInit()) lstadapt->unloadPhasesList(); }
+void FightclubClient::unloadStagesFile()   { if(continueAndInit()) lstadapt->unloadStagesList(); }
+void FightclubClient::unloadPhasesFile()   { if(continueAndInit()) lstadapt->unloadPhasesList(); }
+
+void FightclubClient::unloadProblemsFile() {
+    if(continueAndInit()) {
+        probadapt->unloadProblemsList();
+        ui->problemsFileTitle->setText("No problems loaded");
+        ui->problemsFileDescr->setText(" ");
+        ui->unloadProblemsFile->setEnabled(false);
+        lstadapt->initialize();
+    }
+}
 
 
 

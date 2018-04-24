@@ -88,6 +88,7 @@ private slots:
     void openPhasesFile();
     void unloadPhasesFile();
     void openProblemsFile();
+    void unloadProblemsFile();
 
     void initialize();
 

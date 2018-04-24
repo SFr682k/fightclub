@@ -54,6 +54,11 @@ int ProblemAdapter::loadProblemsFromFile(QString path) {
 }
 
 
+void ProblemAdapter::unloadProblemsList() {
+    QList <Problem> tmplist;
+    problemlist = new ProblemItemListModel(tmplist);
+}
+
 
 QAbstractTableModel* ProblemAdapter::getProblemList(int nr) {
     QList<Problem> tmplist;
@@ -61,10 +66,10 @@ QAbstractTableModel* ProblemAdapter::getProblemList(int nr) {
     if(nr >= 0) {
         tmplist.append(problemlist->getProblem(nr));
         return new ProblemItemListModel(tmplist);
-    } else if(nr == -1) return problemlist; // FIXME: Challenge?
+    } else if(nr == -1) return problemlist; // FIXME: Do challenge stuff
 
     return new ProblemItemListModel(tmplist);
 }
 
 
-
+int ProblemAdapter::getProblemCount() { return problemlist->rowCount(); }
