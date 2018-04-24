@@ -57,13 +57,18 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     ui->listofstages->setEnabled(false);
     ui->listofphases->setEnabled(false);
+    ui->problemcombobox->setEnabled(false);
+    ui->problemaccepted->setEnabled(false);
+    ui->problemrejected->setEnabled(false);
 
     ui->unloadStagesFile->setEnabled(false);
     ui->unloadPhasesFile->setEnabled(false);
+    ui->unloadProblemsFile->setEnabled(false);
 
     ui->dataSetDescr->setText(" ");
     ui->stagesFileDescr->setText(" ");
     ui->phasesFileDescr->setText(" ");
+    ui->problemsFileDescr->setText(" ");
 
     ui->startstopbttn->setEnabled(false);
     ui->resettimebttn->setEnabled(false);
@@ -83,6 +88,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     lstadapt = new ListAdapter();
     phpbar = new PhasePBar();
+    probadapt = new ProblemAdapter();
     settimedlg = new SetTimeDialog(this);
 
     clockwindow = new ClockWindow();
@@ -162,6 +168,9 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), bcastsrv, SLOT(updateRClockState(bool)));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), clockwindow, SLOT(toggleRoomclock(bool)));
 
+    connect(lstadapt, SIGNAL(currentProblemChanged(int)), this, SLOT(propagateProblemsList(int)));
+    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), bcastsrv, SLOT(updateProblem(QString)));
+    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clockwindow, SLOT(problemChanged(QString)));
 
 
 
@@ -189,6 +198,8 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(ui->unloadStagesFile, SIGNAL(clicked(bool)), this, SLOT(unloadStagesFile()));
     connect(ui->loadPhasesFile, SIGNAL(clicked(bool)), this, SLOT(openPhasesFile()));
     connect(ui->unloadPhasesFile, SIGNAL(clicked(bool)), this, SLOT(unloadPhasesFile()));
+    connect(ui->loadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(openProblemsFile()));
+    connect(ui->unloadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(unloadProblemsFile()));
 }
 
 
@@ -361,6 +372,15 @@ void FightclubClient::setPhaseProgress(double progress) {
 }
 
 
+void FightclubClient::propagateProblemsList(int problem) {
+    QAbstractTableModel* model = probadapt->getProblemList(problem);
+
+    ui->problemcombobox->setEnabled(model->rowCount() > 0);
+    ui->problemcombobox->setModel(model);
+    if(problem < 0) ui->problemcombobox->setCurrentIndex(-1);
+}
+
+
 
 
 
@@ -444,8 +464,52 @@ void FightclubClient::openPhasesFile() {
 }
 
 
-void FightclubClient::unloadStagesFile() { if(continueAndInit()) lstadapt->unloadStagesList(); }
-void FightclubClient::unloadPhasesFile() { if(continueAndInit()) lstadapt->unloadPhasesList(); }
+void FightclubClient::openProblemsFile() {
+    if(continueAndInit()) {
+        QFileDialog *selectProblemsFileDialog
+                = new QFileDialog(this, "Select a problems file", previousPath, "Fightclub problems files (*.fcproblems)");
+
+        if(selectProblemsFileDialog->exec()) {
+            QString file = selectProblemsFileDialog->selectedFiles().value(0);
+
+            FilePropertyParser *fpp = new FilePropertyParser(file);
+
+            if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("problems", Qt::CaseInsensitive))) {
+                QMessageBox::critical(this, "Wrong file format",
+                                      "You requested a problems file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+                return;
+            }
+
+            probadapt->loadProblemsFromFile(file);
+            previousPath = selectProblemsFileDialog->directory().absolutePath();
+            if(probadapt->getProblemCount() > 0) {
+                ui->problemsFileTitle->setText(fpp->getTitle());
+                ui->problemsFileDescr->setText(fpp->getDescription());
+                ui->unloadProblemsFile->setEnabled(true);
+            } else {
+                ui->problemsFileTitle->setText("No problems loaded");
+                ui->problemsFileDescr->setText(" ");
+                ui->unloadProblemsFile->setEnabled(false);
+            }
+
+            lstadapt->initialize();
+        }
+    }
+}
+
+
+void FightclubClient::unloadStagesFile()   { if(continueAndInit()) lstadapt->unloadStagesList(); }
+void FightclubClient::unloadPhasesFile()   { if(continueAndInit()) lstadapt->unloadPhasesList(); }
+
+void FightclubClient::unloadProblemsFile() {
+    if(continueAndInit()) {
+        probadapt->unloadProblemsList();
+        ui->problemsFileTitle->setText("No problems loaded");
+        ui->problemsFileDescr->setText(" ");
+        ui->unloadProblemsFile->setEnabled(false);
+        lstadapt->initialize();
+    }
+}
 
 
 

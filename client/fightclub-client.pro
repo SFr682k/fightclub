@@ -8,7 +8,7 @@ QT       += core gui svg network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = fightclubclient
+TARGET = fightclub-client
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -34,7 +34,9 @@ SOURCES += \
     stagelistmodel.cpp \
     broadcastserver.cpp \
     clockwindow.cpp \
-    filepropertyparser.cpp
+    filepropertyparser.cpp \
+    problemadapter.cpp \
+    problemitemlistmodel.cpp
 
 HEADERS += \
     fightclubclient.h \
@@ -46,7 +48,9 @@ HEADERS += \
     stagelistmodel.h \
     broadcastserver.h \
     clockwindow.h \
-    filepropertyparser.h
+    filepropertyparser.h \
+    problemadapter.h \
+    problemitemlistmodel.h
 
 FORMS += \
     fightclubclient.ui \

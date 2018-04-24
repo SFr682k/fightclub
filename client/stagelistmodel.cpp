@@ -95,7 +95,7 @@ QVariant StageListModel::data(const QModelIndex &index, int role) const {
 
 
 void StageListModel::setHighlightedRow(int row){
-    if (row < listofstages.size() && row >= 0){
+    if (row < listofstages.size()){
         int tlRow = (row < highlightedRow) ? row : highlightedRow;
         int brRow = (row < highlightedRow) ? highlightedRow : row;
         highlightedRow = row;

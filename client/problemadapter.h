@@ -16,27 +16,30 @@
 ****************************************************************************/
 
 
-#include "fightclubclient.h"
-#include <QApplication>
-#include <QCommandLineParser>
+#ifndef PROBLEMADAPTER_H
+#define PROBLEMADAPTER_H
 
-int main(int argc, char *argv[])
+#include <problemitemlistmodel.h>
+
+#include <QObject>
+
+#include <QAbstractTableModel>
+
+class ProblemAdapter : public QObject
 {
-    QApplication a(argc, argv);
+    Q_OBJECT
 
-    a.setApplicationName("Fightclub Client");
-    a.setApplicationVersion("0.3");
+public:
+    explicit ProblemAdapter(QObject *parent = nullptr);
+    int loadProblemsFromFile(QString);
+    void unloadProblemsList();
+    QAbstractTableModel* getProblemList(int);
+    int getProblemCount();
 
-    QCommandLineParser cmdparser;
-    cmdparser.setApplicationDescription("An enhanced clock system for the IYPT and similar tournaments");
+private:
+    ProblemItemListModel *problemlist;
 
-    cmdparser.addHelpOption();
-    cmdparser.addVersionOption();
 
-    cmdparser.process(a);
+};
 
-    FightclubClient w;
-    w.show();
-
-    return a.exec();
-}
+#endif // PROBLEMADAPTER_H

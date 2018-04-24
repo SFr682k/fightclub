@@ -90,6 +90,9 @@ void ListAdapter::prevPhase() {
 
         stagelistmodel->setHighlightedRow(currentStage);
         emit currentStageChanged(currentStage);
+
+        if(currentStageIsRclk) emit currentProblemChanged(-2);
+        else currentProblemChanged(cStage.getProblem());
     }
 
     phaselistmodel->setHighlightedRow(currentPhase);
@@ -148,11 +151,17 @@ void ListAdapter::nextPhase() {
             else if (currentStage < stagelistmodel->rowCount() -1) {
                 currentStage++;
                 currentPhase = -1;
+
+                Stage currStage = stagelistmodel->getStageList().value(currentStage);
+                stagelistmodel->setHighlightedRow(currentStage);
+                emit currentStageChanged(currentStage);
+
+                if(currStage.getRoomclockstage() != nullptr) emit currentProblemChanged(-2);
+                else emit currentProblemChanged(currStage.getProblem());
             }
         }
 
-        stagelistmodel->setHighlightedRow(currentStage);
-        emit currentStageChanged(currentStage);
+
     } else if(currentPhase < phaselistmodel->rowCount() -1)
         currentPhase++;
 
@@ -423,6 +432,7 @@ void ListAdapter::initialize() {
 
     if(stagelistmodel->rowCount() > 0) emit currentStageChanged(-1);
     if(phaselistmodel->rowCount() > 0) emit currentPhaseChanged(-1);
+    emit currentProblemChanged(-2);
 
     emit prevPhaseAAdv(false);
     emit prevPhaseCarry(false);
