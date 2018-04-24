@@ -1,39 +1,7 @@
-#### Current stable, distributed versions:
- - Client 0.2
- - Remote Clock Window 0.6
+---
+---
 
-
-## About Fightclub
-Fightclub aims to become an enhanced clock system for the [International Young Physicist's Tournament (IYPT)](http://iypt.org).
-Currently, heavy development is in progress, so design, workflow and requirements may change between two versions and result in incompatibilities.
-
-
-Fightclub currently consists of the following components:
-
- - *Fightclub Client*, an application for timing a physics fight.
- - *Fightclub Remote Clock Window*, a remote clock window for use on remote machines inside the local network.
-
-
-Following components are planned to be added:
-
- - A remote clock window displaying the state of multiple clients
-
-
-
-## Fightclub Client
-
-### Screenshots
-Fightclub Client is equipped with a clear, intuitive interface for managing the physics fight.  
-![Fightclub Client control interface](docs/screenshot-client.png)
-
-During a physics fight, the embedded clock window displays elapsed time as well as the well-known “progress pie-chart.”  
-![The clock window during a physics fight](docs/screenshot-clockwindow.png)
-
-For other points of order, the current time may be displayed.  
-![The clock window during a break](docs/screenshot-roomclock.png)
-
-
-### Requirements on data files
+# Requirements on data files
 Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor; however,
 those files require use of the respective file extension listed below and have to be encoded using UTF-8 (without Byte Order Mark).
 
@@ -53,23 +21,45 @@ to the first lines of a data file:
 As long as not being stated otherwise, `\t` represents a tabstopp. It is *not* possible to use spaces for indentation.
 
 
-#### Files specifying stages
+## Files specifying stages
 
 File extension | `.fcstages`
 `<FightclubExchangeFile>` | `stages`
 `<ExchangeProtocolVersion>` | `1`
 
+### General Syntax
+There are two kinds of stages: stages of a physics fight and so-called “roomclock stages”, such as adresses of welcome, lunch breaks, …
+
+Depending on whether Reporter, Opponent and Reviewer are present, one of the following lines indicates a physics fight's stage:
+
+    stage label \t problem \t reporter id \t opponent id \t reviewer id
+    stage label \t problem \t reporter id \t opponent id
+    stage label \t problem \t reporter id
+
+ - `stage label`: should be used to indicate fight, room and stage nr (e.g. `PF 3/D1` for stage 1 in room D of physics fight 3)
+ - `problem`: either the problem's number or `-1` (when specifying `-1`, the problem may be selected from a list)
+ - `reporter id`, `opponent id`, `reviewer id`: either the *team id* of the reporting, opposing or reviewing team or the *personal id* of the Reporter, Opponent or Reviewer
+
+The following line indicates a roomclock stage:
+
+    stage description
+
+### Examples
+    PF 3/D1  \t -1  \t  ger  \t cze  \t uk
+    Lunch break
+
+For further examples see the stages files inside the `sample-files` directory.
 
 
 
-#### Files specifying phases
+## Files specifying phases
 
 File extension | `.fcphases`
 `<FightclubExchangeFile>` | `phases`
 `<ExchangeProtocolVersion>` | `1`
 
 
-##### General Syntax
+### General Syntax
     duration [sec] \t overtime [sec] \t title [string] \t performances [string] \t options [string]
     
     
@@ -88,7 +78,7 @@ You may omit
 Lines consisting of less than three tabular-separated columns are treated as comments and ignored.
 
     
-##### Allowed values for `performances`
+### Allowed values for `performances`
  - `rep`: the Reporter is performing during the current phase
  - `opp`: the Opponent is performing during the current phase
  - `rev`: the Reviewer is performing during the curr
@@ -97,7 +87,7 @@ Lines consisting of less than three tabular-separated columns are treated as com
 You have to specify *at least one* of these values, including `nll`. Values can be combined, e.g. one may use `repopp`
 for the discussion phase.
     
-##### Available `options`
+### Available `options`
  - `a`: Autoadvance to the next phase, if maximum duration *and* allowed overtime have elapsed
  - `c`: Carry the *whole elapsed* time to the next phase
  - `o`: Only carry the elapsed overtime to the next phase
@@ -106,7 +96,7 @@ for the discussion phase.
 
 Again, you have to specify *at least one* of these values, including `n`.
 
-##### Examples
+### Examples
 The following lines represent only single lines of a `phases` file. As above, `\t` represents a tabstopp:
 
     720000  \t 0  \t Presentation of the report                        \t rep     \t n
@@ -116,28 +106,3 @@ The following lines represent only single lines of a `phases` file. As above, `\
     1000    \t 0  \t Pause                                             \t nll     \t r
 
 For further examples see the phases files inside the `sample-files` directory.
-
-
-
-
-
-
-
-
-## Legal Notes
-### License
-Fightclub is licensed under version 3 of the GNU General Public License.  
-Please review the following information to ensure the GNU General Public License version 3.0 requirements will be met:
-[http://www.gnu.org/copyleft/gpl.html](http://www.gnu.org/copyleft/gpl.html)
-
-
-
-### Third party libraries
-Fightclub Client uses:
-
- - the Qt framework,
- - the “Breeze” icon theme and
- - some components of the [QIYPTClock](https://github.com/drogenlied/QIYPTClock)
-
-The respective copyright holders are listed in the headers of the source files and in the application's “About” dialog.
-  
