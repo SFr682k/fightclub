@@ -64,11 +64,13 @@ FightclubClient::FightclubClient(QWidget *parent) :
     ui->unloadStagesFile->setEnabled(false);
     ui->unloadPhasesFile->setEnabled(false);
     ui->unloadProblemsFile->setEnabled(false);
+    ui->unloadTeamsFile->setEnabled(false);
 
     ui->dataSetDescr->setText(" ");
     ui->stagesFileDescr->setText(" ");
     ui->phasesFileDescr->setText(" ");
     ui->problemsFileDescr->setText(" ");
+    ui->teamsFileDescr->setText(" ");
 
     ui->startstopbttn->setEnabled(false);
     ui->resettimebttn->setEnabled(false);
@@ -200,6 +202,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(ui->unloadPhasesFile, SIGNAL(clicked(bool)), this, SLOT(unloadPhasesFile()));
     connect(ui->loadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(openProblemsFile()));
     connect(ui->unloadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(unloadProblemsFile()));
+    connect(ui->loadTeamsFile, SIGNAL(clicked(bool)), this, SLOT(openTeamsFile()));
 }
 
 
@@ -498,6 +501,40 @@ void FightclubClient::openProblemsFile() {
 }
 
 
+void FightclubClient::openTeamsFile() {
+    if(continueAndInit()) {
+        QFileDialog *selectTeamsFileDialog
+                = new QFileDialog(this, "Select a teams file", previousPath, "Fightclub teams files (*.fcteams)");
+
+        if(selectTeamsFileDialog->exec()) {
+            QString file = selectTeamsFileDialog->selectedFiles().value(0);
+
+            FilePropertyParser *fpp = new FilePropertyParser(file);
+
+            if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("teams", Qt::CaseInsensitive))) {
+                QMessageBox::critical(this, "Wrong file format",
+                                      "You requested a teams file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+                return;
+            }
+
+            //loadTeamsFromFile(file);
+            previousPath = selectTeamsFileDialog->directory().absolutePath();
+            if(false) { // TODO: Set condition to "more than 0 teams specified"
+                ui->teamsFileTitle->setText(fpp->getTitle());
+                ui->teamsFileDescr->setText(fpp->getDescription());
+                ui->unloadTeamsFile->setEnabled(true);
+            } else {
+                ui->problemsFileTitle->setText("No teams loaded");
+                ui->problemsFileDescr->setText(" ");
+                ui->unloadTeamsFile->setEnabled(false);
+            }
+
+            lstadapt->initialize();
+        }
+    }
+}
+
+
 void FightclubClient::unloadStagesFile()   { if(continueAndInit()) lstadapt->unloadStagesList(); }
 void FightclubClient::unloadPhasesFile()   { if(continueAndInit()) lstadapt->unloadPhasesList(); }
 
@@ -507,6 +544,16 @@ void FightclubClient::unloadProblemsFile() {
         ui->problemsFileTitle->setText("No problems loaded");
         ui->problemsFileDescr->setText(" ");
         ui->unloadProblemsFile->setEnabled(false);
+        lstadapt->initialize();
+    }
+}
+
+void FightclubClient::unloadTeamsFile() {
+    if(continueAndInit()) {
+        // TODO: unloadTeamsList()
+        ui->teamsFileTitle->setText("No teams loaded");
+        ui->teamsFileDescr->setText(" ");
+        ui->unloadTeamsFile->setEnabled(false);
         lstadapt->initialize();
     }
 }
