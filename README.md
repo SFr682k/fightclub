@@ -1,4 +1,7 @@
-#### Current stable, distributed versions:
+# Fightclub
+
+**Current stable, distributed versions:**
+
  - Client 0.3
  - Remote Clock Window 0.6
 
@@ -21,7 +24,8 @@ Following components are planned to be added:
 
 
 ## Fightclub Client
-
+Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor.  
+Please review the [requirements on these data files](docs/fightclub-file-requirements.pdf).
 
 ### Screenshots
 Fightclub Client is equipped with a clear, intuitive interface for managing the physics fight.  
@@ -32,11 +36,6 @@ During a physics fight, the embedded clock window displays elapsed time as well 
 
 For other points of order, the current time may be displayed.  
 ![The clock window during a break](docs/screenshot-roomclock.png)
-
-
-
-
-
 
 
 

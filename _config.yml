@@ -1,5 +1,2 @@
 theme: jekyll-theme-slate
-collections:
-  _data
-    output: true
-    permalink: /:name
+repository: https://github.com/sfr682k/fightclub

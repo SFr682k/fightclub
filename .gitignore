@@ -37,3 +37,13 @@ Makefile*
 # QtCtreator CMake
 CMakeLists.txt.user*
 
+
+# (Lua)LaTeX auxiliary files
+
+*.aux
+*.idx
+*.ilg
+*.ind
+*.log
+*.out
+*.toc
