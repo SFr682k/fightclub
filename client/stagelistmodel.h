@@ -29,7 +29,7 @@
 class Stage {
 public:
     Stage(QString rcstg = nullptr, QString label = nullptr, int p = -1, QString rep = nullptr, QString opp = nullptr, QString rev = nullptr);
-    QString getRoomclockstage();
+    QString getRoomclockstage() const;
     QString getLabel();
     int getProblem();
     QString getReporterID();

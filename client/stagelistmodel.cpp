@@ -29,12 +29,12 @@ Stage::Stage(QString rcstring, QString lbl, int p, QString rep, QString opp, QSt
 }
 
 
-QString Stage::getRoomclockstage() { return roomclockstage; }
-QString Stage::getLabel()          { return label; }
-int     Stage::getProblem()        { return problem; }
-QString Stage::getReporterID()     { return reporterID; }
-QString Stage::getOpponentID()     { return opponentID; }
-QString Stage::getReviewerID()     { return reviewerID; }
+QString Stage::getRoomclockstage() const { return roomclockstage; }
+QString Stage::getLabel()                { return label; }
+int     Stage::getProblem()              { return problem; }
+QString Stage::getReporterID()           { return reporterID; }
+QString Stage::getOpponentID()           { return opponentID; }
+QString Stage::getReviewerID()           { return reviewerID; }
 
 
 

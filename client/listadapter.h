@@ -86,6 +86,10 @@ public slots:
     void unloadPhasesList();
 
     void initialize();
+
+private slots:
+    void onStageChanges(int);
+    void onPhaseChanges(int);
 };
 
 #endif // LISTADAPTER_H
