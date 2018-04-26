@@ -25,7 +25,8 @@
 class Team {
 public:
     Team(QString, QString, QList<QString>);
-    QString getTeamname();
+    QString getTeamID() const;
+    QString getTeamname() const;
 
 private:
     QString teamid;
@@ -44,6 +45,7 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QString getTeamnameFromTeamID(QString);
 
 private:
     QList<Team> listofteams;

@@ -25,7 +25,8 @@ Team::Team(QString id, QString name, QList<QString> members) {
     teammembers = members;
 }
 
-QString Team::getTeamname() { return teamname; }
+QString Team::getTeamID()   const { return teamid; }
+QString Team::getTeamname() const { return teamname; }
 
 
 
@@ -60,4 +61,13 @@ QVariant TeamItemListModel::data(const QModelIndex &index, int role) const {
     }
 
     return QVariant();
+}
+
+
+QString TeamItemListModel::getTeamnameFromTeamID(QString teamid) {
+    for(int i = 0; i < listofteams.length(); i++) {
+        if(listofteams.at(i).getTeamID() == teamid) return listofteams.at(i).getTeamname();
+    }
+
+    return teamid;
 }

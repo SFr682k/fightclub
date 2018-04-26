@@ -130,15 +130,15 @@ void ListAdapter::prevPhase() {
             if(teamadapter != nullptr) {
                 if(cStage.getReporterID() != nullptr) {
                     stageoview.append(QString("  —  "));
-                    stageoview.append(teamadapter->getNameFromID(cStage.getReporterID()));
+                    stageoview.append(teamadapter->getTeamFromID(cStage.getReporterID()));
                 }
                 if(cStage.getOpponentID() != nullptr) {
                     stageoview.append(QString("  <>  "));
-                    stageoview.append(teamadapter->getNameFromID(cStage.getOpponentID()));
+                    stageoview.append(teamadapter->getTeamFromID(cStage.getOpponentID()));
                 }
                 if(cStage.getReviewerID() != nullptr) {
                     stageoview.append(QString("  <>  "));
-                    stageoview.append(teamadapter->getNameFromID(cStage.getReviewerID()));
+                    stageoview.append(teamadapter->getTeamFromID(cStage.getReviewerID()));
                 }
             }
             emit phaseNameChanged(stageoview);
@@ -222,15 +222,15 @@ void ListAdapter::nextPhase() {
             if(teamadapter != nullptr) {
                 if(cStage.getReporterID() != nullptr) {
                     stageoview.append(QString("  —  "));
-                    stageoview.append(teamadapter->getNameFromID(cStage.getReporterID()));
+                    stageoview.append(teamadapter->getTeamFromID(cStage.getReporterID()));
                 }
                 if(cStage.getOpponentID() != nullptr) {
                     stageoview.append(QString("  <>  "));
-                    stageoview.append(teamadapter->getNameFromID(cStage.getOpponentID()));
+                    stageoview.append(teamadapter->getTeamFromID(cStage.getOpponentID()));
                 }
                 if(cStage.getReviewerID() != nullptr) {
                     stageoview.append(QString("  <>  "));
-                    stageoview.append(teamadapter->getNameFromID(cStage.getReviewerID()));
+                    stageoview.append(teamadapter->getTeamFromID(cStage.getReviewerID()));
                 }
             }
             emit phaseNameChanged(stageoview);
