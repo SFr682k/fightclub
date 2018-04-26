@@ -25,8 +25,9 @@ Team::Team(QString id, QString name, QList<QString> members) {
     teammembers = members;
 }
 
-QString Team::getTeamID()   const { return teamid; }
-QString Team::getTeamname() const { return teamname; }
+QString        Team::getTeamID()   const { return teamid; }
+QString        Team::getTeamname() const { return teamname; }
+QList<QString> Team::getMembers()  const { return teammembers; }
 
 
 
@@ -70,4 +71,17 @@ QString TeamItemListModel::getTeamnameFromTeamID(QString teamid) {
     }
 
     return teamid;
+}
+
+
+QString TeamItemListModel::getTeamMemberFromID(QString teamid, int partnr) {
+    QList<QString> tmplist;
+
+    for(int i = 0; i < listofteams.length(); i++) {
+        if(listofteams.at(i).getTeamID() == teamid) tmplist = listofteams.at(i).getMembers();
+    }
+
+    if(partnr > tmplist.length())
+        return QString("?[").append(getTeamnameFromTeamID(teamid)).append("]");
+    else return tmplist.value(partnr-1);
 }

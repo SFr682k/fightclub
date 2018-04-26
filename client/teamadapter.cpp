@@ -76,15 +76,23 @@ int TeamAdapter::getTeamCount() { return teamlist->rowCount(); }
 QString TeamAdapter::getTeamFromID(QString id) {
     if(id.contains("/", Qt::CaseInsensitive)) {
         std::string stdstrid = id.toStdString();
-        int lastslash = stdstrid.find_last_of(stdstrid);
+        int lastslash = stdstrid.find_last_of("/");
 
-        QString teamid = QString::fromStdString(stdstrid.substr(0, lastslash - 1));
+        QString teamid = QString::fromStdString(stdstrid.substr(0, lastslash));
 
         return getTeamFromID(teamid);
     } else return teamlist->getTeamnameFromTeamID(id);
 }
 
 QString TeamAdapter::getNameFromID(QString id) {
-    // TODO: Implement this function
-    return id;
+    if(id.contains("/", Qt::CaseInsensitive)) {
+        std::string stdstrid = id.toStdString();
+        int lastslash = stdstrid.find_last_of("/");
+
+        QString teamid = QString::fromStdString(stdstrid.substr(0, lastslash));
+
+
+        // FIXME: Parse number from ID
+        return teamlist->getTeamMemberFromID(teamid, 1);
+    } else return teamlist->getTeamnameFromTeamID(id);
 }

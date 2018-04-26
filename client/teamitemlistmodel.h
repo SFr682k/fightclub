@@ -27,6 +27,7 @@ public:
     Team(QString, QString, QList<QString>);
     QString getTeamID() const;
     QString getTeamname() const;
+    QList<QString> getMembers() const;
 
 private:
     QString teamid;
@@ -46,6 +47,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     QString getTeamnameFromTeamID(QString);
+    QString getTeamMemberFromID(QString, int);
 
 private:
     QList<Team> listofteams;
