@@ -90,9 +90,11 @@ QString TeamAdapter::getNameFromID(QString id) {
         int lastslash = stdstrid.find_last_of("/");
 
         QString teamid = QString::fromStdString(stdstrid.substr(0, lastslash));
+        QString mightBeAnInt = QString::fromStdString(stdstrid.substr(lastslash+1,stdstrid.length()));
+        bool isAnInteger;
+        int tmp = mightBeAnInt.toInt(&isAnInteger);
 
-
-        // FIXME: Parse number from ID
-        return teamlist->getTeamMemberFromID(teamid, 1);
+        if(isAnInteger && tmp > 0) return teamlist->getTeamMemberFromID(teamid, tmp);
+        else return QString("?[").append(getTeamFromID(id)).append("]");
     } else return teamlist->getTeamnameFromTeamID(id);
 }
