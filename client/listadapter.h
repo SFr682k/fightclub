@@ -47,6 +47,7 @@ private:
     TeamAdapter* teamadapter;
     int currentStage;
     int currentPhase;
+    QString getStageOverview(Stage);
 
 signals:
     void stageListModelChanged(QAbstractTableModel*);
@@ -59,12 +60,10 @@ signals:
 
     void currentProblemChanged(int);
 
-    void prevPhaseAAdv(bool);
-    void prevPhaseCarry(bool);
-    void prevPhaseOCarry(bool);
-    void currPhaseAAdv(bool);
-    void currPhaseCarry(bool);
-    void currPhaseOCarry(bool);
+    void currentPerformersChanged(QString, QString, QString);
+
+    void prevPhasePropsChanged(bool,bool,bool);
+    void currPhasePropsChanged(bool,bool,bool);
 
     void getElapsedOvertime();
     void resetTime();

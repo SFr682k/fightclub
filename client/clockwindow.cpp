@@ -28,8 +28,8 @@ ClockWindow::ClockWindow(QWidget *parent) :
 {   
     ui->setupUi(this);
 
-    if(ui->problabel->text().startsWith("<ApplicationName>"))
-        ui->problabel->setText(QApplication::applicationName() + ", Version " + QApplication::applicationVersion());
+    if(ui->problabel->text().startsWith("<empty>"))
+        ui->problabel->setText(" ");
 
     if(ui->perflabel->text().startsWith("<empty>"))
         ui->perflabel->setText(" ");

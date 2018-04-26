@@ -122,12 +122,8 @@ FightclubClient::FightclubClient(QWidget *parent) :
     lstadapt->setUpPhaseSwitchingButtons();
 
 
-    connect(lstadapt, SIGNAL(prevPhaseAAdv(bool)), this, SLOT(setPrevPhaseAAdv(bool)));
-    connect(lstadapt, SIGNAL(prevPhaseCarry(bool)), this, SLOT(setPrevPhaseCarry(bool)));
-    connect(lstadapt, SIGNAL(prevPhaseOCarry(bool)), this, SLOT(setPrevPhaseOCarry(bool)));
-    connect(lstadapt, SIGNAL(currPhaseAAdv(bool)), this, SLOT(setCurrPhaseAAdv(bool)));
-    connect(lstadapt, SIGNAL(currPhaseCarry(bool)), this, SLOT(setCurrPhaseCarry(bool)));
-    connect(lstadapt, SIGNAL(currPhaseOCarry(bool)), this, SLOT(setCurrPhaseOCarry(bool)));
+    connect(lstadapt, SIGNAL(prevPhasePropsChanged(bool,bool,bool)), this, SLOT(setPrevPhaseProps(bool,bool,bool)));
+    connect(lstadapt, SIGNAL(currPhasePropsChanged(bool,bool,bool)), this, SLOT(setCurrPhaseProps(bool,bool,bool)));
 
 
     connect(lstadapt, SIGNAL(resetTime()), phpbar, SLOT(resetTimer()));
@@ -226,8 +222,6 @@ void FightclubClient::initialize() {
 
     phpbar->resetTimer();
 
-    ui->peoplelabel->setText(QApplication::applicationName() + " " + QApplication::applicationVersion());
-
     ui->dummycdown->display("    ");
     ui->aadvcdown->display("    ");
 
@@ -322,34 +316,27 @@ void FightclubClient::scrollToSelectedPhase(int rownr) {
 }
 
 
-void FightclubClient::setPrevPhaseAAdv(bool ppaadv) {
-    if(ppaadv) ui->ppaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
+
+void FightclubClient::setPrevPhaseProps(bool aadv, bool carry, bool ocarry) {
+    if(aadv)   ui->ppaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
     else       ui->ppaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
+
+    if(carry)  ui->ppcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
+    else       ui->ppcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
+
+    if(ocarry) ui->ppocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
+    else       ui->ppocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
 }
 
-void FightclubClient::setPrevPhaseCarry(bool ppcarry) {
-    if(ppcarry) ui->ppcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else        ui->ppcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-}
-
-void FightclubClient::setPrevPhaseOCarry(bool ppocarry){
-    if(ppocarry) ui->ppocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else         ui->ppocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-}
-
-void FightclubClient::setCurrPhaseAAdv(bool cpaadv) {
-    if(cpaadv) ui->cpaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
+void FightclubClient::setCurrPhaseProps(bool aadv, bool carry, bool ocarry) {
+    if(aadv)   ui->cpaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
     else       ui->cpaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-}
 
-void FightclubClient::setCurrPhaseCarry(bool cpcarry) {
-    if(cpcarry) ui->cpcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else        ui->cpcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-}
+    if(carry)  ui->cpcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
+    else       ui->cpcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
 
-void FightclubClient::setCurrPhaseOCarry(bool cpocarry) {
-    if(cpocarry) ui->cpocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else         ui->cpocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
+    if(ocarry) ui->cpocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
+    else       ui->cpocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
 }
 
 

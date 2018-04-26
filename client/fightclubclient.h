@@ -71,12 +71,9 @@ private slots:
     void scrollToSelectedStage(int);
     void propagatePhasesList(QAbstractTableModel*);
     void scrollToSelectedPhase(int);
-    void setPrevPhaseAAdv(bool);
-    void setPrevPhaseCarry(bool);
-    void setPrevPhaseOCarry(bool);
-    void setCurrPhaseAAdv(bool);
-    void setCurrPhaseCarry(bool);
-    void setCurrPhaseOCarry(bool);
+
+    void setPrevPhaseProps(bool,bool,bool);
+    void setCurrPhaseProps(bool,bool,bool);
 
     void propagateProblemsList(int);
 

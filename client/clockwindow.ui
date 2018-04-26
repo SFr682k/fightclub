@@ -57,7 +57,7 @@
          </font>
         </property>
         <property name="text">
-         <string>&lt;ApplicationName&gt;, &lt;Version&gt;</string>
+         <string>&lt;empty&gt;</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
