@@ -30,6 +30,11 @@ ListAdapter::ListAdapter(QObject *parent) : QObject(parent) {
     currentPhase = -1;
 }
 
+void ListAdapter::setTeamAdapter(TeamAdapter* teamadapt) {
+    teamadapter = teamadapt;
+    stagelistmodel->setTeamAdapter(teamadapt);
+}
+
 
 void ListAdapter::setUpPhaseSwitchingButtons() {
     if(phaselistmodel->rowCount() == 0) {
@@ -121,8 +126,21 @@ void ListAdapter::prevPhase() {
 
         if(!currentStageIsRclk) {
             QString stageoview;
-            stageoview = cStage.getLabel() + " — ";
-            stageoview = stageoview + "FIXME: Show a stage overview (Rep <> Opp <> Rev: Problem)";
+            stageoview = cStage.getLabel();
+            if(teamadapter != nullptr) {
+                if(cStage.getReporterID() != nullptr) {
+                    stageoview.append(QString("  —  "));
+                    stageoview.append(teamadapter->getNameFromID(cStage.getReporterID()));
+                }
+                if(cStage.getOpponentID() != nullptr) {
+                    stageoview.append(QString("  <>  "));
+                    stageoview.append(teamadapter->getNameFromID(cStage.getOpponentID()));
+                }
+                if(cStage.getReviewerID() != nullptr) {
+                    stageoview.append(QString("  <>  "));
+                    stageoview.append(teamadapter->getNameFromID(cStage.getReviewerID()));
+                }
+            }
             emit phaseNameChanged(stageoview);
         } else emit phaseNameChanged(cStage.getRoomclockstage());
     }
@@ -200,8 +218,21 @@ void ListAdapter::nextPhase() {
 
         if(!currentStageIsRclk) {
             QString stageoview;
-            stageoview = cStage.getLabel() + " — ";
-            stageoview = stageoview + "FIXME: Show a stage overview (Rep <> Opp <> Rev: Problem)";
+            stageoview = cStage.getLabel();
+            if(teamadapter != nullptr) {
+                if(cStage.getReporterID() != nullptr) {
+                    stageoview.append(QString("  —  "));
+                    stageoview.append(teamadapter->getNameFromID(cStage.getReporterID()));
+                }
+                if(cStage.getOpponentID() != nullptr) {
+                    stageoview.append(QString("  <>  "));
+                    stageoview.append(teamadapter->getNameFromID(cStage.getOpponentID()));
+                }
+                if(cStage.getReviewerID() != nullptr) {
+                    stageoview.append(QString("  <>  "));
+                    stageoview.append(teamadapter->getNameFromID(cStage.getReviewerID()));
+                }
+            }
             emit phaseNameChanged(stageoview);
         } else emit phaseNameChanged(cStage.getRoomclockstage());
     }
@@ -341,7 +372,7 @@ int ListAdapter::loadStagesListFromFile(QString path) {
             problem = splitline.value(1).toInt();
 
             repID = splitline.value(2);
-            if(splitline.size() > 3) oppID = splitline.value(4);
+            if(splitline.size() > 3) oppID = splitline.value(3);
             if(splitline.size() > 4) revID = splitline.value(4);
 
             tmplist.append(Stage(nullptr, label, problem, repID, oppID, revID));
@@ -349,6 +380,7 @@ int ListAdapter::loadStagesListFromFile(QString path) {
     }
 
     stagelistmodel = new StageListModel(tmplist);
+    stagelistmodel->setTeamAdapter(teamadapter);
     emit stageListModelChanged(stagelistmodel);
     file.close();
 

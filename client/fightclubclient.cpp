@@ -92,7 +92,9 @@ FightclubClient::FightclubClient(QWidget *parent) :
     phpbar = new PhasePBar();
     probadapt = new ProblemAdapter();
     settimedlg = new SetTimeDialog(this);
+
     teamadapt = new TeamAdapter();
+    lstadapt->setTeamAdapter(teamadapt);
 
     clockwindow = new ClockWindow();
     connect(ui->openClockWindowBttn, SIGNAL(clicked(bool)), this, SLOT(openClockWindow()));

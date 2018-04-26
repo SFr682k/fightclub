@@ -70,3 +70,15 @@ void TeamAdapter::unloadTeams() {
 
 
 int TeamAdapter::getTeamCount() { return teamlist->rowCount(); }
+
+
+
+QString TeamAdapter::getTeamFromID(QString id) {
+    // TODO: Implement this function
+    return id;
+}
+
+QString TeamAdapter::getNameFromID(QString id) {
+    // TODO: Implement this function
+    return id;
+}

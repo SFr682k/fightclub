@@ -49,6 +49,9 @@ StageListModel::StageListModel(QList<Stage> stages, QObject *parent) : QAbstract
     highlightedRow = -1;
 }
 
+void StageListModel::setTeamAdapter(TeamAdapter* teamadapt) { teamadapter = teamadapt; }
+
+
 
 int StageListModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
@@ -72,7 +75,23 @@ QVariant StageListModel::data(const QModelIndex &index, int role) const {
 
         if(index.column() == 0) {
             if(stage.getRoomclockstage() == nullptr) {
-                return stage.getLabel() + " — " + "(FIXME: Show a stage overview)";
+                QString stageoview;
+                stageoview = stage.getLabel();
+                if(teamadapter != nullptr) {
+                    if(stage.getReporterID() != nullptr) {
+                        stageoview.append(QString("  —  "));
+                        stageoview.append(teamadapter->getTeamFromID(stage.getReporterID()));
+                    }
+                    if(stage.getOpponentID() != nullptr) {
+                        stageoview.append(QString("  <>  "));
+                        stageoview.append(teamadapter->getTeamFromID(stage.getOpponentID()));
+                    }
+                    if(stage.getReviewerID() != nullptr) {
+                        stageoview.append(QString("  <>  "));
+                        stageoview.append(teamadapter->getTeamFromID(stage.getReviewerID()));
+                    }
+                }
+                return stageoview;
             } else return stage.getRoomclockstage();}
         else if(index.column() == 1) return stage.getRoomclockstage();
         else if(index.column() == 2) return stage.getProblem();

@@ -32,6 +32,8 @@ public:
     int loadTeamsFromFile(QString);
     void unloadTeams();
     int getTeamCount();
+    QString getTeamFromID(QString);
+    QString getNameFromID(QString);
 
 private:
     TeamItemListModel *teamlist;

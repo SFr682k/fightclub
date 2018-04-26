@@ -22,6 +22,7 @@
 
 #include "phaselistmodel.h"
 #include "stagelistmodel.h"
+#include "teamadapter.h"
 
 #include <QStringListModel>
 #include <QObject>
@@ -32,6 +33,7 @@ class ListAdapter : public QObject
     Q_OBJECT
 public:
     explicit ListAdapter(QObject *parent = nullptr);
+    void setTeamAdapter(TeamAdapter* teamadapt = nullptr);
     int loadStagesListFromFile(QString);
     int loadPhasesListFromFile(QString);
     void setUpPhaseSwitchingButtons();
@@ -42,6 +44,7 @@ private:
     void setPhaseProperties();
     StageListModel* stagelistmodel;
     PhaseListModel* phaselistmodel;
+    TeamAdapter* teamadapter;
     int currentStage;
     int currentPhase;
 
@@ -84,7 +87,6 @@ public slots:
     void unloadPhasesList();
 
     void initialize();
-
 };
 
 #endif // LISTADAPTER_H

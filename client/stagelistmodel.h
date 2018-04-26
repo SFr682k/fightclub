@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QTime>
 
+#include "teamadapter.h"
 
 class Stage {
 public:
@@ -42,7 +43,6 @@ private:
     QString reporterID;
     QString opponentID;
     QString reviewerID;
-
 };
 
 
@@ -53,6 +53,7 @@ class StageListModel : public QAbstractTableModel {
 public:
     StageListModel(QObject *parent=0);
     StageListModel(QList<Stage>, QObject *parent=0);
+    void setTeamAdapter(TeamAdapter* teamadapt = nullptr);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -61,6 +62,7 @@ public:
 
 
 private:
+    TeamAdapter* teamadapter;
     QList<Stage> listofstages;
     int highlightedRow;
     QColor highlightColor;
