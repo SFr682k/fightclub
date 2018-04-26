@@ -29,6 +29,7 @@
 #include "phasepbar.h"
 #include "problemadapter.h"
 #include "settimedialog.h"
+#include "teamadapter.h"
 
 namespace Ui {
 class FightclubClient;
@@ -51,6 +52,7 @@ private:
     PhasePBar *phpbar;
     ProblemAdapter *probadapt;
     SetTimeDialog *settimedlg;
+    TeamAdapter *teamadapt;
 
     QString previousPath;
 

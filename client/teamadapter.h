@@ -16,37 +16,29 @@
 ****************************************************************************/
 
 
-#ifndef PROBLEMITEMLISTMODEL_H
-#define PROBLEMITEMLISTMODEL_H
+#ifndef TEAMADAPTER_H
+#define TEAMADAPTER_H
 
-#include <QAbstractTableModel>
+#include <QObject>
 
-class Problem {
-public:
-    Problem(int, QString);
-    int getNumber() const;
-    QString getTitle();
-
-private:
-    int number;
-    QString title;
-};
+#include "teamitemlistmodel.h"
 
 
-
-class ProblemItemListModel : public QAbstractTableModel {
+class TeamAdapter : public QObject
+{
     Q_OBJECT
-
 public:
-    explicit ProblemItemListModel(QObject *parent = nullptr);
-    explicit ProblemItemListModel(QList<Problem>, QObject *parent = nullptr);
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    Problem getProblem(int);
+    explicit TeamAdapter(QObject *parent = nullptr);
+    int loadTeamsFromFile(QString);
+    void unloadTeams();
+    int getTeamCount();
 
 private:
-    QList<Problem> listofproblems;
+    TeamItemListModel *teamlist;
+
+signals:
+
+public slots:
 };
 
-#endif // PROBLEMITEMLISTMODEL_H
+#endif // TEAMADAPTER_H

@@ -16,37 +16,37 @@
 ****************************************************************************/
 
 
-#ifndef PROBLEMITEMLISTMODEL_H
-#define PROBLEMITEMLISTMODEL_H
+#ifndef TEAMITEMLISTMODEL_H
+#define TEAMITEMLISTMODEL_H
 
 #include <QAbstractTableModel>
 
-class Problem {
+
+class Team {
 public:
-    Problem(int, QString);
-    int getNumber() const;
-    QString getTitle();
+    Team(QString, QString, QList<QString>);
+    QString getTeamname();
 
 private:
-    int number;
-    QString title;
+    QString teamid;
+    QString teamname;
+    QList<QString> teammembers;
 };
 
 
 
-class ProblemItemListModel : public QAbstractTableModel {
+class TeamItemListModel : public QAbstractTableModel {
     Q_OBJECT
 
 public:
-    explicit ProblemItemListModel(QObject *parent = nullptr);
-    explicit ProblemItemListModel(QList<Problem>, QObject *parent = nullptr);
+    explicit TeamItemListModel(QObject *parent = nullptr);
+    explicit TeamItemListModel(QList<Team>, QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
-    Problem getProblem(int);
 
 private:
-    QList<Problem> listofproblems;
+    QList<Team> listofteams;
 };
 
-#endif // PROBLEMITEMLISTMODEL_H
+#endif // TEAMITEMLISTMODEL_H

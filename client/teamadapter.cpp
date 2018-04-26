@@ -16,22 +16,23 @@
 ****************************************************************************/
 
 
-#include "problemadapter.h"
+#include "teamadapter.h"
 
 #include <QFile>
-#include <QList>
 #include <QTextStream>
+
 
 #include <QDebug>
 
-ProblemAdapter::ProblemAdapter(QObject *parent) : QObject(parent) {
-    problemlist = new ProblemItemListModel();
+
+TeamAdapter::TeamAdapter(QObject *parent) : QObject(parent) {
+    teamlist = new TeamItemListModel();
 }
 
 
 
-int ProblemAdapter::loadProblemsFromFile(QString path) {
-    QList<Problem> tmplist;
+int TeamAdapter::loadTeamsFromFile(QString path) {
+    QList<Team> tmplist;
     QFile file(path);
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) return 1;
@@ -42,34 +43,30 @@ int ProblemAdapter::loadProblemsFromFile(QString path) {
         QStringList splitline = line.split('\t');
 
 
-        if(splitline.size() > 1)
-            tmplist.append(Problem(splitline.value(0).toInt(), splitline.value(1)));
+        if(splitline.size() > 1) {
+            // We're handling an team with an ID and a name
+
+            // Get all team members and add them to a list
+            QList<QString> members;
+            for(int i = 2; i < splitline.size(); i++)
+                members.append(splitline.value(i));
+
+            tmplist.append(Team(splitline.value(0), splitline.value(1), members));
+        }
+
     }
 
-    problemlist = new ProblemItemListModel(tmplist);
+    teamlist = new TeamItemListModel(tmplist);
     file.close();
-
 
     return 0;
 }
 
 
-void ProblemAdapter::unloadProblemsList() {
-    QList<Problem> tmplist;
-    problemlist = new ProblemItemListModel(tmplist);
+void TeamAdapter::unloadTeams() {
+    QList<Team> tmplist;
+    teamlist = new TeamItemListModel(tmplist);
 }
 
 
-QAbstractTableModel* ProblemAdapter::getProblemList(int nr) {
-    QList<Problem> tmplist;
-
-    if(nr >= 0) {
-        tmplist.append(problemlist->getProblem(nr));
-        return new ProblemItemListModel(tmplist);
-    } else if(nr == -1) return problemlist; // FIXME: Do challenge stuff
-
-    return new ProblemItemListModel(tmplist);
-}
-
-
-int ProblemAdapter::getProblemCount() { return problemlist->rowCount(); }
+int TeamAdapter::getTeamCount() { return teamlist->rowCount(); }

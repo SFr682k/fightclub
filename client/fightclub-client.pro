@@ -36,7 +36,9 @@ SOURCES += \
     clockwindow.cpp \
     filepropertyparser.cpp \
     problemadapter.cpp \
-    problemitemlistmodel.cpp
+    problemitemlistmodel.cpp \
+    teamadapter.cpp \
+    teamitemlistmodel.cpp
 
 HEADERS += \
     fightclubclient.h \
@@ -50,7 +52,9 @@ HEADERS += \
     clockwindow.h \
     filepropertyparser.h \
     problemadapter.h \
-    problemitemlistmodel.h
+    problemitemlistmodel.h \
+    teamadapter.h \
+    teamitemlistmodel.h
 
 FORMS += \
     fightclubclient.ui \

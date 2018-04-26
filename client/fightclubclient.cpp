@@ -92,6 +92,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
     phpbar = new PhasePBar();
     probadapt = new ProblemAdapter();
     settimedlg = new SetTimeDialog(this);
+    teamadapt = new TeamAdapter();
 
     clockwindow = new ClockWindow();
     connect(ui->openClockWindowBttn, SIGNAL(clicked(bool)), this, SLOT(openClockWindow()));
@@ -203,6 +204,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(ui->loadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(openProblemsFile()));
     connect(ui->unloadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(unloadProblemsFile()));
     connect(ui->loadTeamsFile, SIGNAL(clicked(bool)), this, SLOT(openTeamsFile()));
+    connect(ui->unloadTeamsFile, SIGNAL(clicked(bool)), this, SLOT(unloadTeamsFile()));
 }
 
 
@@ -517,9 +519,9 @@ void FightclubClient::openTeamsFile() {
                 return;
             }
 
-            //loadTeamsFromFile(file);
+            teamadapt->loadTeamsFromFile(file);
             previousPath = selectTeamsFileDialog->directory().absolutePath();
-            if(false) { // TODO: Set condition to "more than 0 teams specified"
+            if(teamadapt->getTeamCount() > 0) {
                 ui->teamsFileTitle->setText(fpp->getTitle());
                 ui->teamsFileDescr->setText(fpp->getDescription());
                 ui->unloadTeamsFile->setEnabled(true);
@@ -550,7 +552,7 @@ void FightclubClient::unloadProblemsFile() {
 
 void FightclubClient::unloadTeamsFile() {
     if(continueAndInit()) {
-        // TODO: unloadTeamsList()
+        teamadapt->unloadTeams();
         ui->teamsFileTitle->setText("No teams loaded");
         ui->teamsFileDescr->setText(" ");
         ui->unloadTeamsFile->setEnabled(false);
