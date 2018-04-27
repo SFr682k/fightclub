@@ -29,7 +29,8 @@ ListAdapter::ListAdapter(QObject *parent) : QObject(parent) {
     currentStage = -1;
     currentPhase = -1;
 
-    //connect(this, SIGNAL(currentStageChanged()), this, SLOT(onStageChanges(int)));
+    connect(this, SIGNAL(currentStageChanged(int)), this, SLOT(onStageChanges(int)));
+    connect(this, SIGNAL(currentPhaseChanged(int)), this, SLOT(onPhaseChanges(int)));
 }
 
 void ListAdapter::setTeamAdapter(TeamAdapter* teamadapt) {
@@ -67,73 +68,35 @@ void ListAdapter::setUpPhaseSwitchingButtons() {
 
 
 void ListAdapter::prevPhase() {
+    int leftFromStage = currentStage;
+    int leftFromPhase = currentPhase;
+
     if((currentStage < 1) && (currentPhase < 0)) {
         emit endOfStage();
-        if(stagelistmodel->rowCount() > 0) {
-            currentStage =  0;
-            currentPhase = -1;
-        } else currentPhase = 0;
-
         setPhaseProperties();
         return;
-    }
-
-
-    if(currentPhase >= 0) {
-        Phase phaseBeingLeft = phaselistmodel->getPhasesList().value(currentPhase);
-        if(phaseBeingLeft.getRoomclock()) emit resetTime(); }
-    else emit resetTime();
-
-    if((currentPhase > 0) || ((currentPhase == 0) && (stagelistmodel->rowCount() > 0)))
+    } else if(currentPhase > -1)
         currentPhase--;
-    else if(stagelistmodel->rowCount() > 0) {
+    else if((currentPhase < 0) && (currentStage > 0)) {
         currentStage--;
-
-        Stage cStage = stagelistmodel->getStageList().value(currentStage);
-        bool currentStageIsRclk = (cStage.getRoomclockstage() != nullptr);
-
-        if(!currentStageIsRclk) currentPhase = phaselistmodel->rowCount() -1;
-        else                    currentPhase = -1;
-
-        stagelistmodel->setHighlightedRow(currentStage);
-        emit currentStageChanged(currentStage);
-
-        if(currentStageIsRclk) emit currentProblemChanged(-2);
-        else currentProblemChanged(cStage.getProblem());
-
-        emit currentPerformersChanged(cStage.getReporterID(),
-                cStage.getOpponentID(), cStage.getReviewerID());
+        if(stagelistmodel->getStageList().value(currentStage).getRoomclockstage() == nullptr)
+            currentPhase = phaselistmodel->rowCount() - 1;
+        else currentPhase = -1;
     }
 
-    phaselistmodel->setHighlightedRow(currentPhase);
-    emit currentPhaseChanged(currentPhase);
+    if(currentStage != leftFromStage) emit currentStageChanged(currentStage);
 
-    setUpPhaseSwitchingButtons();
+    if((currentPhase != leftFromPhase) || (currentStage != leftFromStage)) {
+        /** Phase has changed */
+        if(leftFromPhase > 0) {
+            if(phaselistmodel->getPhasesList().value(leftFromPhase).getRoomclock())
+                emit resetTime();
+            else if(!(phaselistmodel->getPhasesList().value(currentPhase).getCarry()))
+                emit resetTime();
+        } else emit resetTime();
 
-    handleOvertime(-120000); // erase autoadvance countdown
-
-    if(currentPhase > -1) {
-        QTime tmptime = QTime(0,0,0);
-
-        Phase phase = phaselistmodel->getPhasesList().value(currentPhase);
-        emit roomClockChanged(phase.getRoomclock());
-
-        if(!phase.getCarry()) emit resetTime();
-
-        emit phaseNameChanged(phase.getName());
-        emit maximumTimeChanged(tmptime.msecsTo(phase.getDuration()));
-        emit overtimeChanged(tmptime.msecsTo(phase.getOvertime()));
-    } else {
-        emit roomClockChanged(true);
-
-        Stage cStage = stagelistmodel->getStageList().value(currentStage);
-        bool currentStageIsRclk = (cStage.getRoomclockstage() != nullptr);
-
-        if(!currentStageIsRclk) emit phaseNameChanged(getStageOverview(cStage));
-        else                    emit phaseNameChanged(cStage.getRoomclockstage());
+        emit currentPhaseChanged(currentPhase);
     }
-
-    setPhaseProperties();
 }
 
 
@@ -170,15 +133,9 @@ void ListAdapter::nextPhase() {
         }
     }
 
-    if(currentStage != advancedFromStage) {
-        /** Stage has changed */
-        // FIXME: Find a “permanent solution”
-        emit currentStageChanged(currentStage);
-        onStageChanges(currentStage);
-    }
+    if(currentStage != advancedFromStage) emit currentStageChanged(currentStage);
 
     if((currentPhase != advancedFromPhase) || (currentStage != advancedFromStage)) {
-        /** Phase has changed */
         Phase prevphase;
         if(currentPhase > 0) {
             prevphase = phaselistmodel->getPhasesList().value(currentPhase - 1);
@@ -189,9 +146,7 @@ void ListAdapter::nextPhase() {
             }
         } else emit resetTime();
 
-        // FIXME: Find a “permanent solution”
         emit currentPhaseChanged(currentPhase);
-        onPhaseChanges(currentPhase);
     }
 }
 
@@ -232,39 +187,31 @@ void ListAdapter::onPhaseChanges(int phasenr) {
     } else {
         emit roomClockChanged(true);
 
-        Stage cStage = stagelistmodel->getStageList().value(currentStage);
+        Stage currStage = stagelistmodel->getStageList().value(currentStage);
 
-        if(cStage.getRoomclockstage() == nullptr)
-             emit phaseNameChanged(getStageOverview(cStage));
-        else emit phaseNameChanged(cStage.getRoomclockstage());
+        if(currStage.getRoomclockstage() == nullptr) {
+            // Stage overview
+            QString stageoview;
+            stageoview = currStage.getLabel();
+            if(teamadapter != nullptr) {
+                if(currStage.getReporterID() != nullptr) {
+                    stageoview.append(QString("  —  "));
+                    stageoview.append(teamadapter->getTeamFromID(currStage.getReporterID())); }
+                if(currStage.getOpponentID() != nullptr) {
+                    stageoview.append(QString("  <>  "));
+                    stageoview.append(teamadapter->getTeamFromID(currStage.getOpponentID())); }
+                if(currStage.getReviewerID() != nullptr) {
+                    stageoview.append(QString("  <>  "));
+                    stageoview.append(teamadapter->getTeamFromID(currStage.getReviewerID())); }
+            }
+            emit phaseNameChanged(stageoview);
+        } else emit phaseNameChanged(currStage.getRoomclockstage());
     }
 
     setPhaseProperties();
 }
 
 
-
-
-
-QString ListAdapter::getStageOverview(Stage stage) {
-    QString stageoview;
-    stageoview = stage.getLabel();
-    if(teamadapter != nullptr) {
-        if(stage.getReporterID() != nullptr) {
-            stageoview.append(QString("  —  "));
-            stageoview.append(teamadapter->getTeamFromID(stage.getReporterID()));
-        }
-        if(stage.getOpponentID() != nullptr) {
-            stageoview.append(QString("  <>  "));
-            stageoview.append(teamadapter->getTeamFromID(stage.getOpponentID()));
-        }
-        if(stage.getReviewerID() != nullptr) {
-            stageoview.append(QString("  <>  "));
-            stageoview.append(teamadapter->getTeamFromID(stage.getReviewerID()));
-        }
-    }
-    return stageoview;
-}
 
 
 void ListAdapter::setPhaseProperties() {

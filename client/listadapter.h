@@ -47,7 +47,6 @@ private:
     TeamAdapter* teamadapter;
     int currentStage;
     int currentPhase;
-    QString getStageOverview(Stage);
 
 signals:
     void stageListModelChanged(QAbstractTableModel*);
