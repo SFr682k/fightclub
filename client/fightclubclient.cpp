@@ -174,6 +174,9 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clockwindow, SLOT(problemChanged(QString)));
 
 
+    connect(lstadapt, SIGNAL(currentPerformersChanged(QString,QString,QString)), this, SLOT(performersChanged(QString,QString,QString)));
+
+
 
     // BROADCAST TAB --------------------------------------------------------------------
 
@@ -372,6 +375,21 @@ void FightclubClient::propagateProblemsList(int problem) {
     ui->problemcombobox->setEnabled(model->rowCount() > 0);
     ui->problemcombobox->setModel(model);
     if(problem < 0) ui->problemcombobox->setCurrentIndex(-1);
+}
+
+
+void FightclubClient::performersChanged(QString rep, QString opp, QString rev) {
+    ui->repcombobox->setEnabled(rep != nullptr);
+    ui->oppcombobox->setEnabled(opp != nullptr);
+    ui->revcombobox->setEnabled(rev != nullptr);
+
+    QAbstractTableModel* reporters = teamadapt->getPerformersList(rep);
+    QAbstractTableModel* opponents = teamadapt->getPerformersList(opp);
+    QAbstractTableModel* reviewers = teamadapt->getPerformersList(rev);
+
+    ui->repcombobox->setModel(reporters);
+    ui->oppcombobox->setModel(opponents);
+    ui->revcombobox->setModel(reviewers);
 }
 
 

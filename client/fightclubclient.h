@@ -77,6 +77,8 @@ private slots:
 
     void propagateProblemsList(int);
 
+    void performersChanged(QString, QString, QString);
+
     void setBroadcastIP();
     void setBroadcastPort();
     void setBroadcastID();

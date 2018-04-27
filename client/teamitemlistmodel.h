@@ -53,4 +53,20 @@ private:
     QList<Team> listofteams;
 };
 
+
+
+class PeopleItemListModel : public QAbstractTableModel {
+    Q_OBJECT
+
+public:
+    explicit PeopleItemListModel(QObject *parent = nullptr);
+    explicit PeopleItemListModel(QList<QString>, QObject *parent = nullptr);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+
+private:
+    QList<QString> listofnames;
+};
+
 #endif // TEAMITEMLISTMODEL_H

@@ -84,6 +84,7 @@ QString TeamAdapter::getTeamFromID(QString id) {
     } else return teamlist->getTeamnameFromTeamID(id);
 }
 
+
 QString TeamAdapter::getNameFromID(QString id) {
     if(id.contains("/", Qt::CaseInsensitive)) {
         std::string stdstrid = id.toStdString();
@@ -98,3 +99,18 @@ QString TeamAdapter::getNameFromID(QString id) {
         else return QString("?[").append(getTeamFromID(id)).append("]");
     } else return teamlist->getTeamnameFromTeamID(id);
 }
+
+
+QAbstractTableModel* TeamAdapter::getPerformersList(QString id) {
+    QList<QString> choices;
+
+    if(id == nullptr) {}
+    else if(id.contains("/", Qt::CaseInsensitive)) {
+        choices.append(getNameFromID(id));
+    } else {
+        choices.append(getTeamFromID(id).append(" [Team]"));
+    }
+
+    return new PeopleItemListModel(choices);
+}
+

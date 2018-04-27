@@ -32,6 +32,9 @@ QList<QString> Team::getMembers()  const { return teammembers; }
 
 
 
+
+
+
 TeamItemListModel::TeamItemListModel(QObject *parent) : QAbstractTableModel(parent) {}
 
 TeamItemListModel::TeamItemListModel(QList<Team> teams, QObject *parent) : QAbstractTableModel(parent)  {
@@ -44,12 +47,10 @@ int TeamItemListModel::rowCount(const QModelIndex &parent) const {
     return listofteams.length();
 }
 
-
 int TeamItemListModel::columnCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return 1;
 }
-
 
 QVariant TeamItemListModel::data(const QModelIndex &index, int role) const {
     if(!index.isValid()) return QVariant();
@@ -73,7 +74,6 @@ QString TeamItemListModel::getTeamnameFromTeamID(QString teamid) {
     return teamid;
 }
 
-
 QString TeamItemListModel::getTeamMemberFromID(QString teamid, int partnr) {
     QList<QString> tmplist;
 
@@ -85,3 +85,36 @@ QString TeamItemListModel::getTeamMemberFromID(QString teamid, int partnr) {
         return QString("?[").append(getTeamnameFromTeamID(teamid)).append("]");
     else return tmplist.value(partnr-1);
 }
+
+
+
+
+
+
+
+PeopleItemListModel::PeopleItemListModel(QObject *parent) : QAbstractTableModel(parent) {}
+
+PeopleItemListModel::PeopleItemListModel(QList<QString> names, QObject *parent) : QAbstractTableModel(parent)  {
+    listofnames = names;
+}
+
+
+int PeopleItemListModel::rowCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return listofnames.length();
+}
+
+int PeopleItemListModel::columnCount(const QModelIndex &parent) const {
+    Q_UNUSED(parent);
+    return 1;
+}
+
+QVariant PeopleItemListModel::data(const QModelIndex &index, int role) const {
+    if(!index.isValid()) return QVariant();
+    if(index.row() >= listofnames.size() || index.row() < 0) return QVariant();
+
+    if(role == Qt::DisplayRole) return listofnames.value(index.row());
+    else                        return QVariant();
+}
+
+
