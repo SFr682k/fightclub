@@ -23,7 +23,6 @@
 #include <QDataStream>
 #include <QtNetwork/QUdpSocket>
 
-#include <QDebug>
 
 BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned int prt, unsigned int sig) :
     QObject(parent)
@@ -63,6 +62,12 @@ void BroadcastServer::updatePhaseName(QString name) {
 
 void BroadcastServer::updateProblem(QString prob) {
     problem = prob;
+    emit bcastRequest();
+}
+
+
+void BroadcastServer::updatePerformers(QString perf) {
+    performers = perf;
     emit bcastRequest();
 }
 

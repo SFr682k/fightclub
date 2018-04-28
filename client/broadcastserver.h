@@ -40,6 +40,7 @@ public slots:
     void enableBroadcast(bool);
     void updatePhaseName(QString);
     void updateProblem(QString);
+    void updatePerformers(QString);
     void updateElapsedTime(int);
     void updateMaximumTime(int);
     void updateRClockState(bool roomclock);

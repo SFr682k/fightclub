@@ -26,11 +26,12 @@
 ListAdapter::ListAdapter(QObject *parent) : QObject(parent) {
     stagelistmodel = new StageListModel();
     phaselistmodel = new PhaseListModel();
-    currentStage = -1;
-    currentPhase = -1;
+    currentStage = -1, currentPhase = -1;
+    repPerforming = false, oppPerforming = false, revPerforming = false;
 
     connect(this, SIGNAL(currentStageChanged(int)), this, SLOT(onStageChanges(int)));
     connect(this, SIGNAL(currentPhaseChanged(int)), this, SLOT(onPhaseChanges(int)));
+    connect(this, SIGNAL(currentPerformersChanged(QString,QString,QString)), this, SLOT(onPerformerIDsChange(QString,QString,QString)));
 }
 
 void ListAdapter::setTeamAdapter(TeamAdapter* teamadapt) {
@@ -184,6 +185,10 @@ void ListAdapter::onPhaseChanges(int phasenr) {
         emit phaseNameChanged(phase.getName());
         emit maximumTimeChanged(tmptime.msecsTo(phase.getDuration()));
         emit overtimeChanged(tmptime.msecsTo(phase.getOvertime()));
+
+        repPerforming = phase.getRepPerform();
+        oppPerforming = phase.getOppPerform();
+        revPerforming = phase.getRevPerform();
     } else {
         emit roomClockChanged(true);
 
@@ -194,20 +199,20 @@ void ListAdapter::onPhaseChanges(int phasenr) {
             QString stageoview;
             stageoview = currStage.getLabel();
             if(teamadapter != nullptr) {
-                if(currStage.getReporterID() != nullptr) {
-                    stageoview.append(QString("  —  "));
-                    stageoview.append(teamadapter->getTeamFromID(currStage.getReporterID())); }
-                if(currStage.getOpponentID() != nullptr) {
-                    stageoview.append(QString("  <>  "));
-                    stageoview.append(teamadapter->getTeamFromID(currStage.getOpponentID())); }
-                if(currStage.getReviewerID() != nullptr) {
-                    stageoview.append(QString("  <>  "));
-                    stageoview.append(teamadapter->getTeamFromID(currStage.getReviewerID())); }
+                if(currStage.getReporterID() != nullptr)
+                    stageoview.append("  —  ").append(teamadapter->getTeamFromID(currStage.getReporterID()));
+                if(currStage.getOpponentID() != nullptr)
+                    stageoview.append("  <>  ").append(teamadapter->getTeamFromID(currStage.getOpponentID()));
+                if(currStage.getReviewerID() != nullptr)
+                    stageoview.append("  <>  ").append(teamadapter->getTeamFromID(currStage.getReviewerID()));
             }
             emit phaseNameChanged(stageoview);
         } else emit phaseNameChanged(currStage.getRoomclockstage());
+
+        repPerforming = false; oppPerforming = false; revPerforming = false;
     }
 
+    emit performersChanged(getPerformersLabel());
     setPhaseProperties();
 }
 
@@ -296,6 +301,48 @@ void ListAdapter::handleOvertime(int overtimed) {
     QTime temp = QTime(0,0,0);
     int carriedotime = temp.msecsTo(phase.getOvertime());
     if(!phase.getCarry() && phase.getOCarry()) emit elapsedTimeChanged(carriedotime);
+}
+
+
+QString ListAdapter::getPerformersLabel() {
+    if(!repPerforming && !oppPerforming && !revPerforming) return " ";
+
+    QString perflabel;
+    if(repPerforming)                                     perflabel.append(currentReporter);
+    if(repPerforming && (oppPerforming || revPerforming)) perflabel.append(" | ");
+    if(oppPerforming)                                     perflabel.append(currentOpponent);
+    if(oppPerforming && revPerforming)                    perflabel.append(" | ");
+    if(revPerforming)                                     perflabel.append(currentReviewer);
+
+    return perflabel;
+}
+
+
+
+void ListAdapter::onPerformerIDsChange(QString repid, QString oppid, QString revid) {
+    if(teamadapter == nullptr) return;
+    currentReporter = teamadapter->getNameFromID(repid);
+    currentOpponent = teamadapter->getNameFromID(oppid);
+    currentReviewer = teamadapter->getNameFromID(revid);
+    emit performersChanged(getPerformersLabel());
+}
+
+void ListAdapter::reporterChanged(QString newReporter) {
+    if(newReporter == QString("[").append(currentReporter).append("]")) return;
+    currentReporter = newReporter;
+    emit performersChanged(getPerformersLabel());
+}
+
+void ListAdapter::opponentChanged(QString newOpponent) {
+    if(newOpponent == QString("[").append(currentOpponent).append("]")) return;
+    currentOpponent = newOpponent;
+    emit performersChanged(getPerformersLabel());
+}
+
+void ListAdapter::reviewerChanged(QString newReviewer) {
+    if(newReviewer == QString("[").append(currentReviewer).append("]")) return;
+    currentReviewer = newReviewer;
+    emit performersChanged(getPerformersLabel());
 }
 
 

@@ -38,7 +38,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     previousPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).value(0);
 
-    ui->peoplelabel->setText(QApplication::applicationName() + " " + QApplication::applicationVersion());
+    ui->performerslabel->setText(QApplication::applicationName() + " " + QApplication::applicationVersion());
 
     ui->ppaadvindic->display("A");
     ui->ppcarryindic->display("C");
@@ -182,8 +182,17 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(lstadapt, SIGNAL(currentPerformersChanged(QString,QString,QString)), this, SLOT(performersChanged(QString,QString,QString)));
 
     connect(ui->repcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+    connect(ui->repcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reporterChanged(QString)));
+
     connect(ui->oppcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+    connect(ui->oppcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(opponentChanged(QString)));
+
     connect(ui->revcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+    connect(ui->revcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reviewerChanged(QString)));
+
+    connect(lstadapt, SIGNAL(performersChanged(QString)), ui->performerslabel, SLOT(setText(QString)));
+    connect(lstadapt, SIGNAL(performersChanged(QString)), bcastsrv, SLOT(updatePerformers(QString)));
+    connect(lstadapt, SIGNAL(performersChanged(QString)), clockwindow, SLOT(performersChanged(QString)));
 
 
 

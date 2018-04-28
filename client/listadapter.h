@@ -41,12 +41,14 @@ public:
     int getCurrentPhase();
 
 private:
-    void setPhaseProperties();
     StageListModel* stagelistmodel;
     PhaseListModel* phaselistmodel;
     TeamAdapter* teamadapter;
-    int currentStage;
-    int currentPhase;
+    int currentStage, currentPhase;
+    QString currentReporter, currentOpponent, currentReviewer;
+    bool repPerforming, oppPerforming, revPerforming;
+    void setPhaseProperties();
+    QString getPerformersLabel();
 
 signals:
     void stageListModelChanged(QAbstractTableModel*);
@@ -74,11 +76,18 @@ signals:
     void roomClockChanged(bool);
     void endOfStage();
 
+    void performersChanged(QString);
+
     void forceInit();
 
 public slots:
     void prevPhase();
     void nextPhase();
+
+    void reporterChanged(QString);
+    void opponentChanged(QString);
+    void reviewerChanged(QString);
+
     void handleOvertime(int);
 
     void unloadStagesList();
@@ -89,6 +98,7 @@ public slots:
 private slots:
     void onStageChanges(int);
     void onPhaseChanges(int);
+    void onPerformerIDsChange(QString, QString, QString);
 };
 
 #endif // LISTADAPTER_H
