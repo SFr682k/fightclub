@@ -184,10 +184,10 @@ FightclubClient::FightclubClient(QWidget *parent) :
     connect(ui->repcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
     connect(ui->repcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reporterChanged(QString)));
 
-    connect(ui->oppcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+    connect(ui->oppcombobox, SIGNAL(activated(int)), this, SLOT(updateOpponentModel(int)));
     connect(ui->oppcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(opponentChanged(QString)));
 
-    connect(ui->revcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+    connect(ui->revcombobox, SIGNAL(activated(int)), this, SLOT(updateReviewerModel(int)));
     connect(ui->revcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reviewerChanged(QString)));
 
     connect(lstadapt, SIGNAL(performersChanged(QString)), ui->performerslabel, SLOT(setText(QString)));

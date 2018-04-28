@@ -55,11 +55,15 @@ ClockWindow::~ClockWindow() {
 
 
 void ClockWindow::toggleRoomclock(bool showRClock) {
-    if(roomclock && !showRClock)        refreshtimer->stop();
-    else if (!roomclock && showRClock)  refreshtimer->start(30);
+    bool resetTime = false;
+    if(roomclock && !showRClock) {
+        refreshtimer->stop();
+        resetTime = true;
+    } else if (!roomclock && showRClock)  refreshtimer->start(30);
 
     roomclock = showRClock;
     ui->clockwidget->setRoomclock(showRClock);
+    if(resetTime) updateElapsedTime(0);
 }
 
 

@@ -132,6 +132,11 @@ void PhasePBar::getElapsedOvertime() {
 
 
 void PhasePBar::setRoomclock(bool rclock) {
+    if(!rclock && roomclock) {
+        emit elapsedTimeUpdate(0);
+        emit elapsedTimeUpdate(timeToString(0));
+    }
+
     roomclock = rclock;
     if(roomclock) {
         emit elapsedTimeUpdate(" --:-- ");

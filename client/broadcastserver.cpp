@@ -61,12 +61,14 @@ void BroadcastServer::updatePhaseName(QString name) {
 
 
 void BroadcastServer::updateProblem(QString prob) {
+    if(prob == nullptr) prob = " ";
     problem = prob;
     emit bcastRequest();
 }
 
 
 void BroadcastServer::updatePerformers(QString perf) {
+    if(perf == nullptr) perf = " ";
     performers = perf;
     emit bcastRequest();
 }
