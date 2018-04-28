@@ -181,6 +181,10 @@ FightclubClient::FightclubClient(QWidget *parent) :
 
     connect(lstadapt, SIGNAL(currentPerformersChanged(QString,QString,QString)), this, SLOT(performersChanged(QString,QString,QString)));
 
+    connect(ui->repcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+    connect(ui->oppcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+    connect(ui->revcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
+
 
 
     // BROADCAST TAB --------------------------------------------------------------------
@@ -378,11 +382,36 @@ void FightclubClient::performersChanged(QString rep, QString opp, QString rev) {
     ui->oppcombobox->setModel(teamadapt->getPerformersList(opp, true));
     ui->revcombobox->setModel(teamadapt->getPerformersList(rev, true));
 
-    repcomboboxinit = true; oppcomboboxinit = true; revcomboboxinit = true;
+    repcomboboxinit = rep; oppcomboboxinit = opp; revcomboboxinit = rev;
 
     ui->repcombobox->setEnabled(ui->repcombobox->model()->rowCount() > 1);
     ui->oppcombobox->setEnabled(ui->oppcombobox->model()->rowCount() > 1);
     ui->revcombobox->setEnabled(ui->revcombobox->model()->rowCount() > 1);
+}
+
+
+void FightclubClient::updateReporterModel(int index) {
+    if((repcomboboxinit == nullptr) || (index == 0)) return;
+
+    ui->repcombobox->setModel(teamadapt->getPerformersList(repcomboboxinit, false));
+    ui->repcombobox->setCurrentIndex(index -1);
+    repcomboboxinit = nullptr;
+}
+
+void FightclubClient::updateOpponentModel(int index) {
+    if((oppcomboboxinit == nullptr) || (index == 0)) return;
+
+    ui->oppcombobox->setModel(teamadapt->getPerformersList(oppcomboboxinit, false));
+    ui->oppcombobox->setCurrentIndex(index -1);
+    oppcomboboxinit = nullptr;
+}
+
+void FightclubClient::updateReviewerModel(int index) {
+    if((revcomboboxinit == nullptr) || (index == 0)) return;
+
+    ui->revcombobox->setModel(teamadapt->getPerformersList(revcomboboxinit, false));
+    ui->revcombobox->setCurrentIndex(index -1);
+    revcomboboxinit = nullptr;
 }
 
 

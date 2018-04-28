@@ -54,9 +54,7 @@ private:
     SetTimeDialog *settimedlg;
     TeamAdapter *teamadapt;
 
-    bool repcomboboxinit;
-    bool oppcomboboxinit;
-    bool revcomboboxinit;
+    QString repcomboboxinit, oppcomboboxinit, revcomboboxinit;
 
     QString previousPath;
 
@@ -82,6 +80,9 @@ private slots:
     void propagateProblemsList(int);
 
     void performersChanged(QString, QString, QString);
+    void updateReporterModel(int);
+    void updateOpponentModel(int);
+    void updateReviewerModel(int);
 
     void setBroadcastIP();
     void setBroadcastPort();
