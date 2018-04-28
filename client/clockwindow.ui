@@ -53,7 +53,6 @@
         <property name="font">
          <font>
           <pointsize>13</pointsize>
-          <italic>true</italic>
          </font>
         </property>
         <property name="text">
@@ -88,7 +87,6 @@
         <property name="font">
          <font>
           <pointsize>13</pointsize>
-          <italic>true</italic>
          </font>
         </property>
         <property name="frameShape">

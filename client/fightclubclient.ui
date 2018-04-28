@@ -1312,7 +1312,7 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>0</y>
+             <y>-47</y>
              <width>904</width>
              <height>471</height>
             </rect>
@@ -1335,6 +1335,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="dataSetTitle">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="font">
                   <font>
                    <pointsize>11</pointsize>
@@ -1349,10 +1355,11 @@
                </item>
                <item>
                 <widget class="QLabel" name="dataSetDescr">
-                 <property name="font">
-                  <font>
-                   <italic>true</italic>
-                  </font>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
                  <property name="text">
                   <string>Click the button to load a data set</string>
@@ -1366,6 +1373,9 @@
                 <spacer name="verticalSpacer_10">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Preferred</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -1498,7 +1508,6 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
-                     <italic>true</italic>
                     </font>
                    </property>
                    <property name="text">
@@ -1513,6 +1522,9 @@
                   <spacer name="verticalSpacer_7">
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Preferred</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1606,7 +1618,6 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
-                     <italic>true</italic>
                     </font>
                    </property>
                    <property name="text">
@@ -1621,6 +1632,9 @@
                   <spacer name="verticalSpacer_9">
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Preferred</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1720,7 +1734,6 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
-                     <italic>true</italic>
                     </font>
                    </property>
                    <property name="text">
@@ -1735,6 +1748,9 @@
                   <spacer name="verticalSpacer_8">
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Preferred</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1834,7 +1850,6 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
-                     <italic>true</italic>
                     </font>
                    </property>
                    <property name="text">
@@ -1849,6 +1864,9 @@
                   <spacer name="verticalSpacer_11">
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Preferred</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>

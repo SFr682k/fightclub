@@ -560,8 +560,8 @@ void FightclubClient::unloadTeamsFile() {
 
 void FightclubClient::closeEvent(QCloseEvent *event) {
     if(QMessageBox::warning(this,
-            "Close Fightclub Client?",
-            "Do you <i>really</i> want to close Fightclub Client?",
+            "Confirmation requested",
+            "Do you really want to close Fightclub Client?",
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
         clockwindow->kill();
         event->accept();
