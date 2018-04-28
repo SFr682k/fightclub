@@ -905,9 +905,6 @@
             <layout class="QGridLayout" name="performancesbox">
              <item row="1" column="2">
               <widget class="QLabel" name="revlabel">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
                <property name="text">
                 <string>Reviewer:</string>
                </property>
@@ -915,9 +912,6 @@
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="replabel">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
                <property name="text">
                 <string>Reporter:</string>
                </property>
@@ -925,34 +919,19 @@
              </item>
              <item row="1" column="1">
               <widget class="QLabel" name="opplabel">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
                <property name="text">
                 <string>Opponent:</string>
                </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QComboBox" name="repcombobox">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
+              <widget class="QComboBox" name="repcombobox"/>
              </item>
              <item row="2" column="1">
-              <widget class="QComboBox" name="oppcombobox">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
+              <widget class="QComboBox" name="oppcombobox"/>
              </item>
              <item row="2" column="2">
-              <widget class="QComboBox" name="revcombobox">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-              </widget>
+              <widget class="QComboBox" name="revcombobox"/>
              </item>
              <item row="2" column="3">
               <widget class="QPushButton" name="submitperfomances">
@@ -1335,7 +1314,7 @@
              <x>0</x>
              <y>0</y>
              <width>904</width>
-             <height>477</height>
+             <height>471</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_15">

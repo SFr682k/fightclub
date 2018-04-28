@@ -61,6 +61,11 @@ FightclubClient::FightclubClient(QWidget *parent) :
     ui->problemaccepted->setEnabled(false);
     ui->problemrejected->setEnabled(false);
 
+    ui->repcombobox->setEnabled(false);
+    ui->oppcombobox->setEnabled(false);
+    ui->revcombobox->setEnabled(false);
+    ui->submitperfomances->setEnabled(false);
+
     ui->unloadStagesFile->setEnabled(false);
     ui->unloadPhasesFile->setEnabled(false);
     ui->unloadProblemsFile->setEnabled(false);
@@ -390,6 +395,12 @@ void FightclubClient::performersChanged(QString rep, QString opp, QString rev) {
     ui->repcombobox->setModel(reporters);
     ui->oppcombobox->setModel(opponents);
     ui->revcombobox->setModel(reviewers);
+
+    /*
+    if(reporters->rowCount() > 0) ui->repcombobox->setCurrentIndex(-1);
+    if(opponents->rowCount() > 0) ui->oppcombobox->setCurrentIndex(-1);
+    if(reviewers->rowCount() > 0) ui->revcombobox->setCurrentIndex(-1);
+    */
 }
 
 

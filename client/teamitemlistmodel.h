@@ -48,6 +48,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QString getTeamnameFromTeamID(QString);
     QString getTeamMemberFromID(QString, int);
+    QList<QString> getTeamMembersFromID(QString);
 
 private:
     QList<Team> listofteams;

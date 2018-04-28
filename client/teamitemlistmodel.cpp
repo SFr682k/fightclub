@@ -86,6 +86,14 @@ QString TeamItemListModel::getTeamMemberFromID(QString teamid, int partnr) {
     else return tmplist.value(partnr-1);
 }
 
+QList<QString> TeamItemListModel::getTeamMembersFromID(QString teamid) {
+    for(int i = 0; i < listofteams.length(); i++) {
+        if(listofteams.at(i).getTeamID() == teamid) return listofteams.at(i).getMembers();
+    }
+
+    return QList<QString>();
+}
+
 
 
 

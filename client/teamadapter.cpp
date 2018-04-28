@@ -101,14 +101,16 @@ QString TeamAdapter::getNameFromID(QString id) {
 }
 
 
+
+
 QAbstractTableModel* TeamAdapter::getPerformersList(QString id) {
     QList<QString> choices;
 
     if(id == nullptr) {}
-    else if(id.contains("/", Qt::CaseInsensitive)) {
-        choices.append(getNameFromID(id));
-    } else {
-        choices.append(getTeamFromID(id).append(" [Team]"));
+    else if(id.contains("/", Qt::CaseInsensitive)) choices.append(getNameFromID(id));
+    else {
+        choices.append("[" + getNameFromID(id) + "]");
+        choices.append(teamlist->getTeamMembersFromID(id));
     }
 
     return new PeopleItemListModel(choices);
