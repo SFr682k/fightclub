@@ -103,13 +103,13 @@ QString TeamAdapter::getNameFromID(QString id) {
 
 
 
-QAbstractTableModel* TeamAdapter::getPerformersList(QString id) {
+QAbstractTableModel* TeamAdapter::getPerformersList(QString id, bool includeTeamName) {
     QList<QString> choices;
 
     if(id == nullptr) {}
     else if(id.contains("/", Qt::CaseInsensitive)) choices.append(getNameFromID(id));
     else {
-        choices.append("[" + getNameFromID(id) + "]");
+        if(includeTeamName) choices.append("[" + getNameFromID(id) + "]");
         choices.append(teamlist->getTeamMembersFromID(id));
     }
 

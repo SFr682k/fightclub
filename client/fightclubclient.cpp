@@ -326,25 +326,15 @@ void FightclubClient::scrollToSelectedPhase(int rownr) {
 
 
 void FightclubClient::setPrevPhaseProps(bool aadv, bool carry, bool ocarry) {
-    if(aadv)   ui->ppaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else       ui->ppaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-
-    if(carry)  ui->ppcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else       ui->ppcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-
-    if(ocarry) ui->ppocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else       ui->ppocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
+    ui->ppaadvindic->setSegmentStyle(aadv? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
+    ui->ppcarryindic->setSegmentStyle(carry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
+    ui->ppocarryindic->setSegmentStyle(ocarry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
 }
 
 void FightclubClient::setCurrPhaseProps(bool aadv, bool carry, bool ocarry) {
-    if(aadv)   ui->cpaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else       ui->cpaadvindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-
-    if(carry)  ui->cpcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else       ui->cpcarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
-
-    if(ocarry) ui->cpocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    else       ui->cpocarryindic->setSegmentStyle(QLCDNumber::SegmentStyle::Outline);
+    ui->cpaadvindic->setSegmentStyle(aadv? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
+    ui->cpcarryindic->setSegmentStyle(carry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
+    ui->cpocarryindic->setSegmentStyle(ocarry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
 }
 
 
@@ -377,30 +367,22 @@ void FightclubClient::setPhaseProgress(double progress) {
 void FightclubClient::propagateProblemsList(int problem) {
     QAbstractTableModel* model = probadapt->getProblemList(problem);
 
-    ui->problemcombobox->setEnabled(model->rowCount() > 0);
+    ui->problemcombobox->setEnabled(model->rowCount() > 1);
     ui->problemcombobox->setModel(model);
     if(problem < 0) ui->problemcombobox->setCurrentIndex(-1);
 }
 
 
 void FightclubClient::performersChanged(QString rep, QString opp, QString rev) {
-    ui->repcombobox->setEnabled(rep != nullptr);
-    ui->oppcombobox->setEnabled(opp != nullptr);
-    ui->revcombobox->setEnabled(rev != nullptr);
+    ui->repcombobox->setModel(teamadapt->getPerformersList(rep, true));
+    ui->oppcombobox->setModel(teamadapt->getPerformersList(opp, true));
+    ui->revcombobox->setModel(teamadapt->getPerformersList(rev, true));
 
-    QAbstractTableModel* reporters = teamadapt->getPerformersList(rep);
-    QAbstractTableModel* opponents = teamadapt->getPerformersList(opp);
-    QAbstractTableModel* reviewers = teamadapt->getPerformersList(rev);
+    repcomboboxinit = true; oppcomboboxinit = true; revcomboboxinit = true;
 
-    ui->repcombobox->setModel(reporters);
-    ui->oppcombobox->setModel(opponents);
-    ui->revcombobox->setModel(reviewers);
-
-    /*
-    if(reporters->rowCount() > 0) ui->repcombobox->setCurrentIndex(-1);
-    if(opponents->rowCount() > 0) ui->oppcombobox->setCurrentIndex(-1);
-    if(reviewers->rowCount() > 0) ui->revcombobox->setCurrentIndex(-1);
-    */
+    ui->repcombobox->setEnabled(ui->repcombobox->model()->rowCount() > 1);
+    ui->oppcombobox->setEnabled(ui->oppcombobox->model()->rowCount() > 1);
+    ui->revcombobox->setEnabled(ui->revcombobox->model()->rowCount() > 1);
 }
 
 
@@ -505,15 +487,10 @@ void FightclubClient::openProblemsFile() {
 
             probadapt->loadProblemsFromFile(file);
             previousPath = selectProblemsFileDialog->directory().absolutePath();
-            if(probadapt->getProblemCount() > 0) {
-                ui->problemsFileTitle->setText(fpp->getTitle());
-                ui->problemsFileDescr->setText(fpp->getDescription());
-                ui->unloadProblemsFile->setEnabled(true);
-            } else {
-                ui->problemsFileTitle->setText("No problems loaded");
-                ui->problemsFileDescr->setText(" ");
-                ui->unloadProblemsFile->setEnabled(false);
-            }
+
+            ui->problemsFileTitle->setText((probadapt->getProblemCount() > 0)? fpp->getTitle() : "No problems loaded");
+            ui->problemsFileDescr->setText((probadapt->getProblemCount() > 0)? fpp->getDescription() : " ");
+            ui->unloadProblemsFile->setEnabled(probadapt->getProblemCount() > 0);
 
             lstadapt->initialize();
         }
@@ -539,15 +516,10 @@ void FightclubClient::openTeamsFile() {
 
             teamadapt->loadTeamsFromFile(file);
             previousPath = selectTeamsFileDialog->directory().absolutePath();
-            if(teamadapt->getTeamCount() > 0) {
-                ui->teamsFileTitle->setText(fpp->getTitle());
-                ui->teamsFileDescr->setText(fpp->getDescription());
-                ui->unloadTeamsFile->setEnabled(true);
-            } else {
-                ui->problemsFileTitle->setText("No teams loaded");
-                ui->problemsFileDescr->setText(" ");
-                ui->unloadTeamsFile->setEnabled(false);
-            }
+
+            ui->teamsFileTitle->setText((teamadapt->getTeamCount() > 0)? fpp->getTitle() : "No teams loaded");
+            ui->teamsFileDescr->setText((teamadapt->getTeamCount() > 0)? fpp->getDescription() : " ");
+            ui->unloadTeamsFile->setEnabled(teamadapt->getTeamCount() > 0);
 
             lstadapt->initialize();
         }

@@ -124,5 +124,3 @@ QVariant PeopleItemListModel::data(const QModelIndex &index, int role) const {
     if(role == Qt::DisplayRole) return listofnames.value(index.row());
     else                        return QVariant();
 }
-
-

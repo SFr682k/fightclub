@@ -54,6 +54,10 @@ private:
     SetTimeDialog *settimedlg;
     TeamAdapter *teamadapt;
 
+    bool repcomboboxinit;
+    bool oppcomboboxinit;
+    bool revcomboboxinit;
+
     QString previousPath;
 
     bool continueAndInit();

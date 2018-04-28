@@ -34,7 +34,7 @@ public:
     int getTeamCount();
     QString getTeamFromID(QString);
     QString getNameFromID(QString);
-    QAbstractTableModel* getPerformersList(QString);
+    QAbstractTableModel* getPerformersList(QString, bool includeTeamName = false);
 
 private:
     TeamItemListModel *teamlist;
