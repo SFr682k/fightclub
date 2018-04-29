@@ -19,8 +19,6 @@
 #include "problemitemlistmodel.h"
 
 
-#include <QDebug>
-
 Problem::Problem(int problemnr, QString problemtitle) {
     number = problemnr;
     title = problemtitle;

@@ -22,7 +22,6 @@
 #include <QList>
 #include <QTextStream>
 
-#include <QDebug>
 
 ProblemAdapter::ProblemAdapter(QObject *parent) : QObject(parent) {
     problemlist = new ProblemItemListModel();

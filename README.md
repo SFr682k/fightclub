@@ -2,7 +2,7 @@
 
 **Current stable, distributed versions:**
 
- - Client 0.3
+ - Client 0.4
  - Remote Clock Window 0.6
 
 

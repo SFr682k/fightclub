@@ -22,9 +22,6 @@
 #include <QTextStream>
 
 
-#include <QDebug>
-
-
 TeamAdapter::TeamAdapter(QObject *parent) : QObject(parent) {
     teamlist = new TeamItemListModel();
 }

@@ -27,9 +27,6 @@
 #include <QStandardPaths>
 
 
-#include <QDebug>
-
-
 FightclubClient::FightclubClient(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FightclubClient)

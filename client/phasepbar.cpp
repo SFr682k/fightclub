@@ -18,7 +18,6 @@
 
 #include "phasepbar.h"
 
-#include <QDebug>
 
 PhasePBar::PhasePBar(QObject *parent) : QObject(parent) {
     time = new QTime;

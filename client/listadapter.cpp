@@ -21,7 +21,6 @@
 #include <QFile>
 #include <QTextStream>
 
-#include <QDebug>
 
 ListAdapter::ListAdapter(QObject *parent) : QObject(parent) {
     stagelistmodel = new StageListModel();
