@@ -3,7 +3,7 @@
 **Current stable, distributed versions:**
 
  - Client 0.4
- - Remote Clock Window 0.6
+ - Remote Clock Window 0.7
 
 
 ## About Fightclub

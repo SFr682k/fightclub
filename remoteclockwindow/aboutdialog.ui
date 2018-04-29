@@ -136,6 +136,9 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Fightclub Remote Clock Window provides a clock window for use with Fightclub Client. It is designed to run on any other computer inside the local network.&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Parts of Fightclub Remote Clock Window are based on the QIYPTClock Client:&lt;br /&gt;&lt;a href=&quot;http://github.com/drogenlied/QIYPTClock&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;http://github.com/drogenlied/QIYPTClock&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
+         <property name="openLinks">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
       </layout>

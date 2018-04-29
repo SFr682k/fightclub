@@ -20,6 +20,7 @@
 #define SETUPBROADCASTDIALOG_H
 
 #include <QDialog>
+#include <QKeyEvent>
 
 
 namespace Ui {
@@ -43,6 +44,9 @@ private:
     bool locked;
     QString lockedpwd;
     void setupSelections();
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 public slots:
     void toggleLockedState();

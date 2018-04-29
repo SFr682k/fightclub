@@ -127,3 +127,21 @@ void SetupBroadcastDialog::toggleLockedState() {
     ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.png")
                                     : QIcon(":/breeze-icons/object-locked-16.png"));
 }
+
+
+
+
+void SetupBroadcastDialog::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_Enter:
+            this->accept();
+            break;
+
+        case Qt::Key_Escape:
+            this->reject();
+            break;
+
+        default:
+            QWidget::keyPressEvent(event);
+    }
+}
