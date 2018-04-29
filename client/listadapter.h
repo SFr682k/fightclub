@@ -22,6 +22,7 @@
 
 #include "phaselistmodel.h"
 #include "stagelistmodel.h"
+#include "teamadapter.h"
 
 #include <QStringListModel>
 #include <QObject>
@@ -32,6 +33,7 @@ class ListAdapter : public QObject
     Q_OBJECT
 public:
     explicit ListAdapter(QObject *parent = nullptr);
+    void setTeamAdapter(TeamAdapter* teamadapt = nullptr);
     int loadStagesListFromFile(QString);
     int loadPhasesListFromFile(QString);
     void setUpPhaseSwitchingButtons();
@@ -39,11 +41,14 @@ public:
     int getCurrentPhase();
 
 private:
-    void setPhaseProperties();
     StageListModel* stagelistmodel;
     PhaseListModel* phaselistmodel;
-    int currentStage;
-    int currentPhase;
+    TeamAdapter* teamadapter;
+    int currentStage, currentPhase;
+    QString currentReporter, currentOpponent, currentReviewer;
+    bool repPerforming, oppPerforming, revPerforming;
+    void setPhaseProperties();
+    QString getPerformersLabel();
 
 signals:
     void stageListModelChanged(QAbstractTableModel*);
@@ -56,12 +61,10 @@ signals:
 
     void currentProblemChanged(int);
 
-    void prevPhaseAAdv(bool);
-    void prevPhaseCarry(bool);
-    void prevPhaseOCarry(bool);
-    void currPhaseAAdv(bool);
-    void currPhaseCarry(bool);
-    void currPhaseOCarry(bool);
+    void currentPerformersChanged(QString, QString, QString);
+
+    void prevPhasePropsChanged(bool,bool,bool);
+    void currPhasePropsChanged(bool,bool,bool);
 
     void getElapsedOvertime();
     void resetTime();
@@ -73,11 +76,18 @@ signals:
     void roomClockChanged(bool);
     void endOfStage();
 
+    void performersChanged(QString);
+
     void forceInit();
 
 public slots:
     void prevPhase();
     void nextPhase();
+
+    void reporterChanged(QString);
+    void opponentChanged(QString);
+    void reviewerChanged(QString);
+
     void handleOvertime(int);
 
     void unloadStagesList();
@@ -85,6 +95,10 @@ public slots:
 
     void initialize();
 
+private slots:
+    void onStageChanges(int);
+    void onPhaseChanges(int);
+    void onPerformerIDsChange(QString, QString, QString);
 };
 
 #endif // LISTADAPTER_H

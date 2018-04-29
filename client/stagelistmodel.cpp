@@ -29,12 +29,12 @@ Stage::Stage(QString rcstring, QString lbl, int p, QString rep, QString opp, QSt
 }
 
 
-QString Stage::getRoomclockstage() { return roomclockstage; }
-QString Stage::getLabel()          { return label; }
-int     Stage::getProblem()        { return problem; }
-QString Stage::getReporterID()     { return reporterID; }
-QString Stage::getOpponentID()     { return opponentID; }
-QString Stage::getReviewerID()     { return reviewerID; }
+QString Stage::getRoomclockstage() const { return roomclockstage; }
+QString Stage::getLabel()                { return label; }
+int     Stage::getProblem()              { return problem; }
+QString Stage::getReporterID()           { return reporterID; }
+QString Stage::getOpponentID()           { return opponentID; }
+QString Stage::getReviewerID()           { return reviewerID; }
 
 
 
@@ -48,6 +48,9 @@ StageListModel::StageListModel(QList<Stage> stages, QObject *parent) : QAbstract
     listofstages = stages;
     highlightedRow = -1;
 }
+
+void StageListModel::setTeamAdapter(TeamAdapter* teamadapt) { teamadapter = teamadapt; }
+
 
 
 int StageListModel::rowCount(const QModelIndex &parent) const {
@@ -72,7 +75,23 @@ QVariant StageListModel::data(const QModelIndex &index, int role) const {
 
         if(index.column() == 0) {
             if(stage.getRoomclockstage() == nullptr) {
-                return stage.getLabel() + " — " + "(FIXME: Show a stage overview)";
+                QString stageoview;
+                stageoview = stage.getLabel();
+                if(teamadapter != nullptr) {
+                    if(stage.getReporterID() != nullptr) {
+                        stageoview.append(QString("  —  "));
+                        stageoview.append(teamadapter->getTeamFromID(stage.getReporterID()));
+                    }
+                    if(stage.getOpponentID() != nullptr) {
+                        stageoview.append(QString("  <>  "));
+                        stageoview.append(teamadapter->getTeamFromID(stage.getOpponentID()));
+                    }
+                    if(stage.getReviewerID() != nullptr) {
+                        stageoview.append(QString("  <>  "));
+                        stageoview.append(teamadapter->getTeamFromID(stage.getReviewerID()));
+                    }
+                }
+                return stageoview;
             } else return stage.getRoomclockstage();}
         else if(index.column() == 1) return stage.getRoomclockstage();
         else if(index.column() == 2) return stage.getProblem();

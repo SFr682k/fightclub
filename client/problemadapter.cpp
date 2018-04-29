@@ -22,7 +22,6 @@
 #include <QList>
 #include <QTextStream>
 
-#include <QDebug>
 
 ProblemAdapter::ProblemAdapter(QObject *parent) : QObject(parent) {
     problemlist = new ProblemItemListModel();
@@ -55,7 +54,7 @@ int ProblemAdapter::loadProblemsFromFile(QString path) {
 
 
 void ProblemAdapter::unloadProblemsList() {
-    QList <Problem> tmplist;
+    QList<Problem> tmplist;
     problemlist = new ProblemItemListModel(tmplist);
 }
 

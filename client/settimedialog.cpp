@@ -19,7 +19,6 @@
 #include "settimedialog.h"
 #include "ui_settimedialog.h"
 
-#include <QDebug>
 
 SetTimeDialog::SetTimeDialog(QWidget *parent) :
 QDialog(parent),

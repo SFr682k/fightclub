@@ -29,6 +29,7 @@
 #include "phasepbar.h"
 #include "problemadapter.h"
 #include "settimedialog.h"
+#include "teamadapter.h"
 
 namespace Ui {
 class FightclubClient;
@@ -51,6 +52,9 @@ private:
     PhasePBar *phpbar;
     ProblemAdapter *probadapt;
     SetTimeDialog *settimedlg;
+    TeamAdapter *teamadapt;
+
+    QString repcomboboxinit, oppcomboboxinit, revcomboboxinit;
 
     QString previousPath;
 
@@ -69,14 +73,16 @@ private slots:
     void scrollToSelectedStage(int);
     void propagatePhasesList(QAbstractTableModel*);
     void scrollToSelectedPhase(int);
-    void setPrevPhaseAAdv(bool);
-    void setPrevPhaseCarry(bool);
-    void setPrevPhaseOCarry(bool);
-    void setCurrPhaseAAdv(bool);
-    void setCurrPhaseCarry(bool);
-    void setCurrPhaseOCarry(bool);
+
+    void setPrevPhaseProps(bool,bool,bool);
+    void setCurrPhaseProps(bool,bool,bool);
 
     void propagateProblemsList(int);
+
+    void performersChanged(QString, QString, QString);
+    void updateReporterModel(int);
+    void updateOpponentModel(int);
+    void updateReviewerModel(int);
 
     void setBroadcastIP();
     void setBroadcastPort();
@@ -89,6 +95,8 @@ private slots:
     void unloadPhasesFile();
     void openProblemsFile();
     void unloadProblemsFile();
+    void openTeamsFile();
+    void unloadTeamsFile();
 
     void initialize();
 

@@ -1,30 +1,42 @@
 \documentclass[11pt]{ltxdoc}
 
 \usepackage{fontspec}
+\usepackage{unicode-math}
 \usepackage{polyglossia}
 \setdefaultlanguage{english}
 \usepackage[english]{selnolig}
 
 \setmainfont{Free Serif}
+\setmathfont{XITS Math}
 \setsansfont[Scale=MatchLowercase]{Free Sans}
 \setmonofont[Scale=MatchLowercase]{Hack}
 
 \usepackage[DIV=9]{typearea}
 
+\usepackage{array}
 \usepackage{csquotes}
 \usepackage{enumitem}
-    \setlist{itemsep=0ex,topsep=.75ex}
+    \setlist{itemsep=0ex,topsep=.5ex}
 
 \usepackage[table]{xcolor}
 
 
 \usepackage{imakeidx}
+    \indexprologue[\smallskip]{%
+        This small index contains a selected number of important self-defined keywords and symbols. \\
+        They are defined, explained and \colorbox{red!15}{highlighted} on the stated page.}
 \usepackage[unicode, pdfborder={0 0 0}, hyperindex=true, linktoc=all, pdfpagelabels]{hyperref}
 
 
 \def\highlight#1{%
-    \colorbox{red!12}{#1}%
+    \colorbox{red!15}{#1}%
     \index{\textsf{#1}}}
+
+\newlength{\ccharwidth}
+\settowidth{\ccharwidth}{\texttt{~~~}}
+\def\contindic{\hbox to \ccharwidth {\rmfamily\small\hookrightarrow}}
+\def\tab{\hbox to \ccharwidth {{\rmfamily\small\mapsto}}}
+\hbadness=10000
 
 
 \MakeShortVerb{"}
@@ -32,34 +44,41 @@
 
 \parindent 0pt
 
+\hyphenation{spe-ci-fy-ing}
+
 \hypersetup{pdftitle={Fightclub Client: Requirements on files}, pdfauthor={Sebastian Friedl}}
+
+
+
 
 
 \title{\bfseries Fightclub Client: Requirements on files}
 \author{Sebastian Friedl}
-\date{\itshape Written to match the requirements of version 0.3}
+\date{\itshape Written to match the requirements of Fightclub Client 0.4}
 
 \begin{document}
     \maketitle
     
     \begin{abstract}\noindent
-        Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor; this file describes the syntactical requirements on such data files.
+        Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor. This document describes the syntactical requirements on such data files.
     \end{abstract}
 
     \tableofcontents
-    
-    
-    
+
     
     
     
     
     \clearpage
     \section{General notes}
-    Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor; however, those files require use of the respective file extension listed below and have to be encoded using "UTF-8" (without Byte Order Mark).
+    This section introduces the principles of data files and IDs. \\
+    Since Fightclub Client depends on these mechanisms, knowledge about them is vital.
+    
+    \subsection{General requirements on files}
+    Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor; however, those files require use of the respective file extension listed in sections~\ref{sec:files-stages}ff and have to be encoded using "UTF-8" (without Byte Order Mark).
 
     \medskip
-    To avoid loading wrong files -- and the resulting malfunction -- a \highlight{file header}, consisting of some "XML"-styled code, may be added to the first lines of a data file:
+    To avoid loading wrong files -- and the resulting malfunction -- a \highlight{file header}, consisting of some "XML"-styled code, may be added to the first lines of each data file:
     
     \smallskip
     "<FightclubExchangeFile>stages</FightclubExchangeFile>" \\
@@ -71,30 +90,61 @@
     \textbf{Note:}
     \begin{itemize}
         \item
-            The tags are \textit{case sensitive}: "<FightclubExchangeFile>" gets recognized, while other variations like "<FIGHTCLUBexchangefile>" do not.
+            These tags are \textit{case sensitive}; for example, "<FightclubExchangeFile>" is recognized, while other variations like "<FIGHTCLUBexchangefile>" are not.
         \item
-            Line breaks inside a tag are \textit{not} allowed; the whole tag must be opened and closed on the same line.
+            Line breaks inside a tag are \textit{not} allowed; the whole tag has to be opened and closed on the same line.
         
         \item
-            The values of "<FightclubExchangeFile>" and "<ExchangeProtocolVersion>" depend on the exchange file and are listed below.
+            The values of "<FightclubExchangeFile>" and "<ExchangeProtocolVersion>" depend on the exchange file and are listed in sections~\ref{sec:files-stages}ff.
     \end{itemize} 
     
     \medskip
-    As long as not being stated otherwise, \highlight{\texttt{\textbackslash t}} represents a tabstopp. It is \textit{not} possible to use spaces for indentation.
+    As long as not being stated otherwise, \highlight{\mapsto} represents a tabstopp and \highlight{\hookrightarrow} a continuation of the previous line. It is \textit{not} possible to use spaces for indentation.
+    
+    
+    
+    \subsection{Two flavours of IDs}\label{sec:notes-id}
+    Fightclub Client uses IDs for referencing to teams or participants. Those IDs are derived from the "teams" file (if present; see section~\ref{sec:files-teams}).
+    
+    \medskip
+    There are two flavours of IDs:
+    \begin{itemize}
+        \item[a)] \textbf{Referencing teams: \highlight{Team IDs}} \\
+            Team IDs consist of several arbitrary characters. There are only two limitations:
+            \begin{itemize}
+                \item[1.] Team IDs must \textit{not} contain the slash character ("/")
+                \item[2.] All team IDs must be unique
+            \end{itemize}
+            
+            Although you may use any "UTF-8" character (excluding the slash) for building a team ID, it is \textit{not} recommended to do so.
+            Instead, you should \enquote{only} use latin letters (upper- and lowercase), numbers, underscores and \enquote{more common} symbols.
+            
+            \smallskip
+            Examples for valid team IDs:\quad "foobar", "themysteryof237", "maschendrahtzaun" \\
+            Invalid team IDs are:\quad "08/15", "here/there", "pe/\k", "____/\_______\o/_____"
+
+        
+        \item[b)] \textbf{Referencing participants: \highlight{Personal IDs}} \\
+            Personal IDs consist of a team ID and a slash ("/") followed by an integer number. The integer number is determined by the position of the participant in his team's list of participants (see section~\ref{sec:files-teams}).
+            
+            \smallskip
+            Examples for valid personal IDs:\quad "#lolblub42/1", "foobaz/5", "holzpfosten/2" \\
+            Invalid personal IDs are:\quad "voo/doo", "invalid/23.7", "not/a/personal/id"
+    \end{itemize}
+
     
     
     
     
-    
-    \section{Requirements on data files}
+    \section{Specific requirements on files}
     This section depicts the format of the exchange files. \\
     Examples are stored in the "sample-files" directory.
     
     
-    \subsection{Files specifying stages}
+    \subsection{Files specifying stages}\label{sec:files-stages}
     \begin{center}
         \rowcolors{1}{black!20}{white}
-        \begin{tabular}{ll}
+        \begin{tabular}{lr}
             File extension & ".fcstages" \\
             "<FightclubExchangeFile>" & "stages" \\
             "<ExchangeProtocolVersion>" & "1"
@@ -108,16 +158,16 @@
     
     \subsubsection*{Syntax for physics fight stages}
     The syntax of a physics fight stage depends on the roles involved in it. It is
-    \begin{center}
-        "stage label  \t  problem  \t  rep. id  \t  opp. id  \t  rev. id"
+    \begin{center}\ttfamily
+        stage label  \tab problem  \tab rep. id  \tab opp. id  \tab rev. id
     \end{center}
     for stages featuring all roles (Reporter, Opponent, Reviewer),
-    \begin{center}
-        "stage label  \t  problem  \t  rep. id  \t  opp. id"
+    \begin{center}\ttfamily
+        stage label  \tab problem  \tab rep. id  \tab opp. id
     \end{center}
     for stages without reviewer and
-    \begin{center}
-        "stage label  \t  problem  \t  rep. id"
+    \begin{center}\ttfamily
+        stage label  \tab problem  \tab rep. id
     \end{center}
     for stages with only a reporter.
     
@@ -125,9 +175,9 @@
     \textit{Key:}
     \begin{itemize}
         \item
-            "stage label": should be used to indicate fight, room and stage nr (e.g. "PF 3/D1" for stage 1 of physics fight 3 in room D or just a simple time like "09:00")
+            "stage label": should be used to indicate physics fight, room and stage nr (e.g. "PF 3/D1" for stage 1 of physics fight 3 in room D or just a simple time like "09:00")
         \item
-            "problem": either the problem's number or "-1" (when specifying "-1", the problem may be selected from a list)
+            "problem": either the problem's number as stated in the "problems" file or "-1" (when specifying "-1", an arbitrary problem may be selected via the provided combo box)
  
         \item
             "rep. id", "opp. id", "rev. id": either the \textit{team id} of the reporting, opposing or reviewing team or the \textit{personal id} of the Reporter, Opponent or Reviewer
@@ -135,15 +185,19 @@
     
     \medskip
     Please mind the difference between a \textit{stage} and a \textit{physics fight:} \\
-    If there are three teams participating in a physics fight, there have to be three stages -- and therefore three lines in the stages file.
+    If there are three teams participating in a physics fight, there have to be three stages -- and therefore at least three lines in the stages file.
     
     \bigskip
     Teams with the Observer's role are not listed in such a stages file. \\
-    Example for a four-teams-fight between "hun", "pol", "chn" and "sgp" with an observer: \\[\smallskipamount]
-    "Final/Stage 1  \t  9   \t  hun  \t  pol  \t  chn" \\
-    "Final/Stage 2  \t  17  \t  pol  \t  chn  \t  sgp" \\
-    "Final/Stage 3  \t  3   \t  chn  \t  sgp  \t  hun" \\
-    "Final/Stage 4  \t  5   \t  sgp  \t  hun  \t  pol" 
+    Example for a four-team-fight between "hun", "pol", "chn" and "sgp" with an observer: \\[\smallskipamount]
+    \begin{ttfamily}%
+        \begin{tabular}{@{}l*{4}{>{\tab}l}}%
+            Final/Stage 1 & 9  & hun & pol & chn \\
+            Final/Stage 2 & 17 & pol & chn & sgp \\
+            Final/Stage 3 & 3  & chn & sgp & hun \\
+            Final/Stage 4 & 5  & sgp & hun & pol
+        \end{tabular}
+    \end{ttfamily}
     
     
     
@@ -152,17 +206,21 @@
     
     
     \subsubsection*{Example lines for a \texttt{stages} file}
-    "Address of Welcome" \\
-    "PF 3/D1  \t  -1  \t  ger     \t  cze   \t  uk" \\
-    "D 15:40  \t  17  \t  aggr/2  \t  dch3" \\
-    "14:50    \t  9   \t  wshp/4" 
+    \begin{ttfamily}%
+        \begin{tabular}{@{}l*{4}{>{\tab}l}}%
+            \multicolumn{5}{@{}l}{Address of Welcome} \\
+            PF 3/D1 & -1 & ger    & cze~ & uk \\
+            D 15:40 & 17 & aggr/2 & dch3 \\
+            14:50   & 9  & wshp/4
+        \end{tabular}
+    \end{ttfamily}
     
     
     
     \subsection{Files specifying phases}
     \begin{center}
         \rowcolors{1}{black!20}{white}
-        \begin{tabular}{ll}
+        \begin{tabular}{lr}
             File extension & ".fcphases" \\
             "<FightclubExchangeFile>" & "phases" \\
             "<ExchangeProtocolVersion>" & "1"
@@ -171,8 +229,8 @@
     
     
     \subsubsection*{General syntax}
-    \begin{center}
-        "duration  \t  overtime  \t  title  \t  performances  \t  options"
+    \begin{center}\ttfamily
+        duration  \tab overtime  \tab title  \tab performances  \tab options
     \end{center}
     
     \smallskip
@@ -185,7 +243,7 @@
         \item "options": further configuration of the phase
     \end{itemize}
 
-    \smallskip
+    \medskip
     You may omit
     \begin{itemize}
         \item
@@ -195,7 +253,7 @@
     \end{itemize}
     
     \smallskip
-    Lines consisting of less than three tabular-separated columns are treated as comments and ignored.
+    Lines consisting of less than three tabular-separated columns are ignored.
 
     
     \subsubsection*{Allowed values for \texttt{performances}}
@@ -211,28 +269,32 @@
     \subsubsection*{Allowed \texttt{options}}
     \begin{itemize}
         \item "a": autoadvance to the next phase if maximum duration \textit{and} allowed overtime elapsed
-        \item "c": carry the \textit{whole elapsed} time to the next phase
-        \item "o": only carry the \textit{elapsed overtime} to the next phase
-        \item "r": show the roomclock. Use this option only for phases with no maximum duration.
-        \item "n": do not use any \enquote{special} options and behave like a \enquote{normal} phase.
+        \item "c": carry the \textit{whole elapsed time} to the next phase
+        \item "o": carry the \textit{elapsed overtime} to the next phase
+        \item "r": roomclock phase; use this option only for phases where elapsed time and maximum duration are not relevant (e.g. breaks)
+        \item "n": do not use any \enquote{special} options and behave like a \enquote{normal} phase
     \end{itemize}
 
     Again, you have to specify \textit{at least one} of these values, including "n".
     
     
     \subsubsection*{Example lines for a \texttt{phases} file}
-    "720  \t 0  \t Presentation of the report                \t rep     \t n" \\
-    "240  \t 0  \t The Opponent takes the floor              \t opp     \t c" \\
-    "840  \t 0  \t Discussion between Reporter and Opponent  \t repopp  \t n" \\
-    "120  \t 0  \t Preparation of the Reviewer               \t rev     \t n" \\
-    "600  \t 0  \t Break                                     \t nll     \t r"
+    \begin{ttfamily}
+        \begin{tabular}{@{}l*{4}{>{\tab}l}}%
+            720 & 0 & Presentation of the report               & rep    & n \\
+            240 & 0 & The Opponent takes the floor             & opp    & c \\
+            840 & 0 & Discussion between Reporter and Opponent & repopp & n \\
+            120 & 0 & Preparation of the Reviewer              & rev    & n \\
+            600 & 0 & Break                                    & nll    & r
+        \end{tabular}
+    \end{ttfamily}
     
     
     
     \subsection{Files specifying problems}
     \begin{center}
         \rowcolors{1}{black!20}{white}
-        \begin{tabular}{ll}
+        \begin{tabular}{lr}
             File extension & ".fcproblems" \\
             "<FightclubExchangeFile>" & "problems" \\
             "<ExchangeProtocolVersion>" & "1"
@@ -241,8 +303,8 @@
     
     
     \subsubsection*{General syntax}
-    \begin{center}
-        "nr  \t  title"
+    \begin{center}\ttfamily
+        nr  \tab  title
     \end{center}
 
     The list should be sorted by problem numbers in ascending order.
@@ -255,23 +317,84 @@
     \end{itemize}
     
     \smallskip
-    Lines consisting of less than three tabular-separated columns are treated as comments and ignored.
+    Lines consisting of less than two tabular-separated columns are ignored.
     
     
     \subsubsection*{Example lines for a \texttt{problems} file}
-    "5   \t  Leidenfrost Stars" \\
-    "10  \t  Pulling Glasses Apart" \\
-    "12  \t  Torsion Gyroscope"
+    \begin{ttfamily}
+        \begin{tabular}{@{}l>{\tab}l}%
+            5  & Leidenfrost Stars \\
+            10 & Pulling Glasses Apart \\
+            12 & Torsion Gyroscope
+        \end{tabular}
+    \end{ttfamily}
     
-    \medskip
-    \textit{This is only an extract; a full \texttt{problems} file should of course contain all 17 problems ;)}
+    \bigskip
+    This is only an extract; a full \texttt{problems} file should of course contain all 17 problems.
     
+    
+    
+    
+    \subsection{Files specifying teams}\label{sec:files-teams}
+    \begin{center}
+        \rowcolors{1}{black!20}{white}
+        \begin{tabular}{lr}
+            File extension & ".fcteams" \\
+            "<FightclubExchangeFile>" & "teams" \\
+            "<ExchangeProtocolVersion>" & "1"
+        \end{tabular}
+    \end{center}
+    
+    
+    \subsubsection*{General syntax}
+    \begin{center}\ttfamily
+        team id  \tab  team name  \tab  <list of participants>
+    \end{center}
+
+    \smallskip
+    \textit{Key:}
+    \begin{itemize}
+        \item "team id": the unique \textit{team id} (see section~\ref{sec:notes-id}) assigned to this team
+        \item "team name": the name of the team (doesn't need not be unique)
+        \item "<list of participants>": A tabstopp-separated list of all participants belonging this team. 
+    \end{itemize}
+    
+    Lines consisting of less than two tabular-separated columns are ignored.
+    
+    
+    \subsubsection*{Example lines for a \texttt{teams} file}
+    \begin{ttfamily}
+        \begin{tabular}{@{}l*{4}{>{\tab}l}}%
+        ger & Germany     & R. Mason       & S. Friedl & W. El-Kishawi \\\multicolumn{2}{r@{}}{\contindic}
+                          & B. Magnussen   & A. Medert \\
+        cze & Czech Rep.  & P. Stepanek    & J. Domes  & D. Rychlý     \\\multicolumn{2}{r@{}}{\contindic}
+                          & D. Wittek      & T. Wolf \\
+        uk  & Un. Kingdom & J. Dranczewski & P. Cloud  & Y. Fei        \\\multicolumn{2}{r@{}}{\contindic}
+                          & L. Jiao        & B. Miller
+        \end{tabular}
+    \end{ttfamily}
+    
+    The following IDs are derived from this example:
+    \begin{itemize}
+        \item["ger"] \textbf{Team ID}
+            representing an arbitrary member of team \texttt{Germany}, i.e. \texttt{R.~Mason}, \texttt{S.~Friedl}, \texttt{W.~El-Kishawi}, \texttt{B.~Magnussen} or \texttt{A.~Medert}. \\
+            When using such a Team ID in a "stages" file, one of team's members may be selected via the provided combo boxes.
+        
+        \item["ger/1"] \textbf{Personal ID}
+            representing member \texttt{1} of team \texttt{Germany}, i.e. \texttt{R.~Mason}
+        
+        \item["ger/3"] \textbf{Personal ID}
+            representing member \texttt{3} of team \texttt{Germany}, i.e. \texttt{W. El-Kishawi}
+        
+        \item["ger/7"] \textbf{Invalid personal ID}
+            since team \texttt{Germany} consists of only five members
+    \end{itemize}
+
     
     
     
     
 
-    \clearpage
     \printindex
     \phantomsection
     \addcontentsline{toc}{section}{Index}

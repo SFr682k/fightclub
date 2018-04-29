@@ -28,8 +28,8 @@ ClockWindow::ClockWindow(QWidget *parent) :
 {   
     ui->setupUi(this);
 
-    if(ui->problabel->text().startsWith("<ApplicationName>"))
-        ui->problabel->setText(QApplication::applicationName() + ", Version " + QApplication::applicationVersion());
+    if(ui->problabel->text().startsWith("<empty>"))
+        ui->problabel->setText(" ");
 
     if(ui->perflabel->text().startsWith("<empty>"))
         ui->perflabel->setText(" ");
@@ -55,11 +55,15 @@ ClockWindow::~ClockWindow() {
 
 
 void ClockWindow::toggleRoomclock(bool showRClock) {
-    if(roomclock && !showRClock)        refreshtimer->stop();
-    else if (!roomclock && showRClock)  refreshtimer->start(30);
+    bool resetTime = false;
+    if(roomclock && !showRClock) {
+        refreshtimer->stop();
+        resetTime = true;
+    } else if (!roomclock && showRClock)  refreshtimer->start(30);
 
     roomclock = showRClock;
     ui->clockwidget->setRoomclock(showRClock);
+    if(resetTime) updateElapsedTime(0);
 }
 
 
