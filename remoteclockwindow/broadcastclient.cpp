@@ -24,6 +24,7 @@
 #include <QDataStream>
 #include <QtNetwork>
 
+
 BroadcastClient::BroadcastClient(QObject *parent, unsigned int prt, unsigned int sig) :
     QObject(parent)
 {
@@ -46,12 +47,12 @@ BroadcastClient::BroadcastClient(QObject *parent, unsigned int prt, unsigned int
 }
 
 
-BroadcastClient::~BroadcastClient(){
+BroadcastClient::~BroadcastClient() {
     delete udpSocket;
 }
 
 
-void BroadcastClient::setListeningPort(unsigned int prt){
+void BroadcastClient::setListeningPort(unsigned int prt) {
     udpSocket->close();
     if(prt > 0) port = prt%65536;
     else        port = 45454;
@@ -59,11 +60,11 @@ void BroadcastClient::setListeningPort(unsigned int prt){
     udpSocket->bind(port, QUdpSocket::ShareAddress);
 }
 
-
 void BroadcastClient::setSignature(unsigned int sig) { signature = sig; }
 
 
-void BroadcastClient::processDatagrams(){
+
+void BroadcastClient::processDatagrams() {
     quint32 nsignature, nmaximumTime, nroomclock, nelapsedTime;
     QString nphasename, nproblem, nperformers;
 
@@ -104,6 +105,7 @@ void BroadcastClient::processDatagrams(){
         emit phaseNameChanged(phasename);
     }
 
+    if(nproblem == "") { nproblem = " "; }
     if(problem != nproblem) {
         problem = nproblem;
         emit problemChanged(problem);
@@ -115,3 +117,7 @@ void BroadcastClient::processDatagrams(){
     }
 }
 
+
+
+uint BroadcastClient::getBcastPort()      { return port; }
+uint BroadcastClient::getBcastSignature() { return signature; }
