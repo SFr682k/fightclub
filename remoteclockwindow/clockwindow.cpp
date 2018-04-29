@@ -29,6 +29,11 @@ ClockWindow::ClockWindow(QWidget *parent) :
 {      
     ui->setupUi(this);
 
+    bcastcli = new BroadcastClient(this);
+    setupbcastdial = new SetupBroadcastDialog(this);
+
+
+
     if(ui->problabel->text().startsWith("<ApplicationName>"))
         ui->problabel->setText(QApplication::applicationName() + ", Version " + QApplication::applicationVersion());
 
@@ -51,7 +56,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
     roomclock = true;
 
-    bcastcli = new BroadcastClient(this, 45454, 12345);
+
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), this, SLOT(updateElapsedTime(int)));
 
@@ -85,20 +90,23 @@ void ClockWindow::openAboutDialog() {
 
 
 void ClockWindow::openSetupBCastDialog() {
-    bcastSettingsOpen = true;
-    SetupBroadcastDialog *setupbcastdial = new SetupBroadcastDialog(this,this);
-    int finished = setupbcastdial->exec();
-    bcastSettingsOpen = false;
-
-    if(finished == QDialog::Accepted) {
+    if(setupbcastdial->exec()) {
         emit newPort(setupbcastdial->getBroadcastPort());
         emit newID(setupbcastdial->getBroadcastID());
     }
 }
 
 
-void ClockWindow::setPort(uint newport) { emit newPort(newport); }
-void ClockWindow::setID(uint newid)     { emit newID(newid); }
+void ClockWindow::setPort(uint newport) {
+    setupbcastdial->setPort(newport);
+    emit newPort(newport);
+}
+
+void ClockWindow::setID(uint newid) {
+    setupbcastdial->setID(newid);
+    emit newID(newid);
+}
+
 
 uint ClockWindow::getBcastPort() { return bcastcli->getBcastPort(); }
 uint ClockWindow::getBcastID()   { return bcastcli->getBcastSignature(); }
@@ -175,7 +183,7 @@ void ClockWindow::keyPressEvent(QKeyEvent *event) {
             break;
 
         case Qt::Key_Escape:
-            setWindowState(Qt::WindowMaximized);
+            if(windowState() == Qt::WindowFullScreen) setWindowState(Qt::WindowMaximized);
             break;
 
         case Qt::Key_Q:

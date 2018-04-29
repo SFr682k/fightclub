@@ -26,6 +26,7 @@
 #include <QTimer>
 
 #include "broadcastclient.h"
+#include "setupbroadcastdialog.h"
 
 namespace Ui {
 class ClockWindow;
@@ -52,6 +53,7 @@ protected:
 private:
     Ui::ClockWindow *ui;
     BroadcastClient *bcastcli;
+    SetupBroadcastDialog *setupbcastdial;
     bool aboutDialogOpen;
     bool bcastSettingsOpen;
     QTimer *refreshtimer;

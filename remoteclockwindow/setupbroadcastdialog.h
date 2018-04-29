@@ -21,7 +21,6 @@
 
 #include <QDialog>
 
-#include "clockwindow.h"
 
 namespace Ui {
 class SetupBroadcastDialog;
@@ -32,17 +31,27 @@ class SetupBroadcastDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SetupBroadcastDialog(ClockWindow *cwindow, QWidget *parent = 0);
+    explicit SetupBroadcastDialog(QWidget *parent = 0, unsigned int port = 45454, unsigned int id = 12345);
     ~SetupBroadcastDialog();
     int getBroadcastPort();
     int getBroadcastID();
 
+private:
+    Ui::SetupBroadcastDialog *ui;
+    uint port;
+    uint id;
+    bool locked;
+    QString lockedpwd;
+    void setupSelections();
+
+public slots:
+    void toggleLockedState();
+    void setPort(uint);
+    void setID(uint);
+
 private slots:
     void enableCustomSettings(bool);
     void applyDefaultSettings(bool);
-
-private:
-    Ui::SetupBroadcastDialog *ui;
 };
 
 #endif // SETUPBROADCASTDIALOG_H

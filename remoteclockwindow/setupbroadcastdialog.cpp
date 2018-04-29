@@ -20,30 +20,57 @@
 #include "ui_setupbroadcastdialog.h"
 
 
-SetupBroadcastDialog::SetupBroadcastDialog(ClockWindow* cwindow, QWidget *parent) :
+SetupBroadcastDialog::SetupBroadcastDialog(QWidget *parent, unsigned int bcastport, unsigned int bcastid) :
     QDialog(parent),
     ui(new Ui::SetupBroadcastDialog) {
     ui->setupUi(this);
 
+    setPort(bcastport);
+    setID(bcastid);
+
+    locked = false;
+
+
     connect(ui->defaultSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(applyDefaultSettings(bool)));
     connect(ui->customSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(enableCustomSettings(bool)));
 
-    if((cwindow->getBcastPort() != 45454) || (cwindow->getBcastID() != 12345)) {
-        ui->customSettingsRbttn->setChecked(true);
-        ui->selBcastPort->setValue(cwindow->getBcastPort());
-        ui->selBcastID->setValue(cwindow->getBcastID());
-    } else {
-        ui->defaultSettingsRbttn->setChecked(true);
-        enableCustomSettings(false);
-    }
+    connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
+    connect(ui->applySettings, SIGNAL(clicked(bool)), this, SLOT(accept()));
+
+
+    setupSelections();
 }
 
 SetupBroadcastDialog::~SetupBroadcastDialog() {
     delete ui;
 }
 
+
+void SetupBroadcastDialog::setupSelections() {
+    if((port != 45454) || (id != 12345)) {
+        ui->customSettingsRbttn->setChecked(true);
+        ui->selBcastPort->setValue(port);
+        ui->selBcastID->setValue(id);
+    } else {
+        ui->defaultSettingsRbttn->setChecked(true);
+        enableCustomSettings(false);
+    }
+}
+
 int SetupBroadcastDialog::getBroadcastPort() { return ui->selBcastPort->value(); }
 int SetupBroadcastDialog::getBroadcastID()   { return ui->selBcastID->value(); }
+
+
+void SetupBroadcastDialog::setPort(uint newport) {
+    if(newport > 0) port = newport%65536;
+    else            port = 45454;
+    setupSelections();
+}
+
+void SetupBroadcastDialog::setID(uint newid) {
+    id = newid;
+    setupSelections();
+}
 
 
 void SetupBroadcastDialog::applyDefaultSettings(bool apply) {
@@ -58,4 +85,20 @@ void SetupBroadcastDialog::enableCustomSettings(bool enabled) {
     ui->selBcastPort->setEnabled(enabled);
     ui->bcastIDLabel->setEnabled(enabled);
     ui->selBcastID->setEnabled(enabled);
+}
+
+
+void SetupBroadcastDialog::toggleLockedState() {
+    if(!locked) {
+        // TODO: Insert a password prompt
+        locked = true;
+    } else {
+        // TODO: Enter password prompt
+        locked = false;
+    }
+
+    ui->bcastSettings->setEnabled(!locked);
+    ui->lockSettings->setText(locked? "Unlock" : "Lock");
+    ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.png")
+                                    : QIcon(":/breeze-icons/object-locked-16.png"));
 }
