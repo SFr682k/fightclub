@@ -19,14 +19,17 @@
 #include "setupbroadcastdialog.h"
 #include "ui_setupbroadcastdialog.h"
 
+#include <QInputDialog>
+#include <QMessageBox>
 
 SetupBroadcastDialog::SetupBroadcastDialog(QWidget *parent, unsigned int bcastport, unsigned int bcastid) :
     QDialog(parent),
     ui(new Ui::SetupBroadcastDialog) {
     ui->setupUi(this);
 
-    setPort(bcastport);
-    setID(bcastid);
+    port = bcastport;
+    id = bcastid;
+    setupSelections();
 
     locked = false;
 
@@ -90,10 +93,32 @@ void SetupBroadcastDialog::enableCustomSettings(bool enabled) {
 
 void SetupBroadcastDialog::toggleLockedState() {
     if(!locked) {
-        // TODO: Insert a password prompt
+        QString pwd1 = QInputDialog::getText(this, "Set password",
+                                             "Please set a password:", QLineEdit::Password);
+
+        if(pwd1 == nullptr) return;
+
+        QString pwd2 = QInputDialog::getText(this, "Set password",
+                                             "Please confirm the password:", QLineEdit::Password);
+
+        if(pwd2 == nullptr) return;
+        else if(pwd1 != pwd2) {
+            QMessageBox::critical(this, "Error", "The passwords are not identical");
+            return;
+        }
+
         locked = true;
+        lockedpwd = pwd1;
     } else {
-        // TODO: Enter password prompt
+        QString pwd = QInputDialog::getText(this, "Enter password",
+                                            "Please enter the password:", QLineEdit::Password);
+
+        if(pwd == nullptr) return;
+        else if(pwd != lockedpwd) {
+            QMessageBox::critical(this, "Error", "Wrong password");
+            return;
+        }
+
         locked = false;
     }
 
