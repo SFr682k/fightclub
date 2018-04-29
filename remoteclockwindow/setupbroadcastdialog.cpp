@@ -19,7 +19,8 @@
 #include "setupbroadcastdialog.h"
 #include "ui_setupbroadcastdialog.h"
 
-SetupBroadcastDialog::SetupBroadcastDialog(QWidget *parent) :
+
+SetupBroadcastDialog::SetupBroadcastDialog(ClockWindow* cwindow, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SetupBroadcastDialog) {
     ui->setupUi(this);
@@ -27,8 +28,14 @@ SetupBroadcastDialog::SetupBroadcastDialog(QWidget *parent) :
     connect(ui->defaultSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(applyDefaultSettings(bool)));
     connect(ui->customSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(enableCustomSettings(bool)));
 
-    enableCustomSettings(false);
-    ui->defaultSettingsRbttn->setChecked(true);
+    if((cwindow->getBcastPort() != 45454) || (cwindow->getBcastID() != 12345)) {
+        ui->customSettingsRbttn->setChecked(true);
+        ui->selBcastPort->setValue(cwindow->getBcastPort());
+        ui->selBcastID->setValue(cwindow->getBcastID());
+    } else {
+        ui->defaultSettingsRbttn->setChecked(true);
+        enableCustomSettings(false);
+    }
 }
 
 SetupBroadcastDialog::~SetupBroadcastDialog() {

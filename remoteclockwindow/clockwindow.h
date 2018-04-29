@@ -25,6 +25,8 @@
 #include <QTime>
 #include <QTimer>
 
+#include "broadcastclient.h"
+
 namespace Ui {
 class ClockWindow;
 }
@@ -40,6 +42,8 @@ public:
     void setID(uint);
     void openAboutDialog();
     void openSetupBCastDialog();
+    uint getBcastPort();
+    uint getBcastID();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -47,11 +51,13 @@ protected:
 
 private:
     Ui::ClockWindow *ui;
+    BroadcastClient *bcastcli;
     bool aboutDialogOpen;
     bool bcastSettingsOpen;
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;
+    uint bcastPort, bcastID;
 
 signals:
     void newPort(uint);

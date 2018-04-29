@@ -44,16 +44,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="problabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="font">
          <font>
           <pointsize>13</pointsize>
-          <italic>true</italic>
          </font>
         </property>
         <property name="text">
@@ -61,6 +54,9 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -79,16 +75,9 @@
       </item>
       <item>
        <widget class="QLabel" name="perflabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
         <property name="font">
          <font>
           <pointsize>13</pointsize>
-          <italic>true</italic>
          </font>
         </property>
         <property name="frameShape">
@@ -99,6 +88,9 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

@@ -21,6 +21,8 @@
 
 #include <QDialog>
 
+#include "clockwindow.h"
+
 namespace Ui {
 class SetupBroadcastDialog;
 }
@@ -30,7 +32,7 @@ class SetupBroadcastDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SetupBroadcastDialog(QWidget *parent = 0);
+    explicit SetupBroadcastDialog(ClockWindow *cwindow, QWidget *parent = 0);
     ~SetupBroadcastDialog();
     int getBroadcastPort();
     int getBroadcastID();

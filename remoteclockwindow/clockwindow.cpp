@@ -20,14 +20,13 @@
 #include "ui_clockwindow.h"
 
 #include "aboutdialog.h"
-#include "broadcastclient.h"
 #include "setupbroadcastdialog.h"
 
 
 ClockWindow::ClockWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ClockWindow)
-{   
+{      
     ui->setupUi(this);
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
@@ -52,7 +51,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
     roomclock = true;
 
-    BroadcastClient *bcastcli = new BroadcastClient(this, 45454, 12345);
+    bcastcli = new BroadcastClient(this, 45454, 12345);
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), this, SLOT(updateElapsedTime(int)));
 
@@ -87,7 +86,7 @@ void ClockWindow::openAboutDialog() {
 
 void ClockWindow::openSetupBCastDialog() {
     bcastSettingsOpen = true;
-    SetupBroadcastDialog *setupbcastdial = new SetupBroadcastDialog(this);
+    SetupBroadcastDialog *setupbcastdial = new SetupBroadcastDialog(this,this);
     int finished = setupbcastdial->exec();
     bcastSettingsOpen = false;
 
@@ -100,6 +99,9 @@ void ClockWindow::openSetupBCastDialog() {
 
 void ClockWindow::setPort(uint newport) { emit newPort(newport); }
 void ClockWindow::setID(uint newid)     { emit newID(newid); }
+
+uint ClockWindow::getBcastPort() { return bcastcli->getBcastPort(); }
+uint ClockWindow::getBcastID()   { return bcastcli->getBcastSignature(); }
 
 
 void ClockWindow::toggleRoomclock(bool showRClock) {

@@ -33,6 +33,8 @@ public:
     explicit BroadcastClient(QObject *parent = 0, unsigned int port = 45454, unsigned int signature = 12345);
     ~BroadcastClient();
     QString toString();
+    uint getBcastPort();
+    uint getBcastSignature();
 
 signals:
     void phaseNameChanged(QString);
