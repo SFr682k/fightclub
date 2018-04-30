@@ -71,6 +71,9 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     maxtime = 1;
     roomclock = false;
 
+
+
+
     rscene = new QGraphicsScene();
 
     QPen handPen;
@@ -145,6 +148,15 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     rscene->addItem(secondHandBase);
     rscene->addItem(secondRing);
 
+
+
+
+    emptyscene = new QGraphicsScene();
+
+    bboxring = new QGraphicsEllipseItem(0,0,300,300);
+    bboxring->setPen(QPen(QColor(255,255,255,0)));
+
+    emptyscene->addItem(bboxring);
 }
 
 
@@ -202,6 +214,7 @@ void ThemeClockWidget::act() {
     else          actPie();
 }
 
+void ThemeClockWidget::clear() { setScene(emptyscene); }
 
 void ThemeClockWidget::setMaximumTime(int ms)       { if(ms > 0) maxtime = ms; }
 void ThemeClockWidget::setElapsedTime(int ms)       { time = ms; }

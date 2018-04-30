@@ -44,6 +44,8 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
 
 
     listofclockboxes = QList<QGroupBox*>();
+    listofperflabels = QList<QLabel*>();
+    listofphaselabels = QList<QLabel*>();
 
 
     refreshtimer = new QTimer();
@@ -51,9 +53,12 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
 
     connect(refreshtimer, SIGNAL(timeout()), this, SLOT(updateTimeDisplay()));
 
-
     switchpagetimer = new QTimer();
     switchpagetimer->setInterval(6000);
+
+
+    mbcastclient = new MultiBroadcastClient();
+    connect(mbcastclient, SIGNAL(newClock(SignalHelper*)), this, SLOT(createClock(SignalHelper*)));
 
     QTimer::singleShot(6000 - QTime::currentTime().msecsSinceStartOfDay() % 6000,
                        switchpagetimer, SLOT(start()));
@@ -63,13 +68,8 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
 
     aboutDialogOpen = false;
 
-    createClock();
-    createClock();
-    createClock();
-    createClock();
-    createClock();
-    createClock();
-    createClock();
+    mbcastclient->loadFromFile("fights.txt");
+    fillRemainingSpace();
 }
 
 
@@ -89,14 +89,14 @@ void FightclubDashboard::openAboutDialog() {
 
 
 
-void FightclubDashboard::createClock() {
+void FightclubDashboard::createClock(SignalHelper* signalHelper) {
     if(numberOfClocks/6 >= container->count()) {
         // All pages of the clock container are full
         QWidget *newPage = new QWidget();
 
         QGridLayout *containerGrid = new QGridLayout();
         containerGrid->setMargin(0);
-        containerGrid->setSpacing(0);
+        containerGrid->setSpacing(6);
         containerGrid->setColumnStretch(0,1);
         containerGrid->setColumnStretch(1,1);
         containerGrid->setRowStretch(0,1);
@@ -115,8 +115,7 @@ void FightclubDashboard::createClock() {
     clockboxfont.setPointSize(height()*0.019);
     clockbox->setFont(clockboxfont);
     listofclockboxes.append(clockbox);
-    clockbox->setTitle(QString::number(numberOfClocks));
-
+    clockbox->setTitle(signalHelper->getTitle());
 
     QGridLayout *clkboxlayout = new QGridLayout();
     clkboxlayout->setColumnStretch(0,3);
@@ -177,13 +176,89 @@ void FightclubDashboard::createClock() {
     clkboxlayout->addWidget(clockwidget,0,1);
 
 
+
+    connect(signalHelper, SIGNAL(elapsedTimeUpdate(int)), clockwidget, SLOT(setElapsedTime(int)));
+    connect(signalHelper, SIGNAL(elapsedTimeUpdate(QString)), eltimedisplay, SLOT(display(QString)));
+    connect(signalHelper, SIGNAL(maximumTimeChanged(int)), clockwidget, SLOT(setMaximumTime(int)));
+    connect(signalHelper, SIGNAL(phaseNameChanged(QString)), phaselabel, SLOT(setText(QString)));
+    connect(signalHelper, SIGNAL(roomclockChanged(bool)), clockwidget, SLOT(setRoomclock(bool)));
     connect(refreshtimer, SIGNAL(timeout()), clockwidget, SLOT(act()));
 
 
     currentGrid->addWidget(clockbox, (numberOfClocks % 6)/2, (numberOfClocks % 6) % 2);
 
+
     numberOfClocks++;
     ui->currentpagelabel->setText(QString::number(container->currentIndex() +1).append("/").append(QString::number(container->count())));
+}
+
+
+void FightclubDashboard::fillRemainingSpace() {
+    /*
+     * The following code is some kind of “dirty hack” inserting dummy clocks in
+     * the remaining empty layout boxes to get all boxes to the same height.
+     */
+
+    if(!(numberOfClocks/6 >= container->count())) {
+        // The last page’s grid has some empty fields
+        for(int i = (numberOfClocks % 6); i < 6; i++) {
+            QGroupBox *clockbox = new QGroupBox();
+            QFont clockboxfont = clockbox->font();
+            clockboxfont.setPointSize(height()*0.019);
+            clockbox->setFont(clockboxfont);
+            listofclockboxes.append(clockbox);
+            clockbox->setTitle(" ");
+            clockbox->setEnabled(false);
+
+            QGridLayout *clkboxlayout = new QGridLayout();
+            clkboxlayout->setColumnStretch(0,3);
+            clkboxlayout->setColumnStretch(1,1);
+            clockbox->setLayout(clkboxlayout);
+
+
+            QVBoxLayout *stagestatusbox = new QVBoxLayout();
+            stagestatusbox->setSpacing(0);
+            clkboxlayout->addLayout(stagestatusbox,0,0);
+
+
+            QLabel *performerslabel = new QLabel();
+            QFont performerslabelfont = performerslabel->font();
+            performerslabelfont.setPointSize(height()*0.019);
+            performerslabel->setFont(performerslabelfont);
+            listofperflabels.append(performerslabel);
+            performerslabel->setWordWrap(true);
+            performerslabel->setText(" ");
+            performerslabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            performerslabel->setAlignment(Qt::AlignBottom);
+            stagestatusbox->addWidget(performerslabel);
+
+
+            QLabel *phaselabel = new QLabel();
+            QFont phaselabelfont = phaselabel->font();
+            phaselabelfont.setPointSize(height()*0.02);
+            phaselabelfont.setBold(true);
+            phaselabel->setFont(phaselabelfont);
+            listofphaselabels.append(phaselabel);
+            phaselabel->setWordWrap(true);
+            phaselabel->setText(" ");
+            phaselabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            phaselabel->setAlignment(Qt::AlignTop);
+            stagestatusbox->addWidget(phaselabel);
+
+
+            ThemeClockWidget *clockwidget = new ThemeClockWidget();
+            clockwidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            clockwidget->setMinimumWidth(110);
+            clockwidget->clear();
+            clockwidget->setStyleSheet("background: transparent");
+            //clockwidget->setFrameShape(QFrame::NoFrame);
+            clockwidget->setEnabled(false);
+            clkboxlayout->addWidget(clockwidget,0,1);
+
+
+            currentGrid->addWidget(clockbox, i/2, i%2);
+        }
+    }
 }
 
 
@@ -198,6 +273,7 @@ void FightclubDashboard::nextContainerPage() {
     if(container->count() > 0)
         ui->currentpagelabel->setText(QString::number(container->currentIndex() +1).append("/").append(QString::number(container->count())));
     else ui->currentpagelabel->setText(" ");
+    repaint();
 }
 
 

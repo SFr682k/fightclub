@@ -21,6 +21,8 @@
 
 #include <QMainWindow>
 
+#include "multibroadcastclient.h"
+
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QKeyEvent>
@@ -44,6 +46,7 @@ public:
 
 private:
     Ui::FightclubDashboard *ui;
+    MultiBroadcastClient *mbcastclient;
     bool aboutDialogOpen;
     int numberOfClocks;
     QTimer *refreshtimer, *switchpagetimer;
@@ -53,6 +56,8 @@ private:
 
     QList<QGroupBox*> listofclockboxes;
     QList<QLabel*> listofperflabels, listofphaselabels;
+
+    void fillRemainingSpace();
 
 
 protected:
@@ -65,7 +70,7 @@ signals:
 
 
 private slots:
-    void createClock();
+    void createClock(SignalHelper*);
     void nextContainerPage();
     void updateTimeDisplay();
 };

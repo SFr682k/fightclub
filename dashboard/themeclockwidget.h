@@ -41,6 +41,7 @@ public:
 
 public slots:
     void act();
+    void clear();
     void setMaximumTime(int ms);
     void setRoomclock(bool roomclock);
     void setElapsedTime(int ms);
@@ -48,6 +49,7 @@ public slots:
 private:
     QGraphicsScene *nscene;
     QGraphicsScene *rscene;
+    QGraphicsScene *emptyscene;
 
     QGraphicsPolygonItem *hourHand;
     QGraphicsPolygonItem *minuteHand;
@@ -56,6 +58,7 @@ private:
     QGraphicsEllipseItem *secondRing;
 
     QGraphicsEllipseItem *fg, *mg, *bg, *ring, *focus, *focus2;
+    QGraphicsEllipseItem *bboxring;
     int time, maxtime;
     bool roomclock;
 

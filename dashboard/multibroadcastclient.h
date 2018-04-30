@@ -3,6 +3,11 @@
 ** Copyright (C) 2018 Sebastian Friedl
 ** Contact: sfr682k@t-online.de
 **
+** Based on the QIYPTClock MultiBroadcastClient
+** available on https://github.com/drogenlied/qiyptclock
+** Copyright (C) 2011-2012 Jan M. Binder
+** Contact: jan.binder@sfz-bw.de
+**
 ** $QT_BEGIN_LICENSE:GPL$
 ** GNU General Public License Usage
 ** This file may be used under the terms of the GNU
@@ -16,25 +21,30 @@
 ****************************************************************************/
 
 
-#ifndef ABOUTDIALOG_H
-#define ABOUTDIALOG_H
+#ifndef MULTIBROADCASTCLIENT_H
+#define MULTIBROADCASTCLIENT_H
 
-#include <QDialog>
+#include <QObject>
+#include <QVector>
+#include <QMap>
+#include "signalhelper.h"
+#include "sockethelper.h"
 
-namespace Ui {
-class AboutDialog;
-}
-
-class AboutDialog : public QDialog
+class MultiBroadcastClient : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit AboutDialog(QWidget *parent = 0);
-    ~AboutDialog();
+    explicit MultiBroadcastClient(QObject *parent = 0);
+    ~MultiBroadcastClient();
+
+signals:
+    void newClock(SignalHelper*);
+
+public slots:
+    void loadFromFile(QString path);
 
 private:
-    Ui::AboutDialog *ui;
+    QMap<unsigned int, SocketHelper*> mp;
 };
 
-#endif // ABOUTDIALOG_H
+#endif // MULTIBROADCASTCLIENT_H

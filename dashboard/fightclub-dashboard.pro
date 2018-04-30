@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg
+QT       += core gui network svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,11 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     fightclubdashboard.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    multibroadcastclient.cpp \
+    signalhelper.cpp \
+    sockethelper.cpp
 
 HEADERS += \
     fightclubdashboard.h \
-    aboutdialog.h
+    aboutdialog.h \
+    multibroadcastclient.h \
+    signalhelper.h \
+    sockethelper.h
 
 FORMS += \
     fightclubdashboard.ui \
