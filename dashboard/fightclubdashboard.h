@@ -21,7 +21,11 @@
 
 #include <QMainWindow>
 
+#include <QGridLayout>
+#include <QGroupBox>
 #include <QKeyEvent>
+#include <QLabel>
+#include <QStackedWidget>
 #include <QTimer>
 
 
@@ -41,14 +45,28 @@ public:
 private:
     Ui::FightclubDashboard *ui;
     bool aboutDialogOpen;
+    int numberOfClocks;
     QTimer *refreshtimer, *switchpagetimer;
+
+    QStackedWidget *container;
+    QGridLayout *currentGrid;
+
+    QList<QGroupBox*> listofclockboxes;
+    QList<QLabel*> listofperflabels, listofphaselabels;
+
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
 
+signals:
+    void boxCaptionFontChanged(QFont);
+
+
 private slots:
+    void createClock();
+    void nextContainerPage();
     void updateTimeDisplay();
 };
 
