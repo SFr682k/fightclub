@@ -39,5 +39,7 @@ int main(int argc, char *argv[])
     FightclubDashboard w;
     w.show();
 
+    w.openAboutDialog();
+
     return a.exec();
 }

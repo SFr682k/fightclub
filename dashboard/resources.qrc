@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>gpl-v3-logo.png</file>
+    </qresource>
+</RCC>

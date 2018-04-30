@@ -32,9 +32,11 @@ class FightclubDashboard : public QMainWindow
 public:
     explicit FightclubDashboard(QWidget *parent = 0);
     ~FightclubDashboard();
+    void openAboutDialog();
 
 private:
     Ui::FightclubDashboard *ui;
+    bool aboutDialogOpen;
 };
 
 #endif // FIGHTCLUBDASHBOARD_H

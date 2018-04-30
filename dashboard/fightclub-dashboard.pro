@@ -24,11 +24,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        fightclubdashboard.cpp
+    main.cpp \
+    fightclubdashboard.cpp \
+    aboutdialog.cpp
 
 HEADERS += \
-        fightclubdashboard.h
+    fightclubdashboard.h \
+    aboutdialog.h
 
 FORMS += \
-        fightclubdashboard.ui
+    fightclubdashboard.ui \
+    aboutdialog.ui
+
+RESOURCES += \
+    resources.qrc

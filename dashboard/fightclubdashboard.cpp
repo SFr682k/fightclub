@@ -19,14 +19,29 @@
 #include "fightclubdashboard.h"
 #include "ui_fightclubdashboard.h"
 
+#include "aboutdialog.h"
+
+
 FightclubDashboard::FightclubDashboard(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FightclubDashboard)
 {
     ui->setupUi(this);
+
+    aboutDialogOpen = false;
 }
 
 FightclubDashboard::~FightclubDashboard()
 {
     delete ui;
+}
+
+
+void FightclubDashboard::openAboutDialog() {
+    if(!aboutDialogOpen) {
+        aboutDialogOpen = true;
+        AboutDialog *ad = new AboutDialog(this);
+        ad->exec();
+        aboutDialogOpen = false;
+    }
 }
