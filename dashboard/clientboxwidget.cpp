@@ -32,29 +32,49 @@ ClientBoxWidget::ClientBoxWidget(SignalHelper *sigHelp, QWidget *parent) :
     maximumTime = 1;
     roomclock = true;
 
-    setTitle(clockTitle);
-    setFont(getBoxTitleFont(parent->height()));
 
     QGridLayout *root = new QGridLayout();
     root->setSpacing(0);
     root->setColumnStretch(0,9);
     root->setColumnStretch(1,1);
-    root->setRowStretch(0,2);
-    root->setRowStretch(1,2);
-    root->setRowStretch(2,1);
+    root->setRowStretch(0,0);
+    root->setRowStretch(1,0);
+    root->setRowStretch(2,2);
+    root->setRowStretch(3,2);
     setLayout(root);
 
-    perflabel = new QLabel(" ");
-    perflabel->setAlignment(Qt::AlignBottom);
-    perflabel->setWordWrap(true);
-    perflabel->setFont(getPerflabelFont(parent->height()));
-    root->addWidget(perflabel,0,0);
+
+    titlelabel = new QLabel(clockTitle);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    titlelabel->setFont(getBoxTitleFont(parent->height()));
+    root->addWidget(titlelabel,0,0,1,2);
+
+
+    // The progress bar has to be packed into an extra layout
+    // to obtain the margins around it
+    QGridLayout *progresslayout = new QGridLayout();
+    progresslayout->setContentsMargins(0, 4, 0, 4);
+    root->addLayout(progresslayout,1,0,1,2);
+
+    progressbar = new QProgressBar();
+    progressbar->setTextVisible(false);
+    progressbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    setProgressBarHeight(parent->height());
+    progresslayout->addWidget(progressbar,0,0);
+
 
     phaselabel = new QLabel("Waiting for a broadcast");
+    phaselabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     phaselabel->setAlignment(Qt::AlignTop);
-    phaselabel->setWordWrap(true);
     phaselabel->setFont(getPhaselabelFont(parent->height()));
-    root->addWidget(phaselabel,1,0);
+    root->addWidget(phaselabel,2,0);
+
+
+    perflabel = new QLabel(" ");
+    perflabel->setAlignment(Qt::AlignTop);
+    perflabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+    perflabel->setFont(getPerflabelFont(parent->height()));
+    root->addWidget(perflabel,3,0);
 
 
     timedisplay = new QLCDNumber();
@@ -63,20 +83,10 @@ ClientBoxWidget::ClientBoxWidget(SignalHelper *sigHelp, QWidget *parent) :
     setTimeDisplayHeight(parent->height());
     timedisplay->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
     timedisplay->setFrameStyle(QFrame::NoFrame);
-    root->addWidget(timedisplay,0,1,2,1);
+    root->addWidget(timedisplay,2,1,2,1);
 
 
-    // The progress bar has to be packed into an extra layout
-    // to optain a margin on the top of it
-    QGridLayout *progresslayout = new QGridLayout();
-    progresslayout->setContentsMargins(0, 8, 0, 0);
-    root->addLayout(progresslayout,2,0,1,2);
 
-    progressbar = new QProgressBar();
-    progressbar->setTextVisible(false);
-    progressbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    setProgressBarHeight(parent->height());
-    progresslayout->addWidget(progressbar,0,0);
 
 
 
@@ -108,8 +118,8 @@ void ClientBoxWidget::toggleRoomclock(bool roomclck) { roomclock   = roomclck; }
 
 void ClientBoxWidget::updateProblem(QString problem) {
     if((problem != " ") && (problem != "") && (problem != nullptr))
-        setTitle(clockTitle + "  —  " + problem);
-    else setTitle(clockTitle);
+        titlelabel->setText(clockTitle + " | " + problem);
+    else titlelabel->setText(clockTitle);
 }
 
 
@@ -180,7 +190,7 @@ QFont ClientBoxWidget::getPhaselabelFont(int windowHeight) {
 
 
 void ClientBoxWidget::onResizeEvent(int windowHeight) {
-    this->setFont(this->getBoxTitleFont(windowHeight));
+    titlelabel->setFont(this->getBoxTitleFont(windowHeight));
     perflabel->setFont(getPerflabelFont(windowHeight));
     phaselabel->setFont(getPhaselabelFont(windowHeight));
     setTimeDisplayHeight(windowHeight);

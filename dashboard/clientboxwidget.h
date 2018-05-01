@@ -39,7 +39,7 @@ private:
 
     int elapsedTime, maximumTime;
     bool roomclock;
-    QLabel *perflabel, *phaselabel;
+    QLabel *titlelabel, *perflabel, *phaselabel;
     QProgressBar *progressbar;
     QLCDNumber *timedisplay;
 

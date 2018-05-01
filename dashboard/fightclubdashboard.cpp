@@ -69,7 +69,6 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     aboutDialogOpen = false;
 
     mbcastclient->loadFromFile("fights.txt");
-    fillEmptySlots();
 }
 
 
@@ -90,18 +89,18 @@ void FightclubDashboard::openAboutDialog() {
 
 
 void FightclubDashboard::createClock(SignalHelper* signalHelper) {
-    if(numberOfClocks/4 >= container->count()) {
+    if(numberOfClocks/5 >= container->count()) {
         // All pages of the clock container are full
         QWidget *newPage = new QWidget();
 
         QGridLayout *containerGrid = new QGridLayout();
         containerGrid->setMargin(0);
-        containerGrid->setSpacing(12);
+        containerGrid->setSpacing(8);
         containerGrid->setRowStretch(0,2);
         containerGrid->setRowStretch(1,2);
         containerGrid->setRowStretch(2,2);
         containerGrid->setRowStretch(3,2);
-        containerGrid->setRowStretch(4,1);
+        containerGrid->setRowStretch(4,2);
 
         currentGrid = containerGrid;
 
@@ -110,86 +109,14 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
     }
 
     ClientBoxWidget *clockbox = new ClientBoxWidget(signalHelper, this);
-    currentGrid->addWidget(clockbox, numberOfClocks % 4, 0);
+    currentGrid->addWidget(clockbox, numberOfClocks % 5, 0);
 
     connect(this, SIGNAL(screenSizeChanged(int)), clockbox, SLOT(onResizeEvent(int)));
-
-
-    /*
-    QGroupBox *clockbox = new QGroupBox();
-    QFont clockboxfont = clockbox->font();
-    clockboxfont.setPointSize(height()*0.019);
-    clockbox->setFont(clockboxfont);
-    listofclockboxes.append(clockbox);
-    clockbox->setTitle(signalHelper->getTitle());
-
-    QGridLayout *clkboxlayout = new QGridLayout();
-    clkboxlayout->setColumnStretch(0,3);
-    clkboxlayout->setColumnStretch(1,1);
-    clockbox->setLayout(clkboxlayout);
-
-
-    QVBoxLayout *stagestatusbox = new QVBoxLayout();
-    stagestatusbox->setSpacing(0);
-    clkboxlayout->addLayout(stagestatusbox,0,0);
-
-
-    QLabel *performerslabel = new QLabel();
-    QFont performerslabelfont = performerslabel->font();
-    performerslabelfont.setPointSize(height()*0.019);
-    performerslabel->setFont(performerslabelfont);
-    listofperflabels.append(performerslabel);
-    performerslabel->setWordWrap(true);
-    performerslabel->setText("foobar");
-    performerslabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    performerslabel->setAlignment(Qt::AlignBottom);
-    stagestatusbox->addWidget(performerslabel);
-
-
-    QLabel *phaselabel = new QLabel();
-    QFont phaselabelfont = phaselabel->font();
-    phaselabelfont.setPointSize(height()*0.02);
-    phaselabelfont.setBold(true);
-    phaselabel->setFont(phaselabelfont);
-    listofphaselabels.append(phaselabel);
-    phaselabel->setWordWrap(true);
-    phaselabel->setText("foobaz");
-    phaselabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    phaselabel->setAlignment(Qt::AlignTop);
-    stagestatusbox->addWidget(phaselabel);
-
-    QHBoxLayout *eltimelayout = new QHBoxLayout();
-    stagestatusbox->addLayout(eltimelayout);
-
-    QSpacerItem *eltimespacer = new QSpacerItem(6,6,QSizePolicy::Expanding,QSizePolicy::Fixed);
-    eltimelayout->addItem(eltimespacer);
-
-    QLCDNumber *eltimedisplay = new QLCDNumber();
-    eltimedisplay->setMinimumSize(90,27);
-    eltimedisplay->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-    eltimedisplay->setDigitCount(7);
-    eltimedisplay->setFrameShape(QFrame::NoFrame);
-    eltimedisplay->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
-    eltimedisplay->display(" ");
-    eltimelayout->addWidget(eltimedisplay);
-
-
-    currentGrid->addWidget(clockbox, (numberOfClocks % 6)/2, (numberOfClocks % 6) % 2);
-    */
 
     numberOfClocks++;
     ui->currentpagelabel->setText(QString::number(container->currentIndex() +1).append("/").append(QString::number(container->count())));
 }
 
-
-void FightclubDashboard::fillEmptySlots() {
-    if(numberOfClocks/4 >= container->count()) return;
-    for(int i = numberOfClocks % 4; i < 4; i++) {
-        QGroupBox *dummybox = new QGroupBox();
-        dummybox->setEnabled(false);
-        currentGrid->addWidget(dummybox, i, 0);
-    }
-}
 
 
 
