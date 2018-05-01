@@ -45,4 +45,4 @@ FORMS += \
 RESOURCES += \
     resources.qrc
 
-include(themeclockwidget.pri)
+include(clientboxwidget.pri)

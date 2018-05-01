@@ -28,39 +28,36 @@
 SocketHelper::SocketHelper(unsigned int p, QObject *parent) :
     QObject(parent)
 {
-    if(p > 0){
-        port = p%65536;
-    }else{
-        port = 54545;
-    }
+    if(p > 0) port = p%65536;
+    else      port = 54545;
 
     udpSocket = new QUdpSocket(this);
     udpSocket->bind(port, QUdpSocket::ShareAddress);
 
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(processDatagrams()));
-    //qDebug("Socket: %d\n",port);
 }
 
-SocketHelper::~SocketHelper(){
-    for(QMap<unsigned int,SignalHelper*>::Iterator i = sigmap.begin(); i != sigmap.end() ; i++){
+
+SocketHelper::~SocketHelper() {
+    for(QMap<unsigned int,SignalHelper*>::Iterator i = sigmap.begin(); i != sigmap.end() ; i++)
         delete i.value();
-    }
+
     sigmap.clear();
     delete udpSocket;
-    qDebug("SocketHelper %d died", port);
 }
 
-void SocketHelper::setSignalHelper(unsigned int signature, SignalHelper* s){
-    if(sigmap.contains(signature)){
+
+void SocketHelper::setSignalHelper(unsigned int signature, SignalHelper* s) {
+    if(sigmap.contains(signature)) {
+        // TODO: Emit warning (same port, same signature)
         sigmap[signature] = s;
-    } else {
-        sigmap.insert(signature, s);
-    }
+    } else sigmap.insert(signature, s);
 }
 
-void SocketHelper::processDatagrams(){
+
+void SocketHelper::processDatagrams() {
     quint32 nsignature, nallowedtime, ntime, nroomclock;;
-    QString nstagename;
+    QString nphasename, nproblem, nperformers;
 
     while (udpSocket->hasPendingDatagrams()) {
         QByteArray datagram;
@@ -71,11 +68,12 @@ void SocketHelper::processDatagrams(){
         dgstream >> nallowedtime;
         dgstream >> ntime;
         dgstream >> nroomclock;
-        dgstream >> nstagename;
+        dgstream >> nphasename;
+        dgstream >> nproblem;
+        dgstream >> nperformers;
 
-        if (sigmap.contains(nsignature)){
-            sigmap[nsignature]->fireSignal(ntime, nallowedtime, nroomclock, nstagename);
-        }
+        if (sigmap.contains(nsignature))
+            sigmap[nsignature]->emitSignal(ntime, nallowedtime, nroomclock,
+                                           nphasename, nproblem, nperformers);
     }
-    //qDebug("process Datagram: %d ", nsignature);
 }

@@ -33,25 +33,25 @@ class SignalHelper : public QObject
 public:
     explicit SignalHelper( QString title = QString("No Title set"), QObject *parent = 0);
     ~SignalHelper();
-    void fireSignal(quint32 time, quint32 allowedTime, quint32 roomclock, QString stageName);
+    void emitSignal(quint32, quint32, quint32, QString, QString, QString);
     QString getTitle();
     QString toString();
 
 signals:
     void maximumTimeChanged(int);
     void elapsedTimeUpdate(int);
-    void elapsedTimeUpdate(QString);
     void phaseNameChanged(QString);
+    void problemChanged(QString);
+    void performersChanged(QString);
     void roomclockChanged(bool);
 
 public slots:
 
 private:
     QString title;
-    QString stageName;
-    quint32 time;
-    quint32 maximumTime;
-    quint32 roomclock;
+    QString phaseName, problem, performers;
+    int elapsedTime, maximumTime;
+    uint roomclock;
 
 };
 

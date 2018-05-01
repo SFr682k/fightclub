@@ -133,7 +133,19 @@
      </widget>
     </item>
     <item>
-     <widget class="QStackedWidget" name="container"/>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QStackedWidget" name="container"/>
+       </item>
+      </layout>
+     </widget>
     </item>
    </layout>
   </widget>

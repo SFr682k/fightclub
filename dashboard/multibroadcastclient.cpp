@@ -35,11 +35,10 @@ MultiBroadcastClient::MultiBroadcastClient(QObject *parent) :
     mp.clear();
 }
 
+
 MultiBroadcastClient::~MultiBroadcastClient() {
-    for(QMap<unsigned int,SocketHelper*>::Iterator i = mp.begin(); i != mp.end() ; i++){
+    for(QMap<unsigned int,SocketHelper*>::Iterator i = mp.begin(); i != mp.end() ; i++)
         delete i.value();
-    }
-    qDebug("MultiBroadcastClient died");
 }
 
 
@@ -61,16 +60,16 @@ void MultiBroadcastClient::loadFromFile(QString path) {
              QString title = sl.at(2);
              SignalHelper *sh = new SignalHelper(title);
 
-             if (mp.contains(port)){
+             if (mp.contains(port))
                  mp[port]->setSignalHelper(signature, sh);
-             } else {
+             else {
                  mp.insert(port, new SocketHelper(port));
                  mp[port]->setSignalHelper(signature, sh);
              }
-             //qDebug("blub! %d %d %d\n",sl.value(0).toInt(), sl.value(1).toInt(), mp.size() );
+
              emit newClock(sh);
         }
     }
+
     file.close();
-    //qDebug("blub");
 }

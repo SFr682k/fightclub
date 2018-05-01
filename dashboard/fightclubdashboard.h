@@ -57,8 +57,6 @@ private:
     QList<QGroupBox*> listofclockboxes;
     QList<QLabel*> listofperflabels, listofphaselabels;
 
-    void fillRemainingSpace();
-
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -66,7 +64,7 @@ protected:
 
 
 signals:
-    void boxCaptionFontChanged(QFont);
+    void screenSizeChanged(int);
 
 
 private slots:

@@ -20,7 +20,7 @@
 #include "ui_fightclubdashboard.h"
 
 #include "aboutdialog.h"
-#include "themeclockwidget.h"
+#include "clientboxwidget.h"
 
 #include <QHBoxLayout>
 #include <QListIterator>
@@ -57,7 +57,7 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     switchpagetimer->setInterval(6000);
 
 
-    mbcastclient = new MultiBroadcastClient();
+    mbcastclient = new MultiBroadcastClient(this);
     connect(mbcastclient, SIGNAL(newClock(SignalHelper*)), this, SLOT(createClock(SignalHelper*)));
 
     QTimer::singleShot(6000 - QTime::currentTime().msecsSinceStartOfDay() % 6000,
@@ -69,7 +69,6 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     aboutDialogOpen = false;
 
     mbcastclient->loadFromFile("fights.txt");
-    fillRemainingSpace();
 }
 
 
@@ -90,18 +89,19 @@ void FightclubDashboard::openAboutDialog() {
 
 
 void FightclubDashboard::createClock(SignalHelper* signalHelper) {
-    if(numberOfClocks/6 >= container->count()) {
+    //if(numberOfClocks/6 >= container->count()) {
+    if(numberOfClocks/4 >= container->count()) {
         // All pages of the clock container are full
         QWidget *newPage = new QWidget();
 
         QGridLayout *containerGrid = new QGridLayout();
         containerGrid->setMargin(0);
         containerGrid->setSpacing(6);
-        containerGrid->setColumnStretch(0,1);
-        containerGrid->setColumnStretch(1,1);
-        containerGrid->setRowStretch(0,1);
-        containerGrid->setRowStretch(1,1);
-        containerGrid->setRowStretch(2,1);
+        containerGrid->setRowStretch(0,2);
+        containerGrid->setRowStretch(1,2);
+        containerGrid->setRowStretch(2,2);
+        containerGrid->setRowStretch(3,2);
+        containerGrid->setRowStretch(4,1);
 
         currentGrid = containerGrid;
 
@@ -109,7 +109,14 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
         container->addWidget(newPage);
     }
 
+    ClientBoxWidget *clockbox = new ClientBoxWidget(signalHelper, this);
+    //currentGrid->addWidget(clockbox, (numberOfClocks % 6)/2, (numberOfClocks % 6) % 2);
+    currentGrid->addWidget(clockbox, numberOfClocks % 4, 0);
 
+    connect(this, SIGNAL(screenSizeChanged(int)), clockbox, SLOT(onResizeEvent(int)));
+    connect(this, SIGNAL(screenSizeChanged(int)), clockbox, SLOT(setProgressBarHeight(int)));
+
+    /*
     QGroupBox *clockbox = new QGroupBox();
     QFont clockboxfont = clockbox->font();
     clockboxfont.setPointSize(height()*0.019);
@@ -168,98 +175,14 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
     eltimelayout->addWidget(eltimedisplay);
 
 
-    ThemeClockWidget *clockwidget = new ThemeClockWidget();
-    clockwidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    clockwidget->setMinimumWidth(110);
-    clockwidget->setRenderHints({QPainter::Antialiasing, QPainter::SmoothPixmapTransform});
-    clockwidget->setRoomclock(true);
-    clkboxlayout->addWidget(clockwidget,0,1);
-
-
-
-    connect(signalHelper, SIGNAL(elapsedTimeUpdate(int)), clockwidget, SLOT(setElapsedTime(int)));
-    connect(signalHelper, SIGNAL(elapsedTimeUpdate(QString)), eltimedisplay, SLOT(display(QString)));
-    connect(signalHelper, SIGNAL(maximumTimeChanged(int)), clockwidget, SLOT(setMaximumTime(int)));
-    connect(signalHelper, SIGNAL(phaseNameChanged(QString)), phaselabel, SLOT(setText(QString)));
-    connect(signalHelper, SIGNAL(roomclockChanged(bool)), clockwidget, SLOT(setRoomclock(bool)));
-    connect(refreshtimer, SIGNAL(timeout()), clockwidget, SLOT(act()));
-
-
     currentGrid->addWidget(clockbox, (numberOfClocks % 6)/2, (numberOfClocks % 6) % 2);
-
+    */
 
     numberOfClocks++;
     ui->currentpagelabel->setText(QString::number(container->currentIndex() +1).append("/").append(QString::number(container->count())));
 }
 
 
-void FightclubDashboard::fillRemainingSpace() {
-    /*
-     * The following code is some kind of “dirty hack” inserting dummy clocks in
-     * the remaining empty layout boxes to get all boxes to the same height.
-     */
-
-    if(!(numberOfClocks/6 >= container->count())) {
-        // The last page’s grid has some empty fields
-        for(int i = (numberOfClocks % 6); i < 6; i++) {
-            QGroupBox *clockbox = new QGroupBox();
-            QFont clockboxfont = clockbox->font();
-            clockboxfont.setPointSize(height()*0.019);
-            clockbox->setFont(clockboxfont);
-            listofclockboxes.append(clockbox);
-            clockbox->setTitle(" ");
-            clockbox->setEnabled(false);
-
-            QGridLayout *clkboxlayout = new QGridLayout();
-            clkboxlayout->setColumnStretch(0,3);
-            clkboxlayout->setColumnStretch(1,1);
-            clockbox->setLayout(clkboxlayout);
-
-
-            QVBoxLayout *stagestatusbox = new QVBoxLayout();
-            stagestatusbox->setSpacing(0);
-            clkboxlayout->addLayout(stagestatusbox,0,0);
-
-
-            QLabel *performerslabel = new QLabel();
-            QFont performerslabelfont = performerslabel->font();
-            performerslabelfont.setPointSize(height()*0.019);
-            performerslabel->setFont(performerslabelfont);
-            listofperflabels.append(performerslabel);
-            performerslabel->setWordWrap(true);
-            performerslabel->setText(" ");
-            performerslabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            performerslabel->setAlignment(Qt::AlignBottom);
-            stagestatusbox->addWidget(performerslabel);
-
-
-            QLabel *phaselabel = new QLabel();
-            QFont phaselabelfont = phaselabel->font();
-            phaselabelfont.setPointSize(height()*0.02);
-            phaselabelfont.setBold(true);
-            phaselabel->setFont(phaselabelfont);
-            listofphaselabels.append(phaselabel);
-            phaselabel->setWordWrap(true);
-            phaselabel->setText(" ");
-            phaselabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            phaselabel->setAlignment(Qt::AlignTop);
-            stagestatusbox->addWidget(phaselabel);
-
-
-            ThemeClockWidget *clockwidget = new ThemeClockWidget();
-            clockwidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            clockwidget->setMinimumWidth(110);
-            clockwidget->clear();
-            clockwidget->setStyleSheet("background: transparent");
-            //clockwidget->setFrameShape(QFrame::NoFrame);
-            clockwidget->setEnabled(false);
-            clkboxlayout->addWidget(clockwidget,0,1);
-
-
-            currentGrid->addWidget(clockbox, i/2, i%2);
-        }
-    }
-}
 
 
 
@@ -273,7 +196,6 @@ void FightclubDashboard::nextContainerPage() {
     if(container->count() > 0)
         ui->currentpagelabel->setText(QString::number(container->currentIndex() +1).append("/").append(QString::number(container->count())));
     else ui->currentpagelabel->setText(" ");
-    repaint();
 }
 
 
@@ -295,30 +217,7 @@ void FightclubDashboard::resizeEvent(QResizeEvent *event) {
     pagelabelfont.setPointSize(height()*0.02);
     ui->currentpagelabel->setFont(pagelabelfont);
 
-
-    QListIterator<QGroupBox*> cboxiterator(listofclockboxes);
-    while(cboxiterator.hasNext()) {
-        QGroupBox *clockbox = cboxiterator.next();
-        QFont clockboxfont = clockbox->font();
-        clockboxfont.setPointSize(height()*0.019);
-        clockbox->setFont(clockboxfont);
-    }
-
-    QListIterator<QLabel*> perfliterator(listofperflabels);
-    while(perfliterator.hasNext()) {
-        QLabel *perflabel = perfliterator.next();
-        QFont perflabelfont = perflabel->font();
-        perflabelfont.setPointSize(height()*0.019);
-        perflabel->setFont(perflabelfont);
-    }
-
-    QListIterator<QLabel*> phaseliterator(listofphaselabels);
-    while(phaseliterator.hasNext()) {
-        QLabel *phaselabel = phaseliterator.next();
-        QFont phaselabelfont = phaselabel->font();
-        phaselabelfont.setPointSize(height()*0.02);
-        phaselabel->setFont(phaselabelfont);
-    }
+    emit screenSizeChanged(height());
 
     QWidget::resizeEvent(event);
 }

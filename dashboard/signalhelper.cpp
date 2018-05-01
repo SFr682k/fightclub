@@ -24,52 +24,58 @@
 #include "signalhelper.h"
 #include <QTime>
 
+
 SignalHelper::SignalHelper(QString t, QObject *parent) :
     QObject(parent)
 {
       title = t;
 
-      time = 0;
-      maximumTime = 1;
-      stageName = "";
+      elapsedTime = -1;
+      maximumTime = -1;
+      phaseName = "";
+      problem = "";
+      performers = "";
+      roomclock = 2;
 }
 
-SignalHelper::~SignalHelper(){
-    qDebug("SignalHelper died");
-}
+SignalHelper::~SignalHelper() { }
 
-void SignalHelper::fireSignal(quint32 ntime, quint32 nallowedTime, quint32 nroomclock, QString nstageName) {
-    if (time != ntime){
-        time = ntime;
-        emit elapsedTimeUpdate(time);
-        emit elapsedTimeUpdate(this->toString());
+
+void SignalHelper::emitSignal(quint32 ntime, quint32 nallowedTime, quint32 nroomclock,
+                              QString nphasename, QString nproblem, QString nperformers) {
+    if (elapsedTime != (signed) ntime) {
+        elapsedTime = ntime;
+        emit elapsedTimeUpdate(elapsedTime);
     }
 
-    if (maximumTime != nallowedTime){
+    if (maximumTime != (signed) nallowedTime) {
         maximumTime = nallowedTime;
         emit maximumTimeChanged(maximumTime);
     }
 
-    if (roomclock != nroomclock){
+    if (roomclock != nroomclock) {
         roomclock = nroomclock;
         emit roomclockChanged(roomclock > 0);
     }
 
-    if (nstageName != stageName){
-        stageName = nstageName;
-        emit phaseNameChanged(stageName);
+    if (nphasename != phaseName) {
+        phaseName = nphasename;
+        emit phaseNameChanged((phaseName != nullptr)? phaseName : " ");
+    }
+
+    if(nproblem != problem) {
+        problem = nproblem;
+        emit problemChanged(problem);
+    }
+
+    if(nperformers != performers) {
+        performers = nperformers;
+        emit performersChanged((performers != nullptr)? performers: " ");
     }
 }
 
 
-QString SignalHelper::getTitle() {
-    return title;
-}
+QString SignalHelper::getTitle() { return title; }
 
 
-QString SignalHelper::toString() {
-    QTime tmp = QTime(0,0,0,0);
-    tmp = tmp.addMSecs(time);
-    QString s = tmp.toString("mm:ss");
-    return s;
-}
+
