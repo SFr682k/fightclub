@@ -38,15 +38,25 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    defaultFont = font();
+
+
+    if(ui->tournamentname->text().contains("<empty>", Qt::CaseInsensitive))
+        ui->tournamentname->setText(" ");
+
+    displayCurrTime = true;
+
     container = ui->container;
 
     numberOfClocks = 0;
 
 
-    listofclockboxes = QList<QGroupBox*>();
-    listofperflabels = QList<QLabel*>();
-    listofphaselabels = QList<QLabel*>();
+    aboutDialogOpen = false;
+    settingsdial = new SettingsDialog(this);
 
+    connect(settingsdial, SIGNAL(tournamentNameChanged(QString)), ui->tournamentname, SLOT(setText(QString)));
+    connect(settingsdial, SIGNAL(displayCTimeChanged(bool)), this, SLOT(setDisplayCurrTime(bool)));
+    connect(settingsdial, SIGNAL(fontChanged(QString)), this, SLOT(setApplicationFont(QString)));
 
     refreshtimer = new QTimer();
     refreshtimer->start(30);
@@ -66,15 +76,18 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     connect(switchpagetimer, SIGNAL(timeout()), this, SLOT(nextContainerPage()));
 
 
-    aboutDialogOpen = false;
 
     mbcastclient->loadFromFile("fights.txt");
 }
 
 
+
 FightclubDashboard::~FightclubDashboard() {
     delete ui;
 }
+
+
+
 
 
 void FightclubDashboard::openAboutDialog() {
@@ -83,6 +96,13 @@ void FightclubDashboard::openAboutDialog() {
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
+    }
+}
+
+
+void FightclubDashboard::openSettingsDialog() {
+    if(settingsdial->exec()) {
+
     }
 }
 
@@ -101,6 +121,7 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
         containerGrid->setRowStretch(2,2);
         containerGrid->setRowStretch(3,2);
         containerGrid->setRowStretch(4,2);
+        containerGrid->setRowStretch(5,1);
 
         currentGrid = containerGrid;
 
@@ -114,7 +135,9 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
     connect(this, SIGNAL(screenSizeChanged(int)), clockbox, SLOT(onResizeEvent(int)));
 
     numberOfClocks++;
-    ui->currentpagelabel->setText(QString::number(container->currentIndex() +1).append("/").append(QString::number(container->count())));
+    if(container->count() > 1)
+        ui->currentpagelabel->setText(QString::number(container->currentIndex() +1)
+                                      .append("/").append(QString::number(container->count())));
 }
 
 
@@ -126,19 +149,30 @@ void FightclubDashboard::nextContainerPage() {
         container->setCurrentIndex(container->currentIndex() +1);
     else container->setCurrentIndex(0);
 
-    if(container->count() > 0)
-        ui->currentpagelabel->setText(QString::number(container->currentIndex() +1).append("/").append(QString::number(container->count())));
+    if(container->count() > 1)
+        ui->currentpagelabel->setText(QString::number(container->currentIndex() +1)
+                                      .append("/").append(QString::number(container->count())));
     else ui->currentpagelabel->setText(" ");
 }
 
 
 
 void FightclubDashboard::updateTimeDisplay() {
+    if(!displayCurrTime) {
+        ui->currenttime->display(" ");
+        return;
+    }
+
     QString currentTime = QTime::currentTime().toString("HH:mm");
     if(QTime::currentTime().second() % 2 != 0) currentTime[2] = ' ';
     ui->currenttime->display(currentTime);
 }
 
+void FightclubDashboard::setDisplayCurrTime(bool display) { displayCurrTime = display; }
+
+
+void FightclubDashboard::setApplicationFont(QString font)
+    { this->setFont((font == nullptr)? defaultFont : QFont(font)); }
 
 
 void FightclubDashboard::resizeEvent(QResizeEvent *event) {
@@ -175,6 +209,12 @@ void FightclubDashboard::keyPressEvent(QKeyEvent *event) {
         case Qt::Key_Q:
             if(QApplication::keyboardModifiers() & Qt::ControlModifier)
                 this->close();
+            break;
+
+        case Qt::Key_S:
+            if((QApplication::keyboardModifiers() & Qt::ControlModifier)
+                    && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
+                openSettingsDialog();
             break;
 
         default:

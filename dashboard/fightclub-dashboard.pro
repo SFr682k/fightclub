@@ -29,18 +29,21 @@ SOURCES += \
     aboutdialog.cpp \
     multibroadcastclient.cpp \
     signalhelper.cpp \
-    sockethelper.cpp
+    sockethelper.cpp \
+    settingsdialog.cpp
 
 HEADERS += \
     fightclubdashboard.h \
     aboutdialog.h \
     multibroadcastclient.h \
     signalhelper.h \
-    sockethelper.h
+    sockethelper.h \
+    settingsdialog.h
 
 FORMS += \
     fightclubdashboard.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    settingsdialog.ui
 
 RESOURCES += \
     resources.qrc

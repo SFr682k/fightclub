@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     w.show();
 
     w.openAboutDialog();
+    w.openSettingsDialog();
 
     return a.exec();
 }

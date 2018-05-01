@@ -22,6 +22,7 @@
 #include <QMainWindow>
 
 #include "multibroadcastclient.h"
+#include "settingsdialog.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -43,9 +44,15 @@ public:
     explicit FightclubDashboard(QWidget *parent = 0);
     ~FightclubDashboard();
     void openAboutDialog();
+    void openSettingsDialog();
 
 private:
     Ui::FightclubDashboard *ui;
+    SettingsDialog *settingsdial;
+
+    QFont defaultFont;
+    bool displayCurrTime;
+
     MultiBroadcastClient *mbcastclient;
     bool aboutDialogOpen;
     int numberOfClocks;
@@ -53,9 +60,6 @@ private:
 
     QStackedWidget *container;
     QGridLayout *currentGrid;
-
-    QList<QGroupBox*> listofclockboxes;
-    QList<QLabel*> listofperflabels, listofphaselabels;
 
 
 protected:
@@ -71,6 +75,8 @@ private slots:
     void createClock(SignalHelper*);
     void nextContainerPage();
     void updateTimeDisplay();
+    void setDisplayCurrTime(bool);
+    void setApplicationFont(QString);
 };
 
 #endif // FIGHTCLUBDASHBOARD_H
