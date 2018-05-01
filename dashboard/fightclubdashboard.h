@@ -69,6 +69,7 @@ signals:
 
 private slots:
     void createClock(SignalHelper*);
+    void fillEmptySlots();
     void nextContainerPage();
     void updateTimeDisplay();
 };

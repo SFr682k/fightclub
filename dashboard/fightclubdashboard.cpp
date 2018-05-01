@@ -69,6 +69,7 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     aboutDialogOpen = false;
 
     mbcastclient->loadFromFile("fights.txt");
+    fillEmptySlots();
 }
 
 
@@ -89,14 +90,13 @@ void FightclubDashboard::openAboutDialog() {
 
 
 void FightclubDashboard::createClock(SignalHelper* signalHelper) {
-    //if(numberOfClocks/6 >= container->count()) {
     if(numberOfClocks/4 >= container->count()) {
         // All pages of the clock container are full
         QWidget *newPage = new QWidget();
 
         QGridLayout *containerGrid = new QGridLayout();
         containerGrid->setMargin(0);
-        containerGrid->setSpacing(6);
+        containerGrid->setSpacing(12);
         containerGrid->setRowStretch(0,2);
         containerGrid->setRowStretch(1,2);
         containerGrid->setRowStretch(2,2);
@@ -110,11 +110,10 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
     }
 
     ClientBoxWidget *clockbox = new ClientBoxWidget(signalHelper, this);
-    //currentGrid->addWidget(clockbox, (numberOfClocks % 6)/2, (numberOfClocks % 6) % 2);
     currentGrid->addWidget(clockbox, numberOfClocks % 4, 0);
 
     connect(this, SIGNAL(screenSizeChanged(int)), clockbox, SLOT(onResizeEvent(int)));
-    connect(this, SIGNAL(screenSizeChanged(int)), clockbox, SLOT(setProgressBarHeight(int)));
+
 
     /*
     QGroupBox *clockbox = new QGroupBox();
@@ -183,7 +182,14 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
 }
 
 
-
+void FightclubDashboard::fillEmptySlots() {
+    if(numberOfClocks/4 >= container->count()) return;
+    for(int i = numberOfClocks % 4; i < 4; i++) {
+        QGroupBox *dummybox = new QGroupBox();
+        dummybox->setEnabled(false);
+        currentGrid->addWidget(dummybox, i, 0);
+    }
+}
 
 
 

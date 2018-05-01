@@ -33,14 +33,12 @@ class ClientBoxWidget : public QGroupBox
 
 public:
     ClientBoxWidget(SignalHelper*, QWidget *parent = 0);
-    QFont getBoxTitleFont(int);
-    QFont getPerflabelFont(int);
-    QFont getPhaselabelFont(int);
 
 private:
+    QString clockTitle;
+
     int elapsedTime, maximumTime;
     bool roomclock;
-
     QLabel *perflabel, *phaselabel;
     QProgressBar *progressbar;
     QLCDNumber *timedisplay;
@@ -49,12 +47,17 @@ private slots:
     void updateElapsedTime(int);
     void updateMaximumTime(int);
     void toggleRoomclock(bool);
+    void updateProblem(QString);
     void updateDisplayedTime();
     void updatePhaseProgress();
+    QFont getBoxTitleFont(int);
+    QFont getPerflabelFont(int);
+    QFont getPhaselabelFont(int);
+    void setTimeDisplayHeight(int);
+    void setProgressBarHeight(int);
 
 public slots:
     void onResizeEvent(int);
-    void setProgressBarHeight(int);
 };
 
 #endif

@@ -45,7 +45,7 @@
          </font>
         </property>
         <property name="text">
-         <string>TextLabel</string>
+         <string>&lt;empty&gt;</string>
         </property>
        </widget>
       </item>
