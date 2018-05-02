@@ -16,8 +16,8 @@
 ****************************************************************************/
 
 
-#ifndef FIGHTCLUBCLIENT_H
-#define FIGHTCLUBCLIENT_H
+#ifndef FIGHTCLUBDEPARTMENT_H
+#define FIGHTCLUBDEPARTMENT_H
 
 #include <QMainWindow>
 #include <QAbstractTableModel>
@@ -32,19 +32,19 @@
 #include "teamadapter.h"
 
 namespace Ui {
-class FightclubClient;
+class FightclubDepartment;
 }
 
-class FightclubClient : public QMainWindow
+class FightclubDepartment : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit FightclubClient(QWidget *parent = 0);
-    ~FightclubClient();
+    explicit FightclubDepartment(QWidget *parent = 0);
+    ~FightclubDepartment();
 
 private:
-    Ui::FightclubClient *ui;
+    Ui::FightclubDepartment *ui;
     AboutDialog *aboutdlg;
     BroadcastServer *bcastsrv;
     ClockWindow *clockwindow;
@@ -106,4 +106,4 @@ public slots:
 
 };
 
-#endif // FIGHTCLUBCLIENT_H
+#endif // FIGHTCLUBDEPARTMENT_H

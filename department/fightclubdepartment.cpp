@@ -16,8 +16,8 @@
 ****************************************************************************/
 
 
-#include "fightclubclient.h"
-#include "ui_fightclubclient.h"
+#include "fightclubdepartment.h"
+#include "ui_fightclubdepartment.h"
 
 #include "filepropertyparser.h"
 
@@ -27,9 +27,9 @@
 #include <QStandardPaths>
 
 
-FightclubClient::FightclubClient(QWidget *parent) :
+FightclubDepartment::FightclubDepartment(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::FightclubClient)
+    ui(new Ui::FightclubDepartment)
 {
     ui->setupUi(this);
 
@@ -103,8 +103,10 @@ FightclubClient::FightclubClient(QWidget *parent) :
     lstadapt->setTeamAdapter(teamadapt);
 
     clockwindow = new ClockWindow();
-    connect(ui->openClockWindowBttn, SIGNAL(clicked(bool)), this, SLOT(openClockWindow()));
+    ui->actionClose_Clock_Window->setEnabled(false);
     connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
+    connect(ui->actionOpen_Clock_Window, SIGNAL(triggered(bool)), this, SLOT(openClockWindow()));
+    connect(ui->actionClose_Clock_Window, SIGNAL(triggered(bool)), clockwindow, SLOT(close()));
 
 
     connect(lstadapt, SIGNAL(forceInit()), this, SLOT(initialize()));
@@ -228,7 +230,7 @@ FightclubClient::FightclubClient(QWidget *parent) :
 }
 
 
-FightclubClient::~FightclubClient() {
+FightclubDepartment::~FightclubDepartment() {
     delete ui;
     delete aboutdlg;
     delete clockwindow;
@@ -236,7 +238,7 @@ FightclubClient::~FightclubClient() {
 }
 
 
-void FightclubClient::initialize() {
+void FightclubDepartment::initialize() {
     if(phpbar->isRunning()) {
         phpbar->startOrPause();
         toggleStartStopBttn();
@@ -256,7 +258,7 @@ void FightclubClient::initialize() {
 }
 
 
-bool FightclubClient::continueAndInit() {
+bool FightclubDepartment::continueAndInit() {
     if((lstadapt->getCurrentStage() < 0) && (lstadapt->getCurrentPhase() < 0))
         /** The first stage/phase has not been entered. No progress to be lost. Continue! */
         return true;
@@ -270,12 +272,16 @@ bool FightclubClient::continueAndInit() {
 }
 
 
-void FightclubClient::openClockWindow() {
+void FightclubDepartment::openClockWindow() {
     clockwindow->show();
-    ui->openClockWindowBttn->setEnabled(false);
+    ui->actionOpen_Clock_Window->setEnabled(false);
+    ui->actionClose_Clock_Window->setEnabled(true);
 }
 
-void FightclubClient::clockWindowClosed() { ui->openClockWindowBttn->setEnabled(true); }
+void FightclubDepartment::clockWindowClosed() {
+    ui->actionOpen_Clock_Window->setEnabled(true);
+    ui->actionClose_Clock_Window->setEnabled(false);
+}
 
 
 
@@ -283,7 +289,7 @@ void FightclubClient::clockWindowClosed() { ui->openClockWindowBttn->setEnabled(
 
 // CONTROL TAB --------------------------------------------------------------------------
 
-void FightclubClient::toggleStartStopBttn() {
+void FightclubDepartment::toggleStartStopBttn() {
     if(phpbar->isRunning()) {
         if(phpbar->isRoomclock() && ui->phasefwd->isEnabled()) lstadapt->nextPhase();
         else if((lstadapt->getCurrentStage() == -1) && (lstadapt->getCurrentPhase() == -1))
@@ -294,14 +300,14 @@ void FightclubClient::toggleStartStopBttn() {
 }
 
 
-void FightclubClient::openSetTimeDialog() {
+void FightclubDepartment::openSetTimeDialog() {
     settimedlg->resetValues();
     settimedlg->setMaximumRTime(phpbar->getMaxTime());
     settimedlg->exec();
 }
 
 
-void FightclubClient::propagateStagesList(QAbstractTableModel* stagesList) {
+void FightclubDepartment::propagateStagesList(QAbstractTableModel* stagesList) {
     ui->listofstages->setModel(stagesList);
     ui->listofstages->setEnabled(stagesList->rowCount() > 0);
     ui->unloadStagesFile->setEnabled(stagesList->rowCount() > 0);
@@ -312,13 +318,13 @@ void FightclubClient::propagateStagesList(QAbstractTableModel* stagesList) {
     }
 }
 
-void FightclubClient::scrollToSelectedStage(int rownr) {
+void FightclubDepartment::scrollToSelectedStage(int rownr) {
     if(rownr < 0) rownr = 0;
     QModelIndex id = ui->listofstages->model()->index(rownr, 0);
     ui->listofstages->scrollTo(id, QListView::PositionAtCenter);
 }
 
-void FightclubClient::propagatePhasesList(QAbstractTableModel* phasesList) {
+void FightclubDepartment::propagatePhasesList(QAbstractTableModel* phasesList) {
     ui->listofphases->setModel(phasesList);
     ui->listofphases->setEnabled(phasesList->rowCount() > 0);
     ui->unloadPhasesFile->setEnabled(phasesList->rowCount() > 0);
@@ -331,7 +337,7 @@ void FightclubClient::propagatePhasesList(QAbstractTableModel* phasesList) {
     ui->startstopbttn->setEnabled(phasesList->rowCount() > 0);
 }
 
-void FightclubClient::scrollToSelectedPhase(int rownr) {
+void FightclubDepartment::scrollToSelectedPhase(int rownr) {
     if(rownr < 0) rownr = 0;
     QModelIndex id = ui->listofphases->model()->index(rownr, 0);
     ui->listofphases->scrollTo(id, QListView::PositionAtCenter);
@@ -339,13 +345,13 @@ void FightclubClient::scrollToSelectedPhase(int rownr) {
 
 
 
-void FightclubClient::setPrevPhaseProps(bool aadv, bool carry, bool ocarry) {
+void FightclubDepartment::setPrevPhaseProps(bool aadv, bool carry, bool ocarry) {
     ui->ppaadvindic->setSegmentStyle(aadv? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
     ui->ppcarryindic->setSegmentStyle(carry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
     ui->ppocarryindic->setSegmentStyle(ocarry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
 }
 
-void FightclubClient::setCurrPhaseProps(bool aadv, bool carry, bool ocarry) {
+void FightclubDepartment::setCurrPhaseProps(bool aadv, bool carry, bool ocarry) {
     ui->cpaadvindic->setSegmentStyle(aadv? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
     ui->cpcarryindic->setSegmentStyle(carry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
     ui->cpocarryindic->setSegmentStyle(ocarry? QLCDNumber::SegmentStyle::Flat : QLCDNumber::SegmentStyle::Outline);
@@ -353,7 +359,7 @@ void FightclubClient::setCurrPhaseProps(bool aadv, bool carry, bool ocarry) {
 
 
 
-void FightclubClient::setPhaseProgress(double progress) {
+void FightclubDepartment::setPhaseProgress(double progress) {
     ui->progressbar->setMaximum(1000);
 
     QString lowerbborder;
@@ -378,7 +384,7 @@ void FightclubClient::setPhaseProgress(double progress) {
 }
 
 
-void FightclubClient::propagateProblemsList(int problem) {
+void FightclubDepartment::propagateProblemsList(int problem) {
     QAbstractTableModel* model = probadapt->getProblemList(problem);
 
     ui->problemcombobox->setEnabled(model->rowCount() > 1);
@@ -387,7 +393,7 @@ void FightclubClient::propagateProblemsList(int problem) {
 }
 
 
-void FightclubClient::performersChanged(QString rep, QString opp, QString rev) {
+void FightclubDepartment::performersChanged(QString rep, QString opp, QString rev) {
     ui->repcombobox->setModel(teamadapt->getPerformersList(rep, true));
     ui->oppcombobox->setModel(teamadapt->getPerformersList(opp, true));
     ui->revcombobox->setModel(teamadapt->getPerformersList(rev, true));
@@ -400,7 +406,7 @@ void FightclubClient::performersChanged(QString rep, QString opp, QString rev) {
 }
 
 
-void FightclubClient::updateReporterModel(int index) {
+void FightclubDepartment::updateReporterModel(int index) {
     if((repcomboboxinit == nullptr) || (index == 0)) return;
 
     ui->repcombobox->setModel(teamadapt->getPerformersList(repcomboboxinit, false));
@@ -408,7 +414,7 @@ void FightclubClient::updateReporterModel(int index) {
     repcomboboxinit = nullptr;
 }
 
-void FightclubClient::updateOpponentModel(int index) {
+void FightclubDepartment::updateOpponentModel(int index) {
     if((oppcomboboxinit == nullptr) || (index == 0)) return;
 
     ui->oppcombobox->setModel(teamadapt->getPerformersList(oppcomboboxinit, false));
@@ -416,7 +422,7 @@ void FightclubClient::updateOpponentModel(int index) {
     oppcomboboxinit = nullptr;
 }
 
-void FightclubClient::updateReviewerModel(int index) {
+void FightclubDepartment::updateReviewerModel(int index) {
     if((revcomboboxinit == nullptr) || (index == 0)) return;
 
     ui->revcombobox->setModel(teamadapt->getPerformersList(revcomboboxinit, false));
@@ -432,7 +438,7 @@ void FightclubClient::updateReviewerModel(int index) {
 
 // BROADCAST TAB ------------------------------------------------------------------------
 
-void FightclubClient::setBroadcastIP() {
+void FightclubDepartment::setBroadcastIP() {
     QString bcastIP;
     if(ui->localhost->isChecked())      bcastIP = "127.0.0.1";
     else if(ui->everybody->isChecked()) bcastIP = "255.255.255.255";
@@ -445,10 +451,10 @@ void FightclubClient::setBroadcastIP() {
     bcastsrv->setBroadcastAddress(bcastIP);
 }
 
-void FightclubClient::setBroadcastPort() { bcastsrv->setBroadcastPort(ui->bcastportsel->value()); }
-void FightclubClient::setBroadcastID()   { bcastsrv->setSignature(ui->bcastidsel->value()); }
+void FightclubDepartment::setBroadcastPort() { bcastsrv->setBroadcastPort(ui->bcastportsel->value()); }
+void FightclubDepartment::setBroadcastID()   { bcastsrv->setSignature(ui->bcastidsel->value()); }
 
-void FightclubClient::checkCustomIPRbttn() { ui->customip->setChecked(true); }
+void FightclubDepartment::checkCustomIPRbttn() { ui->customip->setChecked(true); }
 
 
 
@@ -458,7 +464,7 @@ void FightclubClient::checkCustomIPRbttn() { ui->customip->setChecked(true); }
 
 // FIGHTCLUB TAB ------------------------------------------------------------------------
 
-void FightclubClient::openStagesFile() {
+void FightclubDepartment::openStagesFile() {
     if(continueAndInit()) {
         QFileDialog *selectStagesFileDialog
                 = new QFileDialog(this, "Select a stages file", previousPath, "Fightclub stages files (*.fcstages)");
@@ -483,7 +489,7 @@ void FightclubClient::openStagesFile() {
 }
 
 
-void FightclubClient::openPhasesFile() {
+void FightclubDepartment::openPhasesFile() {
     if(continueAndInit()) {
         QFileDialog *selectPhasesFileDialog
                 = new QFileDialog(this, "Select a phases file", previousPath, "Fightclub phases files (*.fcphases)");
@@ -508,7 +514,7 @@ void FightclubClient::openPhasesFile() {
 }
 
 
-void FightclubClient::openProblemsFile() {
+void FightclubDepartment::openProblemsFile() {
     if(continueAndInit()) {
         QFileDialog *selectProblemsFileDialog
                 = new QFileDialog(this, "Select a problems file", previousPath, "Fightclub problems files (*.fcproblems)");
@@ -537,7 +543,7 @@ void FightclubClient::openProblemsFile() {
 }
 
 
-void FightclubClient::openTeamsFile() {
+void FightclubDepartment::openTeamsFile() {
     if(continueAndInit()) {
         QFileDialog *selectTeamsFileDialog
                 = new QFileDialog(this, "Select a teams file", previousPath, "Fightclub teams files (*.fcteams)");
@@ -566,10 +572,10 @@ void FightclubClient::openTeamsFile() {
 }
 
 
-void FightclubClient::unloadStagesFile()   { if(continueAndInit()) lstadapt->unloadStagesList(); }
-void FightclubClient::unloadPhasesFile()   { if(continueAndInit()) lstadapt->unloadPhasesList(); }
+void FightclubDepartment::unloadStagesFile()   { if(continueAndInit()) lstadapt->unloadStagesList(); }
+void FightclubDepartment::unloadPhasesFile()   { if(continueAndInit()) lstadapt->unloadPhasesList(); }
 
-void FightclubClient::unloadProblemsFile() {
+void FightclubDepartment::unloadProblemsFile() {
     if(continueAndInit()) {
         probadapt->unloadProblemsList();
         ui->problemsFileTitle->setText("No problems loaded");
@@ -579,7 +585,7 @@ void FightclubClient::unloadProblemsFile() {
     }
 }
 
-void FightclubClient::unloadTeamsFile() {
+void FightclubDepartment::unloadTeamsFile() {
     if(continueAndInit()) {
         teamadapt->unloadTeams();
         ui->teamsFileTitle->setText("No teams loaded");
@@ -597,10 +603,10 @@ void FightclubClient::unloadTeamsFile() {
 
 // CLOSE EVENT --------------------------------------------------------------------------
 
-void FightclubClient::closeEvent(QCloseEvent *event) {
+void FightclubDepartment::closeEvent(QCloseEvent *event) {
     if(QMessageBox::warning(this,
             "Confirmation requested",
-            "Do you really want to close Fightclub Client?",
+            "Do you really want to close Fightclub Department?",
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
         clockwindow->kill();
         event->accept();

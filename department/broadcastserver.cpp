@@ -21,7 +21,7 @@
 
 #include "broadcastserver.h"
 #include <QDataStream>
-#include <QtNetwork/QUdpSocket>
+#include <QUdpSocket>
 
 
 BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned int prt, unsigned int sig) :

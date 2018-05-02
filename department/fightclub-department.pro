@@ -8,7 +8,7 @@ QT       += core gui svg network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = fightclub-client
+TARGET = fightclub-department
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,7 +25,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    fightclubclient.cpp \
     aboutdialog.cpp \
     phasepbar.cpp \
     settimedialog.cpp \
@@ -38,10 +37,10 @@ SOURCES += \
     problemadapter.cpp \
     problemitemlistmodel.cpp \
     teamadapter.cpp \
-    teamitemlistmodel.cpp
+    teamitemlistmodel.cpp \
+    fightclubdepartment.cpp
 
 HEADERS += \
-    fightclubclient.h \
     aboutdialog.h \
     phasepbar.h \
     settimedialog.h \
@@ -54,13 +53,14 @@ HEADERS += \
     problemadapter.h \
     problemitemlistmodel.h \
     teamadapter.h \
-    teamitemlistmodel.h
+    teamitemlistmodel.h \
+    fightclubdepartment.h
 
 FORMS += \
-    fightclubclient.ui \
     aboutdialog.ui \
     settimedialog.ui \
-    clockwindow.ui
+    clockwindow.ui \
+    fightclubdepartment.ui
 
 OTHER_FILES += \
     gpl_v3_logo.png

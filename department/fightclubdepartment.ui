@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FightclubClient</class>
- <widget class="QMainWindow" name="FightclubClient">
+ <class>FightclubDepartment</class>
+ <widget class="QMainWindow" name="FightclubDepartment">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Fightclub Client</string>
+   <string>Fightclub Department</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -744,19 +744,6 @@
               <number>3</number>
              </property>
              <item>
-              <widget class="QPushButton" name="openClockWindowBttn">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Open Clock Window</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="Line" name="line">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -1024,7 +1011,7 @@
              <item row="2" column="0">
               <widget class="QRadioButton" name="customip">
                <property name="text">
-                <string>&amp;Custom IP address</string>
+                <string>Custo&amp;m IP address</string>
                </property>
               </widget>
              </item>
@@ -2107,18 +2094,20 @@
    </property>
    <widget class="QMenu" name="menuMain">
     <property name="title">
-     <string>&amp;Main</string>
-    </property>
-    <addaction name="actionQuit"/>
-   </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>&amp;Help</string>
+     <string>Figh&amp;tclub Department</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuClock_Window">
+    <property name="title">
+     <string>&amp;Clock Window</string>
+    </property>
+    <addaction name="actionOpen_Clock_Window"/>
+    <addaction name="actionClose_Clock_Window"/>
    </widget>
    <addaction name="menuMain"/>
-   <addaction name="menuHelp"/>
+   <addaction name="menuClock_Window"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionQuit">
@@ -2145,6 +2134,16 @@
     <string>F1</string>
    </property>
   </action>
+  <action name="actionOpen_Clock_Window">
+   <property name="text">
+    <string>Open Clock Window</string>
+   </property>
+  </action>
+  <action name="actionClose_Clock_Window">
+   <property name="text">
+    <string>Close Clock Window</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
@@ -2154,7 +2153,7 @@
   <connection>
    <sender>actionQuit</sender>
    <signal>triggered()</signal>
-   <receiver>FightclubClient</receiver>
+   <receiver>FightclubDepartment</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

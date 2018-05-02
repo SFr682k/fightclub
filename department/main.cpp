@@ -16,7 +16,7 @@
 ****************************************************************************/
 
 
-#include "fightclubclient.h"
+#include "fightclubdepartment.h"
 #include <QApplication>
 #include <QCommandLineParser>
 
@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    a.setApplicationName("Fightclub Client");
-    a.setApplicationVersion("0.4a");
+    a.setApplicationName("Fightclub Department");
+    a.setApplicationVersion("0.5alpha");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("An enhanced clock system for the IYPT and similar tournaments");
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
     cmdparser.process(a);
 
-    FightclubClient w;
+    FightclubDepartment w;
     w.show();
 
     return a.exec();
