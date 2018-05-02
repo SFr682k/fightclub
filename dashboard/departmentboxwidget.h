@@ -27,12 +27,12 @@
 #include <QLCDNumber>
 #include <QProgressBar>
 
-class ClientBoxWidget : public QGroupBox
+class DepartmentBoxWidget : public QGroupBox
 {
     Q_OBJECT
 
 public:
-    ClientBoxWidget(SignalHelper*, QWidget *parent = 0);
+    DepartmentBoxWidget(SignalHelper*, QWidget *parent = 0);
 
 private:
     QString clockTitle;

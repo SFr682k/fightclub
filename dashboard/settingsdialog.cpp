@@ -19,8 +19,12 @@
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 
+#include "filepropertyparser.h"
+
+#include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 #include <QDebug>
 
@@ -30,6 +34,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    previousPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).value(0);
 
     ui->dispTournamentNameCBox->setChecked(false);
     ui->tournName->setEnabled(false);
@@ -38,6 +43,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->customFontCBox->setChecked(false);
     ui->chooseFontBox->setEnabled(false);
+
+    ui->departmentListDescr->setText(" ");
+    ui->unloadDepartmentList->setEnabled(false);
 
 
     connect(ui->dispTournamentNameCBox, SIGNAL(toggled(bool)), this, SLOT(displayTournamentName(bool)));
@@ -48,6 +56,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
     connect(ui->chooseFontBox, SIGNAL(activated(QString)), this, SLOT(selFontChanged(QString)));
 
+    connect(ui->loadDepartmentList, SIGNAL(clicked(bool)), this, SLOT(loadDepList()));
+    connect(ui->unloadDepartmentList, SIGNAL(clicked(bool)), this, SLOT(unloadDepList()));
 
     connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
     connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
@@ -81,6 +91,40 @@ void SettingsDialog::useCustomFont(bool customFont) {
 
 void SettingsDialog::selFontChanged(QString fontname) { emit fontChanged(fontname); }
 
+
+
+void SettingsDialog::loadDepList() {
+    QFileDialog *selectDepFileDialog
+                = new QFileDialog(this, "Select a departments file", previousPath, "Fightclub departments files (*.fcdeps)");
+
+    if(selectDepFileDialog->exec()) {
+        QString file = selectDepFileDialog->selectedFiles().value(0);
+
+        FilePropertyParser *fpp = new FilePropertyParser(file);
+
+        if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("departments", Qt::CaseInsensitive))) {
+            QMessageBox::critical(this, "Wrong file format",
+                                  "You requested a departments file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+            return;
+        }
+
+        emit loadListOfDepartments(file);
+        previousPath = selectDepFileDialog->directory().absolutePath();
+
+
+        ui->departmentListTitle->setText(fpp->getTitle());
+        ui->departmentListDescr->setText(fpp->getDescription());
+        ui->unloadDepartmentList->setEnabled(true);
+    }
+}
+
+
+void SettingsDialog::unloadDepList() {
+    emit unloadListOfDepartments();
+    ui->unloadDepartmentList->setEnabled(false);
+    ui->departmentListTitle->setText("No list of departments loaded");
+    ui->departmentListDescr->setText(" ");
+}
 
 
 
@@ -117,6 +161,7 @@ void SettingsDialog::toggleLockedState() {
     }
 
     ui->appearanceSettings->setEnabled(!locked);
+    ui->departmentBox->setEnabled(!locked);
 
     ui->lockSettings->setText(locked? "Unlock" : "Lock");
     ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.png")

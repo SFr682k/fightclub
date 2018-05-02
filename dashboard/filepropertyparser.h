@@ -16,31 +16,25 @@
 ****************************************************************************/
 
 
-#include "fightclubdashboard.h"
-#include <QApplication>
-#include <QCommandLineParser>
-
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-
-    a.setApplicationName("Fightclub Dashboard");
-    a.setApplicationVersion("0.1alpha");
-
-    QCommandLineParser cmdparser;
-    cmdparser.setApplicationDescription("Display the state of multiple Fightclub Departments.");
-
-    cmdparser.addHelpOption();
-    cmdparser.addVersionOption();
-
-    cmdparser.process(a);
+#ifndef FILEPROPERTYPARSER_H
+#define FILEPROPERTYPARSER_H
 
 
-    FightclubDashboard w;
-    w.show();
+#include <QString>
 
-    w.openAboutDialog();
-    w.openSettingsDialog();
+class FilePropertyParser {
+private:
+    QString fileType;
+    int protocolVersion;
+    QString title;
+    QString description;
 
-    return a.exec();
-}
+public:
+    FilePropertyParser(QString);
+    QString getFileType();
+    int getProtocolVersion();
+    QString getTitle();
+    QString getDescription();
+};
+
+#endif // FILEPROPERTYPARSER_H

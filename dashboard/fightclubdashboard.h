@@ -55,7 +55,7 @@ private:
 
     MultiBroadcastClient *mbcastclient;
     bool aboutDialogOpen;
-    int numberOfClocks;
+    int numberOfDepartments;
     QTimer *refreshtimer, *switchpagetimer;
 
     QStackedWidget *container;
@@ -72,7 +72,8 @@ signals:
 
 
 private slots:
-    void createClock(SignalHelper*);
+    void addDepartmentBox(SignalHelper*);
+    void removeAllDepartmentBoxes();
     void nextContainerPage();
     void updateTimeDisplay();
     void setDisplayCurrTime(bool);

@@ -73,3 +73,6 @@ void MultiBroadcastClient::loadFromFile(QString path) {
 
     file.close();
 }
+
+
+void MultiBroadcastClient::unloadList() { mp.clear(); }

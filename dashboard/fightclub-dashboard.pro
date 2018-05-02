@@ -30,7 +30,8 @@ SOURCES += \
     multibroadcastclient.cpp \
     signalhelper.cpp \
     sockethelper.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    filepropertyparser.cpp
 
 HEADERS += \
     fightclubdashboard.h \
@@ -38,7 +39,8 @@ HEADERS += \
     multibroadcastclient.h \
     signalhelper.h \
     sockethelper.h \
-    settingsdialog.h
+    settingsdialog.h \
+    filepropertyparser.h
 
 FORMS += \
     fightclubdashboard.ui \
@@ -48,4 +50,4 @@ FORMS += \
 RESOURCES += \
     resources.qrc
 
-include(clientboxwidget.pri)
+include(departmentboxwidget.pri)

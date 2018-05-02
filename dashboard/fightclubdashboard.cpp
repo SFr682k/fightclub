@@ -20,7 +20,7 @@
 #include "ui_fightclubdashboard.h"
 
 #include "aboutdialog.h"
-#include "clientboxwidget.h"
+#include "departmentboxwidget.h"
 
 #include <QHBoxLayout>
 #include <QListIterator>
@@ -29,7 +29,6 @@
 #include <QVBoxLayout>
 
 
-#include <QDebug>
 
 
 FightclubDashboard::FightclubDashboard(QWidget *parent) :
@@ -48,7 +47,7 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
 
     container = ui->container;
 
-    numberOfClocks = 0;
+    numberOfDepartments = 0;
 
 
     aboutDialogOpen = false;
@@ -67,17 +66,18 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     switchpagetimer->setInterval(6000);
 
 
-    mbcastclient = new MultiBroadcastClient(this);
-    connect(mbcastclient, SIGNAL(newClock(SignalHelper*)), this, SLOT(createClock(SignalHelper*)));
+    mbcastclient = new MultiBroadcastClient(this);  
+
+    connect(settingsdial, SIGNAL(loadListOfDepartments(QString)), mbcastclient, SLOT(loadFromFile(QString)));
+    connect(settingsdial, SIGNAL(unloadListOfDepartments()), mbcastclient, SLOT(unloadList()));
+    connect(settingsdial, SIGNAL(unloadListOfDepartments()), this, SLOT(removeAllDepartmentBoxes()));
+    connect(mbcastclient, SIGNAL(newClock(SignalHelper*)), this, SLOT(addDepartmentBox(SignalHelper*)));
+
 
     QTimer::singleShot(6000 - QTime::currentTime().msecsSinceStartOfDay() % 6000,
                        switchpagetimer, SLOT(start()));
 
     connect(switchpagetimer, SIGNAL(timeout()), this, SLOT(nextContainerPage()));
-
-
-
-    mbcastclient->loadFromFile("fights.txt");
 }
 
 
@@ -100,16 +100,12 @@ void FightclubDashboard::openAboutDialog() {
 }
 
 
-void FightclubDashboard::openSettingsDialog() {
-    if(settingsdial->exec()) {
-
-    }
-}
+void FightclubDashboard::openSettingsDialog() { if(settingsdial->exec()) {} }
 
 
 
-void FightclubDashboard::createClock(SignalHelper* signalHelper) {
-    if(numberOfClocks/5 >= container->count()) {
+void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {
+    if(numberOfDepartments/5 >= container->count()) {
         // All pages of the clock container are full
         QWidget *newPage = new QWidget();
 
@@ -129,18 +125,27 @@ void FightclubDashboard::createClock(SignalHelper* signalHelper) {
         container->addWidget(newPage);
     }
 
-    ClientBoxWidget *clockbox = new ClientBoxWidget(signalHelper, this);
-    currentGrid->addWidget(clockbox, numberOfClocks % 5, 0);
+    DepartmentBoxWidget *depBox = new DepartmentBoxWidget(signalHelper, this);
+    currentGrid->addWidget(depBox, numberOfDepartments % 5, 0);
 
-    connect(this, SIGNAL(screenSizeChanged(int)), clockbox, SLOT(onResizeEvent(int)));
+    connect(this, SIGNAL(screenSizeChanged(int)), depBox, SLOT(onResizeEvent(int)));
 
-    numberOfClocks++;
+    numberOfDepartments++;
     if(container->count() > 1)
         ui->currentpagelabel->setText(QString::number(container->currentIndex() +1)
                                       .append("/").append(QString::number(container->count())));
 }
 
 
+void FightclubDashboard::removeAllDepartmentBoxes() {
+    for(int i = container->count(); i >= 0; i--) {
+        QWidget* depBox = container->widget(i);
+        container->removeWidget(depBox);
+        depBox->deleteLater();
+    }
+
+    numberOfDepartments = 0;
+}
 
 
 

@@ -36,6 +36,9 @@ public:
 
 private:
     Ui::SettingsDialog *ui;
+
+    QString previousPath;
+
     bool locked;
     QString lockedpwd;
 
@@ -46,8 +49,8 @@ signals:
     void tournamentNameChanged(QString);
     void displayCTimeChanged(bool);
     void fontChanged(QString);
-    void loadListOfClients(QString);
-    void unloadListOfClients();
+    void loadListOfDepartments(QString);
+    void unloadListOfDepartments();
 
 private slots:
     void displayTournamentName(bool);
@@ -55,6 +58,10 @@ private slots:
     void displayCurrentTime(bool);
     void useCustomFont(bool);
     void selFontChanged(QString);
+
+    void loadDepList();
+    void unloadDepList();
+
     void toggleLockedState();
 };
 

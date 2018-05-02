@@ -42,6 +42,7 @@ signals:
 
 public slots:
     void loadFromFile(QString path);
+    void unloadList();
 
 private:
     QMap<unsigned int, SocketHelper*> mp;

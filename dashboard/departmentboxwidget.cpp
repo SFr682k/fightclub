@@ -16,14 +16,13 @@
 ****************************************************************************/
 
 
-#include "clientboxwidget.h"
+#include "departmentboxwidget.h"
 
 #include <QGridLayout>
 #include <QTime>
 
-#include <QDebug>
 
-ClientBoxWidget::ClientBoxWidget(SignalHelper *sigHelp, QWidget *parent) :
+DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent) :
     QGroupBox(parent)
 {
     clockTitle = sigHelp->getTitle();
@@ -86,10 +85,6 @@ ClientBoxWidget::ClientBoxWidget(SignalHelper *sigHelp, QWidget *parent) :
     root->addWidget(timedisplay,2,1,2,1);
 
 
-
-
-
-
     connect(sigHelp, SIGNAL(elapsedTimeUpdate(int)), this, SLOT(updateElapsedTime(int)));
     connect(sigHelp, SIGNAL(elapsedTimeUpdate(int)), this, SLOT(updateDisplayedTime()));
     connect(sigHelp, SIGNAL(elapsedTimeUpdate(int)), this, SLOT(updatePhaseProgress()));
@@ -111,12 +106,12 @@ ClientBoxWidget::ClientBoxWidget(SignalHelper *sigHelp, QWidget *parent) :
 
 
 
-void ClientBoxWidget::updateElapsedTime(int elapsed) { elapsedTime = elapsed; }
-void ClientBoxWidget::updateMaximumTime(int maxTime) { if(maxTime != 0) maximumTime = maxTime; }
-void ClientBoxWidget::toggleRoomclock(bool roomclck) { roomclock   = roomclck; }
+void DepartmentBoxWidget::updateElapsedTime(int elapsed) { elapsedTime = elapsed; }
+void DepartmentBoxWidget::updateMaximumTime(int maxTime) { if(maxTime != 0) maximumTime = maxTime; }
+void DepartmentBoxWidget::toggleRoomclock(bool roomclck) { roomclock   = roomclck; }
 
 
-void ClientBoxWidget::updateProblem(QString problem) {
+void DepartmentBoxWidget::updateProblem(QString problem) {
     if((problem != " ") && (problem != "") && (problem != nullptr))
         titlelabel->setText(clockTitle + " | " + problem);
     else titlelabel->setText(clockTitle);
@@ -124,7 +119,7 @@ void ClientBoxWidget::updateProblem(QString problem) {
 
 
 
-void ClientBoxWidget::updateDisplayedTime() {
+void DepartmentBoxWidget::updateDisplayedTime() {
     QTime tmp = QTime(0,0,0,0);
     tmp = tmp.addMSecs(elapsedTime);
     QString timestr;
@@ -138,7 +133,7 @@ void ClientBoxWidget::updateDisplayedTime() {
 }
 
 
-void ClientBoxWidget::updatePhaseProgress() {
+void DepartmentBoxWidget::updatePhaseProgress() {
     double progress;
 
     if(!roomclock) progress = elapsedTime*1.0/maximumTime*1.0;
@@ -169,19 +164,19 @@ void ClientBoxWidget::updatePhaseProgress() {
 
 
 
-QFont ClientBoxWidget::getBoxTitleFont(int windowHeight) {
+QFont DepartmentBoxWidget::getBoxTitleFont(int windowHeight) {
     QFont tmp = font();
     tmp.setPointSize(windowHeight*0.019);
     return tmp;
 }
 
-QFont ClientBoxWidget::getPerflabelFont(int windowHeight) {
+QFont DepartmentBoxWidget::getPerflabelFont(int windowHeight) {
     QFont tmp = font();
     tmp.setPointSize(windowHeight*0.019);
     return tmp;
 }
 
-QFont ClientBoxWidget::getPhaselabelFont(int windowHeight) {
+QFont DepartmentBoxWidget::getPhaselabelFont(int windowHeight) {
     QFont tmp = font();
     tmp.setPointSize(windowHeight*0.02);
     tmp.setBold(true);
@@ -189,7 +184,7 @@ QFont ClientBoxWidget::getPhaselabelFont(int windowHeight) {
 }
 
 
-void ClientBoxWidget::onResizeEvent(int windowHeight) {
+void DepartmentBoxWidget::onResizeEvent(int windowHeight) {
     titlelabel->setFont(this->getBoxTitleFont(windowHeight));
     perflabel->setFont(getPerflabelFont(windowHeight));
     phaselabel->setFont(getPhaselabelFont(windowHeight));
@@ -198,13 +193,13 @@ void ClientBoxWidget::onResizeEvent(int windowHeight) {
 }
 
 
-void ClientBoxWidget::setTimeDisplayHeight(int windowHeight) {
+void DepartmentBoxWidget::setTimeDisplayHeight(int windowHeight) {
     timedisplay->setMinimumHeight(windowHeight*0.045);
     timedisplay->setMaximumHeight(windowHeight*0.045);
 }
 
 
-void ClientBoxWidget::setProgressBarHeight(int windowHeight) {
+void DepartmentBoxWidget::setProgressBarHeight(int windowHeight) {
     progressbar->setMinimumHeight(windowHeight*0.015);
     progressbar->setMaximumHeight(windowHeight*0.015);
 }
