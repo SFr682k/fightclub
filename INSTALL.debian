@@ -29,6 +29,14 @@ make
 sudo cp fightclub-remoteclockwindow /usr/local/bin
 cd ..
 
+# Build the dashboard and install the binary on the local system
+
+cd dashboard
+qmake fightclub-dashboard.pro
+make
+sudo cp fightclub-dashboard /usr/local/bin
+cd ..
+
 
 # Remove the source files
 
