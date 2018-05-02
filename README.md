@@ -4,6 +4,7 @@
 
  - Client 0.4a
  - Remote Clock Window 0.7
+ - Dashboard 0.1
 
 
 ## About Fightclub
@@ -15,11 +16,8 @@ Fightclub currently consists of the following components:
 
  - *Fightclub Client*, an application for timing a physics fight.
  - *Fightclub Remote Clock Window*, a remote clock window for use on remote machines inside the local network.
+ - *Fightclub Dashboard*, displaying the state of multiple clients
 
-
-Following components are planned to be added:
-
- - A remote clock window displaying the state of multiple clients
 
 
 
