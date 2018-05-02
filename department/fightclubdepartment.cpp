@@ -45,7 +45,6 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     ui->cpcarryindic->display("C");
     ui->cpocarryindic->display("O");
 
-    ui->dummycdown->display("    ");
     ui->aadvcdown->display("    ");
 
     ui->elapsedtime->display(" --:-- ");
@@ -102,16 +101,24 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     teamadapt = new TeamAdapter();
     lstadapt->setTeamAdapter(teamadapt);
 
+
+    ui->actionFullscreen->setEnabled(false);
+    connect(ui->actionAbout, SIGNAL(triggered()), aboutdlg, SLOT(exec()));
+
+
     clockwindow = new ClockWindow();
     ui->actionClose_Clock_Window->setEnabled(false);
+    ui->actionClkWindowApp->setEnabled(false);
     connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
     connect(ui->actionOpen_Clock_Window, SIGNAL(triggered(bool)), this, SLOT(openClockWindow()));
+    connect(ui->actionClockwindowFullscreen, SIGNAL(toggled(bool)), clockwindow, SLOT(setFullscreen(bool)));
+    connect(clockwindow, SIGNAL(fullscreenChanged(bool)), ui->actionClockwindowFullscreen, SLOT(setChecked(bool)));
     connect(ui->actionClose_Clock_Window, SIGNAL(triggered(bool)), clockwindow, SLOT(close()));
 
 
     connect(lstadapt, SIGNAL(forceInit()), this, SLOT(initialize()));
 
-    connect(ui->actionAbout, SIGNAL(triggered()), aboutdlg, SLOT(exec()));
+
 
 
 
@@ -246,7 +253,6 @@ void FightclubDepartment::initialize() {
 
     phpbar->resetTimer();
 
-    ui->dummycdown->display("    ");
     ui->aadvcdown->display("    ");
 
     ui->elapsedtime->display(" --:-- ");
@@ -295,8 +301,8 @@ void FightclubDepartment::toggleStartStopBttn() {
         else if((lstadapt->getCurrentStage() == -1) && (lstadapt->getCurrentPhase() == -1))
             lstadapt->nextPhase();
 
-        ui->startstopbttn->setIcon(QIcon(":/breeze-icons/chronometer-pause-24.png"));
-    } else ui->startstopbttn->setIcon(QIcon(":/breeze-icons/chronometer-start-24.png"));
+        ui->startstopbttn->setIcon(QIcon(":/breeze-icons/chronometer-pause-24.svg"));
+    } else ui->startstopbttn->setIcon(QIcon(":/breeze-icons/chronometer-start-24.svg"));
 }
 
 

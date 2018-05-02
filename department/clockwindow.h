@@ -44,6 +44,7 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 signals:
+    void fullscreenChanged(bool);
     void clockwindowClosed();
 
 private:
@@ -60,6 +61,8 @@ public slots:
     void phaseNameChanged(QString);
     void problemChanged(QString);
     void performersChanged(QString);
+
+    void setFullscreen(bool);
 
 private slots:
     void updateTime();

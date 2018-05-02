@@ -105,6 +105,15 @@ void ClockWindow::updateTime() {
 
 
 
+void ClockWindow::setFullscreen(bool fscreen) {
+    if(fscreen) setWindowState(Qt::WindowFullScreen);
+    else if(windowState() == Qt::WindowFullScreen) setWindowState(Qt::WindowMaximized);
+
+    emit fullscreenChanged(fscreen);
+}
+
+
+
 void ClockWindow::resizeEvent(QResizeEvent *event) {
     QFont phaselabelfont = ui->phaselabel->font();
     phaselabelfont.setPointSize(2 + height()*0.03);
@@ -123,16 +132,15 @@ void ClockWindow::resizeEvent(QResizeEvent *event) {
 void ClockWindow::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
         case Qt::Key_F:
-            setWindowState(Qt::WindowFullScreen);
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier) setFullscreen(true);
             break;
 
         case Qt::Key_Escape:
-            setWindowState(Qt::WindowMaximized);
+            if(windowState() == Qt::WindowFullScreen) setFullscreen(false);
             break;
 
         case Qt::Key_Q:
-            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
-                this->close();
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier) this->close();
             break;
 
         default:

@@ -38,7 +38,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QGroupBox" name="phaseoverview">
+         <widget class="QGroupBox" name="phaseselectionbox">
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -48,71 +48,35 @@
           <property name="title">
            <string/>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_8">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
+          <layout class="QGridLayout" name="gridLayout_5">
+           <property name="verticalSpacing">
+            <number>0</number>
+           </property>
+           <item row="3" column="3">
+            <layout class="QHBoxLayout" name="cpindicators">
              <property name="spacing">
               <number>0</number>
              </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetMaximumSize</enum>
+             </property>
              <item>
-              <widget class="QPushButton" name="phasebwd">
+              <widget class="QLCDNumber" name="cpaadvindic">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                  <horstretch>0</horstretch>
-                 <verstretch>1</verstretch>
+                 <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>60</width>
-                 <height>72</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>60</width>
-                 <height>128</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/go-previous-32.png</normaloff>:/breeze-icons/go-previous-32.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="dummycdown">
-               <property name="minimumSize">
-                <size>
-                 <width>60</width>
+                 <width>10</width>
                  <height>25</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>60</width>
+                 <width>14</width>
                  <height>25</height>
                 </size>
                </property>
@@ -125,162 +89,318 @@
                <property name="lineWidth">
                 <number>0</number>
                </property>
-               <property name="smallDecimalPoint">
-                <bool>true</bool>
-               </property>
                <property name="digitCount">
-                <number>4</number>
+                <number>1</number>
                </property>
                <property name="segmentStyle">
-                <enum>QLCDNumber::Flat</enum>
+                <enum>QLCDNumber::Outline</enum>
+               </property>
+               <property name="value" stdset="0">
+                <double>8.000000000000000</double>
                </property>
                <property name="intValue" stdset="0">
-                <number>888</number>
+                <number>8</number>
                </property>
               </widget>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="ppindicators">
-               <property name="spacing">
+              <widget class="QLCDNumber" name="cpcarryindic">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>14</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <property name="lineWidth">
                 <number>0</number>
                </property>
-               <property name="sizeConstraint">
-                <enum>QLayout::SetMaximumSize</enum>
+               <property name="digitCount">
+                <number>1</number>
                </property>
-               <item>
-                <widget class="QLCDNumber" name="ppaadvindic">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>10</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>14</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>1</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Outline</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLCDNumber" name="ppcarryindic">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>10</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>14</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>1</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Outline</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLCDNumber" name="ppocarryindic">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>10</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>14</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>1</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Outline</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Outline</enum>
+               </property>
+               <property name="value" stdset="0">
+                <double>8.000000000000000</double>
+               </property>
+               <property name="intValue" stdset="0">
+                <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="cpocarryindic">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>14</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="digitCount">
+                <number>1</number>
+               </property>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Outline</enum>
+               </property>
+               <property name="value" stdset="0">
+                <double>8.000000000000000</double>
+               </property>
+               <property name="intValue" stdset="0">
+                <number>8</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
-           <item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="phasebwd">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>60</width>
+               <height>72</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="resources.qrc">
+               <normaloff>:/breeze-icons/go-previous-32.svg</normaloff>:/breeze-icons/go-previous-32.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <layout class="QHBoxLayout" name="ppindicators">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="sizeConstraint">
+              <enum>QLayout::SetMaximumSize</enum>
+             </property>
+             <item>
+              <widget class="QLCDNumber" name="ppaadvindic">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>14</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="digitCount">
+                <number>1</number>
+               </property>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Outline</enum>
+               </property>
+               <property name="value" stdset="0">
+                <double>8.000000000000000</double>
+               </property>
+               <property name="intValue" stdset="0">
+                <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="ppcarryindic">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>14</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="digitCount">
+                <number>1</number>
+               </property>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Outline</enum>
+               </property>
+               <property name="value" stdset="0">
+                <double>8.000000000000000</double>
+               </property>
+               <property name="intValue" stdset="0">
+                <number>8</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLCDNumber" name="ppocarryindic">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>14</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="digitCount">
+                <number>1</number>
+               </property>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Outline</enum>
+               </property>
+               <property name="value" stdset="0">
+                <double>8.000000000000000</double>
+               </property>
+               <property name="intValue" stdset="0">
+                <number>8</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="3">
+            <widget class="QPushButton" name="phasefwd">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>1</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>60</width>
+               <height>72</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="resources.qrc">
+               <normaloff>:/breeze-icons/go-next-32.svg</normaloff>:/breeze-icons/go-next-32.svg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" rowspan="4">
             <widget class="QListView" name="listofstages">
              <property name="enabled">
               <bool>true</bool>
@@ -299,7 +419,44 @@
              </property>
             </widget>
            </item>
-           <item>
+           <item row="2" column="3">
+            <widget class="QLCDNumber" name="aadvcdown">
+             <property name="minimumSize">
+              <size>
+               <width>60</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>60</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="smallDecimalPoint">
+              <bool>true</bool>
+             </property>
+             <property name="digitCount">
+              <number>4</number>
+             </property>
+             <property name="segmentStyle">
+              <enum>QLCDNumber::Flat</enum>
+             </property>
+             <property name="value" stdset="0">
+              <double>888.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2" rowspan="4">
             <widget class="QListView" name="listofphases">
              <property name="enabled">
               <bool>true</bool>
@@ -318,70 +475,56 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="3">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>50</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="currentphasebox">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>130</height>
+           </size>
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0,0">
+           <property name="spacing">
+            <number>3</number>
+           </property>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_7">
-             <property name="spacing">
+            <layout class="QGridLayout" name="phaseinfo" rowstretch="0,0,0">
+             <property name="horizontalSpacing">
+              <number>4</number>
+             </property>
+             <property name="verticalSpacing">
               <number>0</number>
              </property>
-             <item>
-              <widget class="QPushButton" name="phasefwd">
+             <item row="1" column="0">
+              <widget class="QLCDNumber" name="elapsedtime">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>1</verstretch>
                 </sizepolicy>
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>60</width>
-                 <height>72</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>60</width>
-                 <height>128</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/go-next-32.png</normaloff>:/breeze-icons/go-next-32.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLCDNumber" name="aadvcdown">
-               <property name="minimumSize">
-                <size>
-                 <width>60</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>60</width>
+                 <width>90</width>
                  <height>25</height>
                 </size>
                </property>
@@ -394,434 +537,249 @@
                <property name="lineWidth">
                 <number>0</number>
                </property>
-               <property name="smallDecimalPoint">
-                <bool>true</bool>
-               </property>
                <property name="digitCount">
-                <number>4</number>
+                <number>7</number>
                </property>
                <property name="segmentStyle">
                 <enum>QLCDNumber::Flat</enum>
                </property>
                <property name="value" stdset="0">
-                <double>888.000000000000000</double>
+                <double>8888888.000000000000000</double>
+               </property>
+               <property name="intValue" stdset="0">
+                <number>8888888</number>
                </property>
               </widget>
              </item>
-             <item>
-              <layout class="QHBoxLayout" name="cpindicators">
-               <property name="spacing">
+             <item row="2" column="0" colspan="3">
+              <widget class="QProgressBar" name="progressbar">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>10</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>10</height>
+                </size>
+               </property>
+               <property name="maximum">
+                <number>3</number>
+               </property>
+               <property name="value">
+                <number>1</number>
+               </property>
+               <property name="textVisible">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" colspan="3">
+              <widget class="QLabel" name="performerslabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>&lt;ApplicationName&gt; &lt;Version&gt;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLCDNumber" name="maxtime">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>1</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>90</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <property name="lineWidth">
                 <number>0</number>
                </property>
-               <property name="sizeConstraint">
-                <enum>QLayout::SetMaximumSize</enum>
+               <property name="digitCount">
+                <number>7</number>
                </property>
-               <item>
-                <widget class="QLCDNumber" name="cpaadvindic">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>10</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>14</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>1</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Outline</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLCDNumber" name="cpcarryindic">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>10</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>14</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>1</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Outline</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLCDNumber" name="cpocarryindic">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>10</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>14</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>1</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Outline</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="currentphasebox">
-          <property name="title">
-           <string/>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <property name="spacing">
-            <number>3</number>
-           </property>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_13">
-             <property name="spacing">
-              <number>12</number>
-             </property>
-             <item>
-              <layout class="QVBoxLayout" name="phaseinfo">
-               <property name="spacing">
-                <number>0</number>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Flat</enum>
                </property>
-               <item>
-                <widget class="QLabel" name="performerslabel">
-                 <property name="font">
-                  <font>
-                   <pointsize>11</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>&lt;ApplicationName&gt; &lt;Version&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="phaselabel">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>12</pointsize>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Click the “Start” button to initiate the first phase</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+               <property name="value" stdset="0">
+                <double>8888888.000000000000000</double>
+               </property>
+               <property name="intValue" stdset="0">
+                <number>8888888</number>
+               </property>
+              </widget>
              </item>
-             <item>
-              <layout class="QHBoxLayout" name="phaseprogressbar">
-               <item>
-                <widget class="QLCDNumber" name="elapsedtime">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>1</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>90</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>7</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Flat</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8888888.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8888888</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QProgressBar" name="progressbar">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximum">
-                  <number>3</number>
-                 </property>
-                 <property name="value">
-                  <number>1</number>
-                 </property>
-                 <property name="textVisible">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLCDNumber" name="maxtime">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>1</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>90</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>25</height>
-                  </size>
-                 </property>
-                 <property name="frameShape">
-                  <enum>QFrame::NoFrame</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Plain</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>0</number>
-                 </property>
-                 <property name="digitCount">
-                  <number>7</number>
-                 </property>
-                 <property name="segmentStyle">
-                  <enum>QLCDNumber::Flat</enum>
-                 </property>
-                 <property name="value" stdset="0">
-                  <double>8888888.000000000000000</double>
-                 </property>
-                 <property name="intValue" stdset="0">
-                  <number>8888888</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+             <item row="1" column="1">
+              <widget class="QLabel" name="phaselabel">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>13</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Click the “Start” button to initiate the first phase</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
            <item>
             <widget class="Line" name="line_2">
+             <property name="minimumSize">
+              <size>
+               <width>6</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
             </widget>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <property name="spacing">
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="Line" name="line">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+            <layout class="QGridLayout" name="phasecontrolbttns">
+             <item row="0" column="1">
+              <widget class="QPushButton" name="resettimebttn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/chronometer-restart-24.svg</normaloff>:/breeze-icons/chronometer-restart-24.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
                </property>
               </widget>
              </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <item>
-                <widget class="QPushButton" name="startstopbttn">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="resources.qrc">
-                   <normaloff>:/breeze-icons/chronometer-start-24.png</normaloff>:/breeze-icons/chronometer-start-24.png</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>24</width>
-                   <height>24</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="resettimebttn">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="resources.qrc">
-                   <normaloff>:/breeze-icons/chronometer-restart-24.png</normaloff>:/breeze-icons/chronometer-restart-24.png</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>24</width>
-                   <height>24</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="settimebttn">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="resources.qrc">
-                   <normaloff>:/breeze-icons/chronometer-24.png</normaloff>:/breeze-icons/chronometer-24.png</iconset>
-                 </property>
-                 <property name="iconSize">
-                  <size>
-                   <width>24</width>
-                   <height>24</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="startstopbttn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/chronometer-start-24.svg</normaloff>:/breeze-icons/chronometer-start-24.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="settimebttn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/chronometer-24.svg</normaloff>:/breeze-icons/chronometer-24.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="savetimebttn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/document-save-24.svg</normaloff>:/breeze-icons/document-save-24.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -834,71 +792,92 @@
            <string/>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>12</number>
+           </property>
            <item>
-            <layout class="QVBoxLayout" name="problembox">
-             <item>
-              <layout class="QHBoxLayout" name="problemlabelbox">
-               <item>
-                <widget class="QLabel" name="problemlabel">
-                 <property name="text">
-                  <string>Problem:</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+            <layout class="QGridLayout" name="currentProblem">
+             <property name="verticalSpacing">
+              <number>3</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="problemlabel">
+               <property name="text">
+                <string>Problem:</string>
+               </property>
+              </widget>
              </item>
-             <item>
-              <layout class="QHBoxLayout" name="problemselbox">
-               <item>
-                <widget class="QComboBox" name="problemcombobox"/>
-               </item>
-               <item>
-                <widget class="QPushButton" name="problemaccepted">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>Accept</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="resources.qrc">
-                   <normaloff>:/breeze-icons/dialog-ok-apply-16.png</normaloff>:/breeze-icons/dialog-ok-apply-16.png</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="problemrejected">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>Reject</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="resources.qrc">
-                   <normaloff>:/breeze-icons/dialog-cancel-16.png</normaloff>:/breeze-icons/dialog-cancel-16.png</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+             <item row="1" column="0">
+              <widget class="QComboBox" name="problemcombobox"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="problemaccepted">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Accept</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="problemrejected">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Reject</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/dialog-cancel-16.svg</normaloff>:/breeze-icons/dialog-cancel-16.svg</iconset>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QGridLayout" name="performancesbox">
+            <layout class="QGridLayout" name="currentPerformers">
+             <property name="verticalSpacing">
+              <number>3</number>
+             </property>
+             <item row="0" column="1">
+              <widget class="QLabel" name="opplabel">
+               <property name="text">
+                <string>Opponent:</string>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="2">
+              <widget class="QComboBox" name="revcombobox"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="oppcombobox"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="replabel">
+               <property name="text">
+                <string>Reporter:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
               <widget class="QLabel" name="revlabel">
                <property name="text">
                 <string>Reviewer:</string>
@@ -906,29 +885,9 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="replabel">
-               <property name="text">
-                <string>Reporter:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="opplabel">
-               <property name="text">
-                <string>Opponent:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
               <widget class="QComboBox" name="repcombobox"/>
              </item>
-             <item row="2" column="1">
-              <widget class="QComboBox" name="oppcombobox"/>
-             </item>
-             <item row="2" column="2">
-              <widget class="QComboBox" name="revcombobox"/>
-             </item>
-             <item row="2" column="3">
+             <item row="1" column="3">
               <widget class="QPushButton" name="submitperfomances">
                <property name="enabled">
                 <bool>false</bool>
@@ -944,7 +903,7 @@
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/document-send-16.png</normaloff>:/breeze-icons/document-send-16.png</iconset>
+                 <normaloff>:/breeze-icons/document-send-16.svg</normaloff>:/breeze-icons/document-send-16.svg</iconset>
                </property>
               </widget>
              </item>
@@ -991,197 +950,190 @@
           <property name="title">
            <string>Broadcast IPs</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <layout class="QGridLayout" name="gridLayout">
-             <property name="horizontalSpacing">
-              <number>12</number>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="1">
+            <widget class="QLabel" name="localhostip">
+             <property name="text">
+              <string>127.0.0.1</string>
              </property>
-             <item row="2" column="3">
-              <widget class="QPushButton" name="bcastipapply">
-               <property name="text">
-                <string>Apply</string>
-               </property>
-               <property name="icon">
-                <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/dialog-ok-apply-16.png</normaloff>:/breeze-icons/dialog-ok-apply-16.png</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QRadioButton" name="customip">
-               <property name="text">
-                <string>Custo&amp;m IP address</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <layout class="QHBoxLayout" name="customipselect">
-               <property name="spacing">
-                <number>2</number>
-               </property>
-               <item>
-                <widget class="QSpinBox" name="customippt1">
-                 <property name="minimumSize">
-                  <size>
-                   <width>60</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="maximum">
-                  <number>255</number>
-                 </property>
-                 <property name="value">
-                  <number>192</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="customipdot1">
-                 <property name="text">
-                  <string>.</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="customippt2">
-                 <property name="minimumSize">
-                  <size>
-                   <width>60</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="maximum">
-                  <number>255</number>
-                 </property>
-                 <property name="value">
-                  <number>168</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="customipdot2">
-                 <property name="text">
-                  <string>.</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="customippt3">
-                 <property name="minimumSize">
-                  <size>
-                   <width>60</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="maximum">
-                  <number>255</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="customipdot3">
-                 <property name="text">
-                  <string>.</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="customippt4">
-                 <property name="minimumSize">
-                  <size>
-                   <width>60</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                 <property name="maximum">
-                  <number>255</number>
-                 </property>
-                 <property name="value">
-                  <number>1</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="2">
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="everybodyip">
+             <property name="text">
+              <string>255.255.255.255</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <layout class="QHBoxLayout" name="customipselect">
+             <property name="spacing">
+              <number>2</number>
+             </property>
+             <item>
+              <widget class="QSpinBox" name="customippt1">
+               <property name="minimumSize">
                 <size>
-                 <width>40</width>
-                 <height>20</height>
+                 <width>60</width>
+                 <height>0</height>
                 </size>
                </property>
-              </spacer>
-             </item>
-             <item row="1" column="0">
-              <widget class="QRadioButton" name="everybody">
-               <property name="text">
-                <string>&amp;Everybody</string>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>192</number>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QLabel" name="everybodyip">
+             <item>
+              <widget class="QLabel" name="customipdot1">
                <property name="text">
-                <string>255.255.255.255</string>
+                <string>.</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="localhostip">
-               <property name="text">
-                <string>127.0.0.1</string>
+             <item>
+              <widget class="QSpinBox" name="customippt2">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>168</number>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QRadioButton" name="localhost">
+             <item>
+              <widget class="QLabel" name="customipdot2">
                <property name="text">
-                <string>Local host</string>
+                <string>.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="customippt3">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="customipdot3">
+               <property name="text">
+                <string>.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="customippt4">
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>60</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="value">
+                <number>1</number>
                </property>
               </widget>
              </item>
             </layout>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="localhost">
+             <property name="text">
+              <string>Local host</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="everybody">
+             <property name="text">
+              <string>Ever&amp;ybody</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QRadioButton" name="customip">
+             <property name="text">
+              <string>Custo&amp;m IP address</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QPushButton" name="bcastipapply">
+             <property name="text">
+              <string>Apply</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resources.qrc">
+               <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -1205,7 +1157,7 @@
              </property>
              <property name="icon">
               <iconset resource="resources.qrc">
-               <normaloff>:/breeze-icons/dialog-ok-apply-16.png</normaloff>:/breeze-icons/dialog-ok-apply-16.png</iconset>
+               <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
              </property>
             </widget>
            </item>
@@ -1245,7 +1197,7 @@
              </property>
              <property name="icon">
               <iconset resource="resources.qrc">
-               <normaloff>:/breeze-icons/dialog-ok-apply-16.png</normaloff>:/breeze-icons/dialog-ok-apply-16.png</iconset>
+               <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
              </property>
             </widget>
            </item>
@@ -1402,7 +1354,7 @@
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/document-open-24.png</normaloff>:/breeze-icons/document-open-24.png</iconset>
+                 <normaloff>:/breeze-icons/document-open-24.svg</normaloff>:/breeze-icons/document-open-24.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -1440,7 +1392,7 @@
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/edit-clear-24.png</normaloff>:/breeze-icons/edit-clear-24.png</iconset>
+                 <normaloff>:/breeze-icons/edit-clear-24.svg</normaloff>:/breeze-icons/edit-clear-24.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -1578,7 +1530,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/document-open-24.png</normaloff>:/breeze-icons/document-open-24.png</iconset>
+                  <normaloff>:/breeze-icons/document-open-24.svg</normaloff>:/breeze-icons/document-open-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -1613,7 +1565,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/edit-clear-24.png</normaloff>:/breeze-icons/edit-clear-24.png</iconset>
+                  <normaloff>:/breeze-icons/edit-clear-24.svg</normaloff>:/breeze-icons/edit-clear-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -1723,7 +1675,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/document-open-24.png</normaloff>:/breeze-icons/document-open-24.png</iconset>
+                  <normaloff>:/breeze-icons/document-open-24.svg</normaloff>:/breeze-icons/document-open-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -1758,7 +1710,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/edit-clear-24.png</normaloff>:/breeze-icons/edit-clear-24.png</iconset>
+                  <normaloff>:/breeze-icons/edit-clear-24.svg</normaloff>:/breeze-icons/edit-clear-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -1868,7 +1820,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/document-open-24.png</normaloff>:/breeze-icons/document-open-24.png</iconset>
+                  <normaloff>:/breeze-icons/document-open-24.svg</normaloff>:/breeze-icons/document-open-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -1903,7 +1855,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/edit-clear-24.png</normaloff>:/breeze-icons/edit-clear-24.png</iconset>
+                  <normaloff>:/breeze-icons/edit-clear-24.svg</normaloff>:/breeze-icons/edit-clear-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -2013,7 +1965,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/document-open-24.png</normaloff>:/breeze-icons/document-open-24.png</iconset>
+                  <normaloff>:/breeze-icons/document-open-24.svg</normaloff>:/breeze-icons/document-open-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -2048,7 +2000,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="resources.qrc">
-                  <normaloff>:/breeze-icons/edit-clear-24.png</normaloff>:/breeze-icons/edit-clear-24.png</iconset>
+                  <normaloff>:/breeze-icons/edit-clear-24.svg</normaloff>:/breeze-icons/edit-clear-24.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -2096,6 +2048,8 @@
     <property name="title">
      <string>Figh&amp;tclub Department</string>
     </property>
+    <addaction name="actionFullscreen"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -2104,6 +2058,10 @@
      <string>&amp;Clock Window</string>
     </property>
     <addaction name="actionOpen_Clock_Window"/>
+    <addaction name="separator"/>
+    <addaction name="actionClockwindowFullscreen"/>
+    <addaction name="actionClkWindowApp"/>
+    <addaction name="separator"/>
     <addaction name="actionClose_Clock_Window"/>
    </widget>
    <addaction name="menuMain"/>
@@ -2113,7 +2071,7 @@
   <action name="actionQuit">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/breeze-icons/application-exit-16.png</normaloff>:/breeze-icons/application-exit-16.png</iconset>
+     <normaloff>:/breeze-icons/application-exit-16.svg</normaloff>:/breeze-icons/application-exit-16.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -2125,7 +2083,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/breeze-icons/help-about-16.png</normaloff>:/breeze-icons/help-about-16.png</iconset>
+     <normaloff>:/breeze-icons/help-about-16.svg</normaloff>:/breeze-icons/help-about-16.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -2135,13 +2093,54 @@
    </property>
   </action>
   <action name="actionOpen_Clock_Window">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/window-new-16.svg</normaloff>:/breeze-icons/window-new-16.svg</iconset>
+   </property>
    <property name="text">
-    <string>Open Clock Window</string>
+    <string>&amp;Open Clock Window</string>
    </property>
   </action>
   <action name="actionClose_Clock_Window">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/window-close-16.svg</normaloff>:/breeze-icons/window-close-16.svg</iconset>
+   </property>
    <property name="text">
-    <string>Close Clock Window</string>
+    <string>&amp;Close Clock Window</string>
+   </property>
+  </action>
+  <action name="actionClockwindowFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/view-fullscreen-16.svg</normaloff>:/breeze-icons/view-fullscreen-16.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Fullscreen</string>
+   </property>
+  </action>
+  <action name="actionFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/view-fullscreen-16.svg</normaloff>:/breeze-icons/view-fullscreen-16.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Fullscreen</string>
+   </property>
+  </action>
+  <action name="actionClkWindowApp">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/draw-brush-16.svg</normaloff>:/breeze-icons/draw-brush-16.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Configure &amp;Appearance</string>
    </property>
   </action>
  </widget>
