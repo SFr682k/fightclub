@@ -19,6 +19,8 @@
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 
+#include <QInputDialog>
+#include <QMessageBox>
 
 #include <QDebug>
 
@@ -47,6 +49,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->chooseFontBox, SIGNAL(activated(QString)), this, SLOT(selFontChanged(QString)));
 
 
+    connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
     connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
 }
 
@@ -77,3 +80,61 @@ void SettingsDialog::useCustomFont(bool customFont) {
 }
 
 void SettingsDialog::selFontChanged(QString fontname) { emit fontChanged(fontname); }
+
+
+
+
+
+void SettingsDialog::toggleLockedState() {
+    if(!locked) {
+        QString pwd1 = QInputDialog::getText(this, "Set password",
+                                             "Please set a password:", QLineEdit::Password);
+
+        if(pwd1 == nullptr) return;
+
+        QString pwd2 = QInputDialog::getText(this, "Set password",
+                                             "Please confirm the password:", QLineEdit::Password);
+
+        if(pwd2 == nullptr) return;
+        else if(pwd1 != pwd2) {
+            QMessageBox::critical(this, "Error", "The passwords are not identical");
+            return;
+        }
+
+        locked = true;
+        lockedpwd = pwd1;
+    } else {
+        QString pwd = QInputDialog::getText(this, "Enter password",
+                                            "Please enter the password:", QLineEdit::Password);
+
+        if(pwd == nullptr) return;
+        else if(pwd != lockedpwd) {
+            QMessageBox::critical(this, "Error", "Wrong password");
+            return;
+        }
+
+        locked = false;
+    }
+
+    ui->appearanceSettings->setEnabled(!locked);
+
+    ui->lockSettings->setText(locked? "Unlock" : "Lock");
+    ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.png")
+                                    : QIcon(":/breeze-icons/object-locked-16.png"));
+}
+
+
+void SettingsDialog::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_Enter:
+            this->accept();
+            break;
+
+        case Qt::Key_Escape:
+            this->reject();
+            break;
+
+        default:
+            QWidget::keyPressEvent(event);
+    }
+}

@@ -20,6 +20,7 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QKeyEvent>
 
 namespace Ui {
 class SettingsDialog;
@@ -38,6 +39,9 @@ private:
     bool locked;
     QString lockedpwd;
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 signals:
     void tournamentNameChanged(QString);
     void displayCTimeChanged(bool);
@@ -51,6 +55,7 @@ private slots:
     void displayCurrentTime(bool);
     void useCustomFont(bool);
     void selFontChanged(QString);
+    void toggleLockedState();
 };
 
 #endif // SETTINGSDIALOG_H

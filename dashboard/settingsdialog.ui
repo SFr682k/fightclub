@@ -194,12 +194,13 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+      <widget class="QPushButton" name="lockSettings">
        <property name="text">
         <string>Lock</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/breeze-icons/object-locked-16.png</normaloff>:/breeze-icons/object-locked-16.png</iconset>
        </property>
       </widget>
      </item>
@@ -219,7 +220,11 @@
      <item>
       <widget class="QPushButton" name="closeDialogBttn">
        <property name="text">
-        <string>Close</string>
+        <string>OK</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/breeze-icons/dialog-ok-apply-16.png</normaloff>:/breeze-icons/dialog-ok-apply-16.png</iconset>
        </property>
       </widget>
      </item>
@@ -227,6 +232,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
