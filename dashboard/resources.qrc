@@ -4,6 +4,8 @@
     </qresource>
     <qresource>
         <file>breeze-icons/dialog-ok-apply-16.png</file>
+        <file>breeze-icons/document-open-24.png</file>
+        <file>breeze-icons/edit-clear-24.png</file>
         <file>breeze-icons/object-locked-16.png</file>
         <file>breeze-icons/object-unlocked-16.png</file>
     </qresource>

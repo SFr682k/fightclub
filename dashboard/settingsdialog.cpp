@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 
-#include <QDebug>
+
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),

@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Dashboard");
-    a.setApplicationVersion("0.1alpha");
+    a.setApplicationVersion("0.1");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("Display the state of multiple Fightclub Departments.");
