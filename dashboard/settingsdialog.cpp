@@ -35,6 +35,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->dispCTimeCBox->setChecked(true);
 
     ui->customFontCBox->setChecked(false);
+    ui->chooseFontBox->setEnabled(false);
 
 
     connect(ui->dispTournamentNameCBox, SIGNAL(toggled(bool)), this, SLOT(displayTournamentName(bool)));
@@ -72,7 +73,7 @@ void SettingsDialog::displayCurrentTime(bool display) { emit displayCTimeChanged
 
 void SettingsDialog::useCustomFont(bool customFont) {
     ui->chooseFontBox->setEnabled(customFont);
-    emit fontChanged(customFont? ui->chooseFontBox->fontInfo().family() : nullptr);
+    emit fontChanged(customFont? ui->chooseFontBox->currentFont().family() : nullptr);
 }
 
 void SettingsDialog::selFontChanged(QString fontname) { emit fontChanged(fontname); }
