@@ -2100,6 +2100,9 @@
    <property name="text">
     <string>&amp;Open Clock Window</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
   </action>
   <action name="actionClose_Clock_Window">
    <property name="icon">
@@ -2108,6 +2111,9 @@
    </property>
    <property name="text">
     <string>&amp;Close Clock Window</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
    </property>
   </action>
   <action name="actionClockwindowFullscreen">

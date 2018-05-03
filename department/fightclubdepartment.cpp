@@ -33,6 +33,10 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    exitEnabled = true, toggleFscreenEnabled = true;
+
+
     previousPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).value(0);
 
     ui->performerslabel->setText(QApplication::applicationName() + " " + QApplication::applicationVersion());
@@ -102,12 +106,14 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     lstadapt->setTeamAdapter(teamadapt);
 
 
-    ui->actionFullscreen->setEnabled(false);
+    ui->actionFullscreen->setShortcut(QKeySequence(Qt::ControlModifier + Qt::Key_F));
+    connect(ui->actionFullscreen, SIGNAL(triggered(bool)), this, SLOT(activateFullscreen(bool)));
     connect(ui->actionAbout, SIGNAL(triggered()), aboutdlg, SLOT(exec()));
 
 
     clockwindow = new ClockWindow();
     ui->actionClose_Clock_Window->setEnabled(false);
+    ui->actionClockwindowFullscreen->setEnabled(false);
     ui->actionClkWindowApp->setEnabled(false);
     connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
     connect(ui->actionOpen_Clock_Window, SIGNAL(triggered(bool)), this, SLOT(openClockWindow()));
@@ -281,13 +287,18 @@ bool FightclubDepartment::continueAndInit() {
 void FightclubDepartment::openClockWindow() {
     clockwindow->show();
     ui->actionOpen_Clock_Window->setEnabled(false);
+    ui->actionClockwindowFullscreen->setEnabled(true);
     ui->actionClose_Clock_Window->setEnabled(true);
 }
 
 void FightclubDepartment::clockWindowClosed() {
     ui->actionOpen_Clock_Window->setEnabled(true);
+    ui->actionClockwindowFullscreen->setChecked(false);
+    ui->actionClockwindowFullscreen->setEnabled(false);
     ui->actionClose_Clock_Window->setEnabled(false);
 }
+
+
 
 
 
@@ -607,9 +618,30 @@ void FightclubDepartment::unloadTeamsFile() {
 
 
 
-// CLOSE EVENT --------------------------------------------------------------------------
+// INTERNAL STUFF -----------------------------------------------------------------------
+
+void FightclubDepartment::activateFullscreen(bool fscreen) {
+    if(!toggleFscreenEnabled) return;
+
+    if(fscreen) setWindowState(Qt::WindowFullScreen);
+    else if(windowState() == Qt::WindowFullScreen) setWindowState(Qt::WindowMaximized);
+
+    ui->actionFullscreen->setShortcut(fscreen? QKeySequence(Qt::Key_Escape)
+                                             : QKeySequence(Qt::ControlModifier + Qt::Key_F));
+}
+
+
+
+
+
 
 void FightclubDepartment::closeEvent(QCloseEvent *event) {
+    if(!exitEnabled) {
+        QMessageBox::information(this, "Information", "Closing Fightclub Department is currently disabled.");
+        event->ignore();
+        return;
+    }
+
     if(QMessageBox::warning(this,
             "Confirmation requested",
             "Do you really want to close Fightclub Department?",

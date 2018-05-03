@@ -21,6 +21,7 @@
 
 #include <QMainWindow>
 #include <QAbstractTableModel>
+#include <QKeyEvent>
 
 #include "aboutdialog.h"
 #include "broadcastserver.h"
@@ -57,6 +58,8 @@ private:
     QString repcomboboxinit, oppcomboboxinit, revcomboboxinit;
 
     QString previousPath;
+
+    bool exitEnabled, toggleFscreenEnabled;
 
     bool continueAndInit();
 
@@ -99,6 +102,8 @@ private slots:
     void unloadTeamsFile();
 
     void initialize();
+
+    void activateFullscreen(bool);
 
 
 public slots:
