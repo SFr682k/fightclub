@@ -38,7 +38,8 @@ SOURCES += \
     problemitemlistmodel.cpp \
     teamadapter.cpp \
     teamitemlistmodel.cpp \
-    fightclubdepartment.cpp
+    fightclubdepartment.cpp \
+    clkwindowsettings.cpp
 
 HEADERS += \
     aboutdialog.h \
@@ -54,13 +55,15 @@ HEADERS += \
     problemitemlistmodel.h \
     teamadapter.h \
     teamitemlistmodel.h \
-    fightclubdepartment.h
+    fightclubdepartment.h \
+    clkwindowsettings.h
 
 FORMS += \
     aboutdialog.ui \
     settimedialog.ui \
     clockwindow.ui \
-    fightclubdepartment.ui
+    fightclubdepartment.ui \
+    clkwindowsettings.ui
 
 OTHER_FILES += \
     gpl_v3_logo.png

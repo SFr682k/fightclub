@@ -25,6 +25,7 @@
 
 #include "aboutdialog.h"
 #include "broadcastserver.h"
+#include "clkwindowsettings.h"
 #include "clockwindow.h"
 #include "listadapter.h"
 #include "phasepbar.h"
@@ -48,6 +49,7 @@ private:
     Ui::FightclubDepartment *ui;
     AboutDialog *aboutdlg;
     BroadcastServer *bcastsrv;
+    ClkWindowSettings *clkwindowsettings;
     ClockWindow *clockwindow;
     ListAdapter *lstadapt;
     PhasePBar *phpbar;

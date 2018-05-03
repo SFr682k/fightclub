@@ -35,6 +35,9 @@ ClockWindow::ClockWindow(QWidget *parent) :
         ui->perflabel->setText(" ");
 
 
+    fontScale = 1.0;
+
+
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
     acttimer->start(30);
@@ -54,6 +57,8 @@ ClockWindow::~ClockWindow() {
 }
 
 
+
+
 void ClockWindow::toggleRoomclock(bool showRClock) {
     bool resetTime = false;
     if(roomclock && !showRClock) {
@@ -65,6 +70,8 @@ void ClockWindow::toggleRoomclock(bool showRClock) {
     ui->clockwidget->setRoomclock(showRClock);
     if(resetTime) updateElapsedTime(0);
 }
+
+
 
 
 void ClockWindow::updateElapsedTime(int elTime) {
@@ -80,6 +87,8 @@ void ClockWindow::updateMaximumTime(int maxTime)        { ui->clockwidget->setMa
 void ClockWindow::phaseNameChanged(QString phaseName)   { ui->phaselabel->setText(phaseName); }
 void ClockWindow::problemChanged(QString problem)       { ui->problabel->setText(problem);}
 void ClockWindow::performersChanged(QString performers) { ui->perflabel->setText(performers); }
+
+
 
 
 QString ClockWindow::timeToString(int time) {
@@ -105,6 +114,7 @@ void ClockWindow::updateTime() {
 
 
 
+
 void ClockWindow::setFullscreen(bool fscreen) {
     if(fscreen) setWindowState(Qt::WindowFullScreen);
     else if(windowState() == Qt::WindowFullScreen) setWindowState(Qt::WindowMaximized);
@@ -114,12 +124,27 @@ void ClockWindow::setFullscreen(bool fscreen) {
 
 
 
+void ClockWindow::setFont(QString family) {
+
+}
+
+void ClockWindow::setFontScale(double newScale) {
+    if(newScale > 0.5) fontScale = newScale;
+    resizeEvent(new QResizeEvent(QSize(width(),height()),QSize(width(),height())));
+}
+
+
+void ClockWindow::showRclockSecondHand(bool show) { ui->clockwidget->showSecondHand(show); }
+void ClockWindow::setRclockBehavior(int behavior) { ui->clockwidget->setRoomclockMode(behavior); }
+
+
+
 void ClockWindow::resizeEvent(QResizeEvent *event) {
     QFont phaselabelfont = ui->phaselabel->font();
-    phaselabelfont.setPointSize(2 + height()*0.03);
+    phaselabelfont.setPointSize((2 + height()*0.03)*fontScale);
 
     QFont infolabelfont = ui->perflabel->font();
-    infolabelfont.setPointSize(4 + height()*0.015);
+    infolabelfont.setPointSize((4 + height()*0.015)*fontScale);
 
     ui->phaselabel->setFont(phaselabelfont);
     ui->problabel->setFont(infolabelfont);

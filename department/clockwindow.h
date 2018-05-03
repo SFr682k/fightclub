@@ -51,6 +51,7 @@ private:
     Ui::ClockWindow *ui;
     QTimer *refreshtimer;
     QString timeToString(int);
+    double fontScale;
     bool roomclock;
 
 
@@ -62,6 +63,10 @@ public slots:
     void problemChanged(QString);
     void performersChanged(QString);
 
+    void setFont(QString);
+    void setFontScale(double);
+    void showRclockSecondHand(bool);
+    void setRclockBehavior(int);
     void setFullscreen(bool);
 
 private slots:

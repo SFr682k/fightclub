@@ -114,12 +114,20 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     clockwindow = new ClockWindow();
     ui->actionClose_Clock_Window->setEnabled(false);
     ui->actionClockwindowFullscreen->setEnabled(false);
-    ui->actionClkWindowApp->setEnabled(false);
+    ui->actionClkWindowSettings->setEnabled(false);
     connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
     connect(ui->actionOpen_Clock_Window, SIGNAL(triggered(bool)), this, SLOT(openClockWindow()));
     connect(ui->actionClockwindowFullscreen, SIGNAL(toggled(bool)), clockwindow, SLOT(setFullscreen(bool)));
     connect(clockwindow, SIGNAL(fullscreenChanged(bool)), ui->actionClockwindowFullscreen, SLOT(setChecked(bool)));
     connect(ui->actionClose_Clock_Window, SIGNAL(triggered(bool)), clockwindow, SLOT(close()));
+
+
+    clkwindowsettings = new ClkWindowSettings(this);
+    connect(ui->actionClkWindowSettings, SIGNAL(triggered(bool)), clkwindowsettings, SLOT(exec()));
+    connect(clkwindowsettings, SIGNAL(fontChanged(QString)), clockwindow, SLOT(setFont(QString)));
+    connect(clkwindowsettings, SIGNAL(fontScaleChanged(double)), clockwindow, SLOT(setFontScale(double)));
+    connect(clkwindowsettings, SIGNAL(showRclockSecondHand(bool)), clockwindow, SLOT(showRclockSecondHand(bool)));
+    connect(clkwindowsettings, SIGNAL(rclockBehaviorChanged(int)), clockwindow, SLOT(setRclockBehavior(int)));
 
 
     connect(lstadapt, SIGNAL(forceInit()), this, SLOT(initialize()));
@@ -288,6 +296,7 @@ void FightclubDepartment::openClockWindow() {
     clockwindow->show();
     ui->actionOpen_Clock_Window->setEnabled(false);
     ui->actionClockwindowFullscreen->setEnabled(true);
+    ui->actionClkWindowSettings->setEnabled(true);
     ui->actionClose_Clock_Window->setEnabled(true);
 }
 
@@ -295,6 +304,7 @@ void FightclubDepartment::clockWindowClosed() {
     ui->actionOpen_Clock_Window->setEnabled(true);
     ui->actionClockwindowFullscreen->setChecked(false);
     ui->actionClockwindowFullscreen->setEnabled(false);
+    ui->actionClkWindowSettings->setEnabled(false);
     ui->actionClose_Clock_Window->setEnabled(false);
 }
 

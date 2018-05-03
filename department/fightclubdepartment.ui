@@ -2060,7 +2060,7 @@
     <addaction name="actionOpen_Clock_Window"/>
     <addaction name="separator"/>
     <addaction name="actionClockwindowFullscreen"/>
-    <addaction name="actionClkWindowApp"/>
+    <addaction name="actionClkWindowSettings"/>
     <addaction name="separator"/>
     <addaction name="actionClose_Clock_Window"/>
    </widget>
@@ -2140,13 +2140,9 @@
     <string>&amp;Fullscreen</string>
    </property>
   </action>
-  <action name="actionClkWindowApp">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/breeze-icons/draw-brush-16.svg</normaloff>:/breeze-icons/draw-brush-16.svg</iconset>
-   </property>
+  <action name="actionClkWindowSettings">
    <property name="text">
-    <string>Configure &amp;Appearance</string>
+    <string>Settings</string>
    </property>
   </action>
  </widget>
