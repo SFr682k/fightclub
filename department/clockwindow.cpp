@@ -35,6 +35,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
         ui->perflabel->setText(" ");
 
 
+    defaultFont = font();
     fontScale = 1.0;
 
 
@@ -124,9 +125,7 @@ void ClockWindow::setFullscreen(bool fscreen) {
 
 
 
-void ClockWindow::setFont(QString family) {
-
-}
+void ClockWindow::setWindowFont(QString family) { this->setFont((family == nullptr)? defaultFont : QFont(family)); }
 
 void ClockWindow::setFontScale(double newScale) {
     if(newScale > 0.5) fontScale = newScale;

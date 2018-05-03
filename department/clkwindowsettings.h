@@ -43,6 +43,12 @@ signals:
     void rclockBehaviorChanged(int);
 
 private slots:
+    void useCustomFont(bool);
+    void selFontChanged(QString);
+
+    void useCustomFontScale(bool);
+    void scaleFactorChanged(int);
+
     void showSecondHand(bool);
     void setSmoothRClock(bool);
     void setSharpRClock(bool);

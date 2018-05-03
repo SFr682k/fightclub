@@ -124,7 +124,7 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     clkwindowsettings = new ClkWindowSettings(this);
     connect(ui->actionClkWindowSettings, SIGNAL(triggered(bool)), clkwindowsettings, SLOT(exec()));
-    connect(clkwindowsettings, SIGNAL(fontChanged(QString)), clockwindow, SLOT(setFont(QString)));
+    connect(clkwindowsettings, SIGNAL(fontChanged(QString)), clockwindow, SLOT(setWindowFont(QString)));
     connect(clkwindowsettings, SIGNAL(fontScaleChanged(double)), clockwindow, SLOT(setFontScale(double)));
     connect(clkwindowsettings, SIGNAL(showRclockSecondHand(bool)), clockwindow, SLOT(showRclockSecondHand(bool)));
     connect(clkwindowsettings, SIGNAL(rclockBehaviorChanged(int)), clockwindow, SLOT(setRclockBehavior(int)));

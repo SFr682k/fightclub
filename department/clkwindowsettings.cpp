@@ -26,14 +26,27 @@ ClkWindowSettings::ClkWindowSettings(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->chooseFontBox->setEnabled(false);
+    ui->chooseScaleBox->setEnabled(false);
+
     ui->showSecHand->setChecked(true);
     ui->swissRClock->setChecked(true);
+
+
+    connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
+    connect(ui->chooseFontBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(selFontChanged(QString)));
+
+    connect(ui->customScaleCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFontScale(bool)));
+    connect(ui->chooseScaleBox, SIGNAL(valueChanged(int)), this, SLOT(scaleFactorChanged(int)));
 
     connect(ui->showSecHand, SIGNAL(toggled(bool)), this, SLOT(showSecondHand(bool)));
 
     connect(ui->swissRClock, SIGNAL(clicked(bool)), this, SLOT(setSwissRClock(bool)));
     connect(ui->smoothRClock, SIGNAL(clicked(bool)), this, SLOT(setSmoothRClock(bool)));
     connect(ui->sharpRClock, SIGNAL(clicked(bool)), this, SLOT(setSharpRClock(bool)));
+
+
+    connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
 }
 
 
@@ -41,6 +54,23 @@ ClkWindowSettings::~ClkWindowSettings()
 {
     delete ui;
 }
+
+
+void ClkWindowSettings::useCustomFont(bool customFont) {
+    ui->chooseFontBox->setEnabled(customFont);
+    emit fontChanged(customFont? ui->chooseFontBox->currentFont().family() : nullptr);
+}
+
+void ClkWindowSettings::selFontChanged(QString fontname) { emit fontChanged(fontname); }
+
+
+
+void ClkWindowSettings::useCustomFontScale(bool customScale) {
+    ui->chooseScaleBox->setEnabled(customScale);
+    emit fontScaleChanged(customScale? ui->chooseScaleBox->value()/100.0 : 1.0);
+}
+
+void ClkWindowSettings::scaleFactorChanged(int scale) { emit fontScaleChanged(scale/100.0); }
 
 
 
