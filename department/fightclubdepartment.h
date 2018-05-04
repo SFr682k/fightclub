@@ -66,12 +66,18 @@ private:
     bool continueAndInit();
 
 protected:
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
+
+signals:
+    void switchStages(bool);
 
 private slots:
     void openClockWindow();
     void clockWindowClosed();
 
+    void switchBetweenStages(bool);
     void toggleStartStopBttn();
     void openSetTimeDialog();
     void propagateStagesList(QAbstractTableModel*);

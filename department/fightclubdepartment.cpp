@@ -27,6 +27,9 @@
 #include <QStandardPaths>
 
 
+#include <QDebug>
+
+
 FightclubDepartment::FightclubDepartment(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FightclubDepartment)
@@ -144,11 +147,17 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     connect(ui->phasebwd, SIGNAL(clicked()), lstadapt, SLOT(prevPhase()));
     connect(lstadapt, SIGNAL(enablePrevPhaseButton(bool)), ui->phasebwd, SLOT(setEnabled(bool)));
+
     connect(ui->phasefwd, SIGNAL(clicked()), lstadapt, SLOT(nextPhase()));
     connect(lstadapt, SIGNAL(enableNextPhaseButton(bool)), ui->phasefwd, SLOT(setEnabled(bool)));
+
     connect(lstadapt, SIGNAL(currentPhaseChanged(int)), this, SLOT(scrollToSelectedPhase(int)));
     connect(lstadapt, SIGNAL(currentStageIsRCS(bool)), ui->listofphases, SLOT(setDisabled(bool)));
+
+    connect(this, SIGNAL(switchStages(bool)), this, SLOT(switchBetweenStages(bool)));
+
     lstadapt->setUpPhaseSwitchingButtons();
+
 
 
     connect(lstadapt, SIGNAL(prevPhasePropsChanged(bool,bool,bool)), this, SLOT(setPrevPhaseProps(bool,bool,bool)));
@@ -315,6 +324,11 @@ void FightclubDepartment::clockWindowClosed() {
 
 
 // CONTROL TAB --------------------------------------------------------------------------
+
+void FightclubDepartment::switchBetweenStages(bool swStages) {
+    ui->phasebwd->setIcon(QIcon(QString(":/breeze-icons/go-").append(swStages? "first" : "previous").append("-32.svg")));
+    ui->phasefwd->setIcon(QIcon(QString(":/breeze-icons/go-").append(swStages? "last"  : "next"    ).append("-32.svg")));
+}
 
 void FightclubDepartment::toggleStartStopBttn() {
     if(phpbar->isRunning()) {
@@ -630,6 +644,22 @@ void FightclubDepartment::unloadTeamsFile() {
 
 // INTERNAL STUFF -----------------------------------------------------------------------
 
+void FightclubDepartment::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_Shift: emit switchStages(true);       break;
+        default:            QWidget::keyPressEvent(event); break;
+    }
+}
+
+void FightclubDepartment::keyReleaseEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_Shift: emit switchStages(false);      break;
+        default:            QWidget::keyPressEvent(event); break;
+    }
+}
+
+
+
 void FightclubDepartment::activateFullscreen(bool fscreen) {
     if(!toggleFscreenEnabled) return;
 
@@ -639,9 +669,6 @@ void FightclubDepartment::activateFullscreen(bool fscreen) {
     ui->actionFullscreen->setShortcut(fscreen? QKeySequence(Qt::Key_Escape)
                                              : QKeySequence(Qt::ControlModifier + Qt::Key_F));
 }
-
-
-
 
 
 
