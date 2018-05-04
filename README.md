@@ -2,7 +2,7 @@
 
 **Current stable, distributed versions:**
 
- - Client 0.4a
+ - Department 0.5
  - Remote Clock Window 0.7
  - Dashboard 0.1
 
@@ -14,20 +14,24 @@ Currently, heavy development is in progress, so design, workflow and requirement
 
 Fightclub currently consists of the following components:
 
- - *Fightclub Client*, an application for timing a physics fight.
+ - *Fightclub Department*, an application for timing a physics fight.
  - *Fightclub Remote Clock Window*, a remote clock window for use on remote machines inside the local network.
  - *Fightclub Dashboard*, displaying the state of multiple clients
 
 
+Following components are considerd as “useful” and may be added soon:
+
+ - *Fightclub Disperser*, a tool for duplicating broadcast signals emitted by Fightclub Department
+ - *Fightclub Nano*, a clock window with an own timing engine, but not as powerful as *Fightclub Department*
 
 
-## Fightclub Client
-Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor.  
+## Fightclub Department
+Fightclub Department uses plain text files for loading data. They can be created and edited using a common text editor.  
 Please review the [requirements on these data files](docs/fightclub-file-requirements.pdf).
 
 ### Screenshots
-Fightclub Client is equipped with a clear, intuitive interface for managing the physics fight.  
-![Fightclub Client control interface](docs/screenshot-client.png)
+Fightclub Department is equipped with a clear, intuitive interface for managing the physics fight.  
+![Fightclub Department control interface](docs/screenshot-department.png)
 
 During a physics fight, the embedded clock window displays elapsed time as well as the well-known “progress pie-chart.”  
 ![The clock window during a physics fight](docs/screenshot-clockwindow.png)
@@ -50,7 +54,7 @@ Please review the following information to ensure the GNU General Public License
 
 
 ### Third party libraries
-Fightclub Client uses:
+Fightclub uses:
 
  - the Qt framework,
  - the “Breeze” icon theme and

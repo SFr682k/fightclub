@@ -46,21 +46,21 @@
 
 \hyphenation{spe-ci-fy-ing}
 
-\hypersetup{pdftitle={Fightclub Client: Requirements on files}, pdfauthor={Sebastian Friedl}}
+\hypersetup{pdftitle={Fightclub: Requirements on files}, pdfauthor={Sebastian Friedl}}
 
 
 
 
 
-\title{\bfseries Fightclub Client: Requirements on files}
+\title{\bfseries Fightclub: Requirements on files}
 \author{Sebastian Friedl}
-\date{\itshape Written to match the requirements of Fightclub Client 0.4}
+\date{\itshape Written to match the requirements of \\ Fightclub Department 0.5}
 
 \begin{document}
     \maketitle
     
     \begin{abstract}\noindent
-        Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor. This document describes the syntactical requirements on such data files.
+        Most Fightclub applications use plain text files for loading data. They can be created and edited using a common text editor. This document describes the syntactical requirements on such data files.
     \end{abstract}
 
     \tableofcontents
@@ -71,11 +71,11 @@
     
     \clearpage
     \section{General notes}
-    This section introduces the principles of data files and IDs. \\
-    Since Fightclub Client depends on these mechanisms, knowledge about them is vital.
+    This section introduces the principles of data files and IDs.
+    Since most Fightclub applications depend on these mechanisms, knowledge about them is vital.
     
     \subsection{General requirements on files}
-    Fightclub Client uses plain text files for loading data. They can be created and edited using a common text editor; however, those files require use of the respective file extension listed in sections~\ref{sec:files-stages}ff and have to be encoded using "UTF-8" (without Byte Order Mark).
+    Fightclub applications use plain text files for loading data. They can be created and edited using a common text editor; however, those files require use of the respective file extension listed in sections~\ref{sec:files-stages}ff and have to be encoded using "UTF-8" (without Byte Order Mark).
 
     \medskip
     To avoid loading wrong files -- and the resulting malfunction -- a \highlight{file header}, consisting of some "XML"-styled code, may be added to the first lines of each data file:
@@ -104,7 +104,7 @@
     
     
     \subsection{Two flavours of IDs}\label{sec:notes-id}
-    Fightclub Client uses IDs for referencing to teams or participants. Those IDs are derived from the "teams" file (if present; see section~\ref{sec:files-teams}).
+    Fightclub Department uses IDs for referencing to teams or participants. Those IDs are derived from the "teams" file (if present; see section~\ref{sec:files-teams}).
     
     \medskip
     There are two flavours of IDs:
@@ -136,8 +136,8 @@
     
     
     
-    \section{Specific requirements on files}
-    This section depicts the format of the exchange files. \\
+    \section{Files for use with Fightclub Department}
+    This section depicts the format of the exchange files used by Fightclub Department. \\
     Examples are stored in the "sample-files" directory.
     
     
