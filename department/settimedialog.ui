@@ -40,9 +40,6 @@
       </property>
       <item row="2" column="0">
        <widget class="QRadioButton" name="stimerbox">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="text">
          <string>Last saved time</string>
         </property>
@@ -120,6 +117,23 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="2" column="2">
+       <widget class="QTimeEdit" name="stimeselbox">
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="maximumTime">
+         <time>
+          <hour>9</hour>
+          <minute>59</minute>
+          <second>59</second>
+         </time>
+        </property>
+        <property name="displayFormat">
+         <string>H:mm:ss</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

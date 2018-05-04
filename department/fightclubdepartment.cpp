@@ -87,6 +87,7 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     ui->startstopbttn->setEnabled(false);
     ui->resettimebttn->setEnabled(false);
     ui->settimebttn->setEnabled(false);
+    ui->savetimebttn->setEnabled(false);
 
 
 
@@ -151,8 +152,10 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(ui->phasefwd, SIGNAL(clicked()), lstadapt, SLOT(fwd()));
     connect(lstadapt, SIGNAL(enableNextPhaseButton(bool)), ui->phasefwd, SLOT(setEnabled(bool)));
 
+    connect(lstadapt, SIGNAL(currentStageChanged(int)), this, SLOT(scrollToSelectedStage(int)));
     connect(lstadapt, SIGNAL(currentPhaseChanged(int)), this, SLOT(scrollToSelectedPhase(int)));
     connect(lstadapt, SIGNAL(currentStageIsRCS(bool)), ui->listofphases, SLOT(setDisabled(bool)));
+
 
     connect(this, SIGNAL(switchStages(bool)), this, SLOT(switchBetweenStages(bool)));
     connect(this, SIGNAL(switchStages(bool)), lstadapt, SLOT(switchStages(bool)));
@@ -179,9 +182,8 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(settimedlg, SIGNAL(elapsedTimeSet(int)), phpbar, SLOT(setElapsedTime(int)));
     connect(settimedlg, SIGNAL(remainingTimeSet(int)), phpbar, SLOT(setRemainingTime(int)));
 
-    connect(lstadapt, SIGNAL(currentStageChanged(int)), this, SLOT(scrollToSelectedStage(int)));
-    connect(lstadapt, SIGNAL(currentPhaseChanged(int)), this, SLOT(scrollToSelectedPhase(int)));
-
+    connect(ui->savetimebttn, SIGNAL(clicked(bool)), phpbar, SLOT(saveCurrentTime()));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->savetimebttn, SLOT(setDisabled(bool)));
 
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), ui->phaselabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), bcastsrv, SLOT(updatePhaseName(QString)));
@@ -345,6 +347,8 @@ void FightclubDepartment::toggleStartStopBttn() {
 void FightclubDepartment::openSetTimeDialog() {
     settimedlg->resetValues();
     settimedlg->setMaximumRTime(phpbar->getMaxTime());
+    settimedlg->setSavedTime(phpbar->getLastSavedTime());
+    settimedlg->setElapsedTime(phpbar->getElapsedTime());
     settimedlg->exec();
 }
 

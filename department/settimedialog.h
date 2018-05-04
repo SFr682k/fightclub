@@ -33,7 +33,9 @@ class SetTimeDialog : public QDialog
 public:
     explicit SetTimeDialog(QWidget *parent = 0);
     void resetValues();
+    void setElapsedTime(int);
     void setMaximumRTime(int);
+    void setSavedTime(int);
     ~SetTimeDialog();
 
 signals:
@@ -44,6 +46,7 @@ private slots:
     void setTime();
     void checkETimeRbttn();
     void checkRTimeRbttn();
+    void checkSTimeRbttn();
 
 private:
     Ui::SetTimeDialog *ui;

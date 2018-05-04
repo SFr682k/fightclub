@@ -28,6 +28,7 @@ ui(new Ui::SetTimeDialog) {
     connect(this, SIGNAL(accepted()), this, SLOT(setTime()));
     connect(ui->etimeselbox, SIGNAL(timeChanged(QTime)), this, SLOT(checkETimeRbttn()));
     connect(ui->rtimeselbox, SIGNAL(timeChanged(QTime)), this, SLOT(checkRTimeRbttn()));
+    connect(ui->stimeselbox, SIGNAL(timeChanged(QTime)), this, SLOT(checkSTimeRbttn()));
 }
 
 
@@ -38,24 +39,16 @@ SetTimeDialog::~SetTimeDialog() {
 
 void SetTimeDialog::checkETimeRbttn() { ui->etimerbox->setChecked(true); }
 void SetTimeDialog::checkRTimeRbttn() { ui->rtimerbox->setChecked(true); }
+void SetTimeDialog::checkSTimeRbttn() { ui->stimerbox->setChecked(true); }
 
 
 void SetTimeDialog::setTime() {
-    QMessageBox msgbox;
-    QTime timeSpec;
-    int specMSecs;
-
-    if(ui->etimerbox->isChecked()) {
-        timeSpec = ui->etimeselbox->time();
-        specMSecs = ((timeSpec.hour()*60 + timeSpec.minute())*60 + timeSpec.second())*1000;
-        emit elapsedTimeSet(specMSecs);
-    } else if(ui->rtimerbox->isChecked()) {
-        timeSpec = ui->rtimeselbox->time();
-        specMSecs = ((timeSpec.hour()*60 + timeSpec.minute())*60 + timeSpec.second())*1000;
-        emit remainingTimeSet(specMSecs);
-    } else if(ui->stimerbox->isChecked()) {
-        msgbox.information(0, "Blub", "Not implemented");
-    }
+    if(ui->etimerbox->isChecked())
+        emit elapsedTimeSet(ui->etimeselbox->time().msecsSinceStartOfDay());
+    else if(ui->rtimerbox->isChecked())
+        emit remainingTimeSet(ui->rtimeselbox->time().msecsSinceStartOfDay());
+    else if(ui->stimerbox->isChecked())
+        emit elapsedTimeSet(ui->stimeselbox->time().msecsSinceStartOfDay());
 }
 
 void SetTimeDialog::resetValues() {
@@ -63,8 +56,17 @@ void SetTimeDialog::resetValues() {
     ui->rtimeselbox->setTime(QTime(0,0,0,0));
 }
 
-void SetTimeDialog::setMaximumRTime(int maxrtms) {
-    QTime *maxRTime = new QTime(0,0,0);
-    *maxRTime = maxRTime->addMSecs(maxrtms);
-    ui->rtimeselbox->setMaximumTime(QTime(maxRTime->hour(), maxRTime->minute(), maxRTime->second()));
+
+void SetTimeDialog::setElapsedTime(int elapsedms)
+    { ui->etimeselbox->setTime(QTime(0,0,0).addMSecs(elapsedms)); }
+
+void SetTimeDialog::setMaximumRTime(int maxrtms)
+    { ui->rtimeselbox->setMaximumTime(QTime(0,0,0).addMSecs(maxrtms)); }
+
+void SetTimeDialog::setSavedTime(int stimems) {
+    ui->stimerbox->setEnabled(stimems >= 0);
+    ui->stimeselbox->setEnabled(stimems >= 0);
+
+    if(stimems < 0) ui->stimeselbox->setTime(QTime(0,0,0));
+    else            ui->stimeselbox->setTime(QTime(0,0,0).addMSecs(stimems));
 }

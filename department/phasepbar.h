@@ -33,14 +33,16 @@ public:
 
     bool isRunning();
     bool isRoomclock();
+    int getElapsedTime();
     int getMaxTime();
+    int getLastSavedTime();
 
 private:
     QTime *time;
     QTimer *refreshTimer;
     bool running;
     bool roomclock;
-    int savedTime;
+    int savedTime, lastSavedTime;
     int maximumTime;
     int overtime;
     QString timeToString(int);
@@ -60,6 +62,7 @@ private slots:
 public slots:
     void startOrPause();
     void resetTimer();
+    void saveCurrentTime();
     void getElapsedOvertime();
     void setElapsedTime(int);
     void setMaximumTime(int);

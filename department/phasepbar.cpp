@@ -28,6 +28,7 @@ PhasePBar::PhasePBar(QObject *parent) : QObject(parent) {
     running = false;
     roomclock = true;
     savedTime = 0;
+    lastSavedTime = -1;
     maximumTime = 1;
     overtime = 0;
 
@@ -67,6 +68,12 @@ void PhasePBar::resetTimer() {
     }
     emit(overtimed(-(maximumTime + overtime + 25))); // +25 to avoid inaccuracies
     emit phaseProgressUpdate(0);
+}
+
+
+void PhasePBar::saveCurrentTime() {
+    if(running) lastSavedTime = time->elapsed();
+    else        lastSavedTime = savedTime;
 }
 
 
@@ -185,6 +192,8 @@ QString PhasePBar::timeToFlashingString(int ms) {
 
 
 
-bool PhasePBar::isRunning()   { return running; }
-bool PhasePBar::isRoomclock() { return roomclock; }
-int  PhasePBar::getMaxTime()  { return maximumTime; }
+bool PhasePBar::isRunning()        { return running; }
+bool PhasePBar::isRoomclock()      { return roomclock; }
+int  PhasePBar::getElapsedTime()   { return time->elapsed(); }
+int  PhasePBar::getMaxTime()       { return maximumTime; }
+int  PhasePBar::getLastSavedTime() { return lastSavedTime; }
