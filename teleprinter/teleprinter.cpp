@@ -30,7 +30,7 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     ui->setupUi(this);
 
     bcastcli = new BroadcastClient(this);
-    setupbcastdial = new TeleprinterSettings(this);
+    settingsdial = new TeleprinterSettings(this);
 
 
 
@@ -42,8 +42,6 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
 
 
     aboutDialogOpen = false;
-    bcastSettingsOpen = false;
-
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
@@ -56,6 +54,8 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
 
     roomclock = true;
 
+    defaultFont = font();
+    fontScale = 1;
 
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), this, SLOT(updateElapsedTime(int)));
@@ -69,6 +69,12 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
 
     connect(this, SIGNAL(newPort(uint)), bcastcli, SLOT(setListeningPort(uint)));
     connect(this, SIGNAL(newID(uint)), bcastcli, SLOT(setSignature(uint)));
+
+    connect(settingsdial, SIGNAL(fontChanged(QString)), this, SLOT(setWindowFont(QString)));
+    connect(settingsdial, SIGNAL(fontScaleChanged(double)), this, SLOT(setFontScale(double)));
+
+    connect(settingsdial, SIGNAL(showRclockSecondHand(bool)), ui->clockwidget, SLOT(showSecondHand(bool)));
+    connect(settingsdial, SIGNAL(rclockBehaviorChanged(int)), ui->clockwidget, SLOT(setRoomclockMode(int)));
 
     ui->clockwidget->setRoomclock(true);
 }
@@ -89,21 +95,21 @@ void FightclubTeleprinter::openAboutDialog() {
 }
 
 
-void FightclubTeleprinter::openSetupBCastDialog() {
-    if(setupbcastdial->exec()) {
-        emit newPort(setupbcastdial->getBroadcastPort());
-        emit newID(setupbcastdial->getBroadcastID());
+void FightclubTeleprinter::openSettingsDialog() {
+    if(settingsdial->exec()) {
+        emit newPort(settingsdial->getBroadcastPort());
+        emit newID(settingsdial->getBroadcastID());
     }
 }
 
 
 void FightclubTeleprinter::setPort(uint newport) {
-    setupbcastdial->setPort(newport);
+    settingsdial->setPort(newport);
     emit newPort(newport);
 }
 
 void FightclubTeleprinter::setID(uint newid) {
-    setupbcastdial->setID(newid);
+    settingsdial->setID(newid);
     emit newID(newid);
 }
 
@@ -152,12 +158,20 @@ void FightclubTeleprinter::updateTime() {
 
 
 
+void FightclubTeleprinter::setWindowFont(QString family) { this->setFont((family == nullptr)? defaultFont : QFont(family)); }
+
+void FightclubTeleprinter::setFontScale(double newScale) {
+    if(newScale > 0.5) fontScale = newScale;
+    resizeEvent(new QResizeEvent(QSize(width(),height()),QSize(width(),height())));
+}
+
+
 void FightclubTeleprinter::resizeEvent(QResizeEvent *event) {
     QFont phaselabelfont = ui->phaselabel->font();
-    phaselabelfont.setPointSize(2 + height()*0.03);
+    phaselabelfont.setPointSize((2 + height()*0.03)*fontScale);
 
     QFont infolabelfont = ui->perflabel->font();
-    infolabelfont.setPointSize(4 + height()*0.015);
+    infolabelfont.setPointSize((4 + height()*0.015)*fontScale);
 
     ui->phaselabel->setFont(phaselabelfont);
     ui->problabel->setFont(infolabelfont);
@@ -173,17 +187,19 @@ void FightclubTeleprinter::keyPressEvent(QKeyEvent *event) {
             openAboutDialog();
             break;
 
-        case Qt::Key_B:
+        case Qt::Key_S:
             if(QApplication::keyboardModifiers() & Qt::ControlModifier)
-                openSetupBCastDialog();
+                openSettingsDialog();
             break;
 
         case Qt::Key_F:
-            setWindowState(Qt::WindowFullScreen);
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                setWindowState(Qt::WindowFullScreen);
             break;
 
         case Qt::Key_Escape:
-            if(windowState() == Qt::WindowFullScreen) setWindowState(Qt::WindowMaximized);
+            if(windowState() == Qt::WindowFullScreen)
+                setWindowState(Qt::WindowMaximized);
             break;
 
         case Qt::Key_Q:

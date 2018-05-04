@@ -42,7 +42,7 @@ public:
     void setPort(uint);
     void setID(uint);
     void openAboutDialog();
-    void openSetupBCastDialog();
+    void openSettingsDialog();
     uint getBcastPort();
     uint getBcastID();
 
@@ -53,9 +53,10 @@ protected:
 private:
     Ui::FightclubTeleprinter *ui;
     BroadcastClient *bcastcli;
-    TeleprinterSettings *setupbcastdial;
+    TeleprinterSettings *settingsdial;
     bool aboutDialogOpen;
-    bool bcastSettingsOpen;
+    QFont defaultFont;
+    double fontScale;
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;
@@ -69,6 +70,9 @@ private slots:
     void toggleRoomclock(bool);
     void updateElapsedTime(int);
     void updateTime();
+
+    void setWindowFont(QString);
+    void setFontScale(double);
 };
 
 #endif // TELEPRINTER_H

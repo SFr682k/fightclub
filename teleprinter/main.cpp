@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     w.openAboutDialog();
 
     if(!(port > 0) || !(id > 0))
-        w.openSetupBCastDialog();
+        w.openSettingsDialog();
 
     return a.exec();
 }
