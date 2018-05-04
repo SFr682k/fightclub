@@ -145,16 +145,17 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(lstadapt, SIGNAL(phaseListModelChanged(QAbstractTableModel*)), this, SLOT(propagatePhasesList(QAbstractTableModel*)));
     connect(lstadapt, SIGNAL(stageListModelChanged(QAbstractTableModel*)), this, SLOT(propagateStagesList(QAbstractTableModel*)));
 
-    connect(ui->phasebwd, SIGNAL(clicked()), lstadapt, SLOT(prevPhase()));
+    connect(ui->phasebwd, SIGNAL(clicked()), lstadapt, SLOT(bwd()));
     connect(lstadapt, SIGNAL(enablePrevPhaseButton(bool)), ui->phasebwd, SLOT(setEnabled(bool)));
 
-    connect(ui->phasefwd, SIGNAL(clicked()), lstadapt, SLOT(nextPhase()));
+    connect(ui->phasefwd, SIGNAL(clicked()), lstadapt, SLOT(fwd()));
     connect(lstadapt, SIGNAL(enableNextPhaseButton(bool)), ui->phasefwd, SLOT(setEnabled(bool)));
 
     connect(lstadapt, SIGNAL(currentPhaseChanged(int)), this, SLOT(scrollToSelectedPhase(int)));
     connect(lstadapt, SIGNAL(currentStageIsRCS(bool)), ui->listofphases, SLOT(setDisabled(bool)));
 
     connect(this, SIGNAL(switchStages(bool)), this, SLOT(switchBetweenStages(bool)));
+    connect(this, SIGNAL(switchStages(bool)), lstadapt, SLOT(switchStages(bool)));
 
     lstadapt->setUpPhaseSwitchingButtons();
 

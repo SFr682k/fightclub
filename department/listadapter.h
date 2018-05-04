@@ -37,6 +37,7 @@ public:
     int loadStagesListFromFile(QString);
     int loadPhasesListFromFile(QString);
     void setUpPhaseSwitchingButtons();
+    void setUpStageSwitchingButtons();
     int getCurrentStage();
     int getCurrentPhase();
 
@@ -44,6 +45,7 @@ private:
     StageListModel* stagelistmodel;
     PhaseListModel* phaselistmodel;
     TeamAdapter* teamadapter;
+    bool swStages;
     int currentStage, currentPhase;
     QString currentReporter, currentOpponent, currentReviewer;
     bool repPerforming, oppPerforming, revPerforming;
@@ -81,6 +83,12 @@ signals:
     void forceInit();
 
 public slots:
+    void fwd();
+    void bwd();
+    void switchStages(bool);
+
+    void prevStage();
+    void nextStage();
     void prevPhase();
     void nextPhase();
 

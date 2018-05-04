@@ -26,6 +26,7 @@ ListAdapter::ListAdapter(QObject *parent) : QObject(parent) {
     stagelistmodel = new StageListModel();
     phaselistmodel = new PhaseListModel();
     currentStage = -1, currentPhase = -1;
+    swStages = false;
     repPerforming = false, oppPerforming = false, revPerforming = false;
 
     connect(this, SIGNAL(currentStageChanged(int)), this, SLOT(onStageChanges(int)));
@@ -65,6 +66,70 @@ void ListAdapter::setUpPhaseSwitchingButtons() {
         emit currentStageIsRCS(false);
     }
 }
+
+
+void ListAdapter::setUpStageSwitchingButtons() {
+    if(stagelistmodel->rowCount() == 0) {
+        emit enablePrevPhaseButton(currentPhase > 0);
+        emit enableNextPhaseButton(currentPhase < phaselistmodel->rowCount() -1);
+        return;
+    }
+
+    bool rcstage = (stagelistmodel->getStageList().value(currentStage).getRoomclockstage() != nullptr);
+    emit enablePrevPhaseButton((currentPhase > 0) || (currentStage > 0));
+    emit enableNextPhaseButton((currentStage < stagelistmodel->rowCount() -1)
+                                || ((currentPhase < phaselistmodel->rowCount() -1) && !rcstage));
+
+    emit currentStageIsRCS(rcstage);
+}
+
+
+
+void ListAdapter::fwd() {
+    if(!swStages) nextPhase();
+    else          nextStage();
+}
+
+void ListAdapter::bwd() {
+    if(!swStages) prevPhase();
+    else          prevStage();
+}
+
+void ListAdapter::switchStages(bool swStg) {
+    swStages = swStg;
+    if(!swStages) setUpPhaseSwitchingButtons();
+    else          setUpStageSwitchingButtons();
+}
+
+
+
+void ListAdapter::prevStage() {
+    if(currentPhase != -1) {
+        currentPhase = -1;
+        emit currentPhaseChanged(currentPhase);
+    } else if(currentStage > 0) {
+        currentStage--;
+        emit currentPhaseChanged(currentPhase);
+        emit currentStageChanged(currentStage);
+    }
+}
+
+
+void ListAdapter::nextStage() {
+    if(currentStage < stagelistmodel->rowCount() -1) {
+        if(currentPhase != -1) currentPhase = -1;
+        currentStage++;
+        emit currentPhaseChanged(currentPhase);
+        emit currentStageChanged(currentStage);
+    } else {
+        if(stagelistmodel->getStageList().value(currentStage).getRoomclockstage() == nullptr)
+            currentPhase = phaselistmodel->rowCount() -1;
+        else currentPhase = -1;
+
+        emit currentPhaseChanged(currentPhase);
+    }
+}
+
 
 
 void ListAdapter::prevPhase() {
@@ -171,7 +236,9 @@ void ListAdapter::onPhaseChanges(int phasenr) {
 
     phaselistmodel->setHighlightedRow(currentPhase);
 
-    setUpPhaseSwitchingButtons();
+    if(!swStages) setUpPhaseSwitchingButtons();
+    else          setUpStageSwitchingButtons();
+
     handleOvertime(-120000); // erase autoadvance countdown
 
     if(currentPhase > -1) {
