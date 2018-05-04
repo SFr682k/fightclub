@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="AppSettings">
+    <widget class="QGroupBox" name="appSettings">
      <property name="title">
       <string>Appearance</string>
      </property>
@@ -148,9 +148,6 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="lockSettingsBttn">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="text">
         <string>Lock</string>
        </property>

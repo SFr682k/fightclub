@@ -4,6 +4,7 @@
     </qresource>
     <qresource>
         <file>breeze-icons/application-exit-16.svg</file>
+        <file>breeze-icons/configure-shortcuts-16.svg</file>
         <file>breeze-icons/chronometer-24.svg</file>
         <file>breeze-icons/chronometer-start-24.svg</file>
         <file>breeze-icons/chronometer-pause-24.svg</file>

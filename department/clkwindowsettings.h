@@ -36,6 +36,9 @@ public:
 private:
     Ui::ClkWindowSettings *ui;
 
+    bool locked;
+    QString lockedpwd;
+
 signals:
     void fontChanged(QString);
     void fontScaleChanged(double);
@@ -53,6 +56,8 @@ private slots:
     void setSmoothRClock(bool);
     void setSharpRClock(bool);
     void setSwissRClock(bool);
+
+    void toggleLockedState();
 };
 
 #endif // CLKWINDOWSETTINGS_H

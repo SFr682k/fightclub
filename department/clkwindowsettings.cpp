@@ -20,6 +20,10 @@
 #include "ui_clkwindowsettings.h"
 
 
+#include <QInputDialog>
+#include <QMessageBox>
+
+
 ClkWindowSettings::ClkWindowSettings(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClkWindowSettings)
@@ -46,6 +50,7 @@ ClkWindowSettings::ClkWindowSettings(QWidget *parent) :
     connect(ui->sharpRClock, SIGNAL(clicked(bool)), this, SLOT(setSharpRClock(bool)));
 
 
+    connect(ui->lockSettingsBttn, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
     connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
 }
 
@@ -87,3 +92,44 @@ void ClkWindowSettings::setSwissRClock(bool set)  { if(set) emit rclockBehaviorC
 void ClkWindowSettings::setSmoothRClock(bool set) { if(set) emit rclockBehaviorChanged(1); }
 void ClkWindowSettings::setSharpRClock(bool set)  { if(set) emit rclockBehaviorChanged(2); }
 
+
+
+
+
+void ClkWindowSettings::toggleLockedState() {
+    if(!locked) {
+        QString pwd1 = QInputDialog::getText(this, "Set password",
+                                             "Please set a password:", QLineEdit::Password);
+
+        if(pwd1 == nullptr) return;
+
+        QString pwd2 = QInputDialog::getText(this, "Set password",
+                                             "Please confirm the password:", QLineEdit::Password);
+
+        if(pwd2 == nullptr) return;
+        else if(pwd1 != pwd2) {
+            QMessageBox::critical(this, "Error", "The passwords are not identical");
+            return;
+        }
+
+        locked = true;
+        lockedpwd = pwd1;
+    } else {
+        QString pwd = QInputDialog::getText(this, "Enter password",
+                                            "Please enter the password:", QLineEdit::Password);
+
+        if(pwd == nullptr) return;
+        else if(pwd != lockedpwd) {
+            QMessageBox::critical(this, "Error", "Wrong password");
+            return;
+        }
+
+        locked = false;
+    }
+
+    ui->appSettings->setEnabled(!locked);
+    ui->rclockSettings->setEnabled(!locked);
+    ui->lockSettingsBttn->setText(locked? "Unlock" : "Lock");
+    ui->lockSettingsBttn->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.svg")
+                                        : QIcon(":/breeze-icons/object-locked-16.svg"));
+}
