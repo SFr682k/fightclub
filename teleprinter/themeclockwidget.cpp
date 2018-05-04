@@ -26,6 +26,8 @@
 #include <QTime>
 
 
+#include <QDebug>
+
 ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     QGraphicsView(parent)
 {
@@ -145,6 +147,7 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     rscene->addItem(secondHandBase);
     rscene->addItem(secondRing);
 
+    roomclockMode = 0;
 }
 
 
@@ -185,15 +188,51 @@ void ThemeClockWidget::actRoomclock() {
 
     QTime now = QTime::currentTime();
 
-    if(now.second()==59) hourHand->setRotation(180.0 + 30.0 * (now.hour() + (now.minute()+(0.5-0.5*cos(now.msec()/1000.0*3.14159)))/60.0));
-    else                 hourHand->setRotation(180.0 + 30.0 * (now.hour() + now.minute()/60.0));
-    
-    if(now.second()==59) minuteHand->setRotation(180.0 + now.minute()*6.0 + 6.0*(0.5-0.5*cos(now.msec()/1000.0*3.14159)));
-    else                 minuteHand->setRotation(180.0 + now.minute()*6.0);
-    
-    secondHand->setRotation(180.0 + now.second()*6.0 + 6.0*(0.5-0.5*cos(now.msec()/1000.0*3.14159)));
-    secondHandBase->setRotation(180.0 + now.second()*6.0 + 6.0*(0.5-0.5*cos(now.msec()/1000.0*3.14159)));
-    secondRing->setRotation(180.0 + now.second()*6.0 + 6.0*(0.5-0.5*cos(now.msec()/1000.0*3.14159)));
+    double hourHandPos;
+    double minuteHandPos;
+    double secondHandPos;
+
+
+    switch (roomclockMode) {        
+        default: // Swiss
+            if(now.second() < 58) secondHandPos = 180.0 + 6.0*((int) ((now.second()*1000 + now.msec())*60/58)/1000
+                                                               + 0.5-0.5*cos((((now.second()*1000 + now.msec())*60/58)%1000)/1000.0*3.14159));
+            else                  secondHandPos = 180.0;
+
+            if(now.second() == 59 && now.msec() > 849) minuteHandPos = 180.0 + now.minute()*6.0 + 6.0*(0.5-0.5*cos((now.msec()-850)/150.0*3.14159));
+            else                                       minuteHandPos = 180.0 + now.minute()*6.0;
+
+            hourHandPos = 180.0 + 30.0 * (now.hour() + (minuteHandPos-180.0)/360.0);
+
+            break;
+
+        case 1: // smooth
+            secondHandPos = 180.0 + now.second()*6.0 + 6.0*(0.5-0.5*cos(now.msec()/1000.0*3.14159));
+
+            if(now.second() == 59) minuteHandPos = 180.0 + now.minute()*6.0 + 6.0*(0.5-0.5*cos(now.msec()/1000.0*3.14159));
+            else                   minuteHandPos = 180.0 + now.minute()*6.0;
+
+            hourHandPos = 180.0 + 30.0 * (now.hour() + (minuteHandPos-180.0)/360.0);
+
+            break;
+
+        case 2: // sharp
+            if(now.msec() < 899) secondHandPos = 180.0 + now.second()*6.0;
+            else                 secondHandPos = 180.0 + now.second()*6.0 + 6.0*(0.5-0.5*cos((now.msec()-900)/100.0*3.14159));
+
+            minuteHandPos = 180.0 + now.minute()*6.0 + ((secondHandPos-180.0)/360.0)*6.0;
+
+            hourHandPos = 180.0 + 30.0 * (now.hour() + (minuteHandPos-180.0)/360.0);
+
+            break;
+    }
+
+
+    hourHand->setRotation(hourHandPos);
+    minuteHand->setRotation(minuteHandPos);
+    secondHand->setRotation(secondHandPos);
+    secondHandBase->setRotation(secondHandPos);
+    secondRing->setRotation(secondHandPos);
 }
 
 
@@ -212,3 +251,11 @@ int  ThemeClockWidget::getElapsedTime() { return time; }
 int  ThemeClockWidget::getMaximumTime() { return maxtime; }
 bool ThemeClockWidget::isRoomclock()    { return roomclock; }
 
+
+void ThemeClockWidget::setRoomclockMode(int mode) { roomclockMode = mode; }
+
+void ThemeClockWidget::showSecondHand(bool show) {
+    secondHand->setVisible(show);
+    secondHandBase->setVisible(show);
+    secondRing->setVisible(show);
+}
