@@ -16,8 +16,8 @@
 ****************************************************************************/
 
 
-#ifndef CLOCKWINDOW_H
-#define CLOCKWINDOW_H
+#ifndef TELEPRINTER_H
+#define TELEPRINTER_H
 
 #include <QMainWindow>
 #include <QKeyEvent>
@@ -29,16 +29,16 @@
 #include "setupbroadcastdialog.h"
 
 namespace Ui {
-class ClockWindow;
+class FightclubTeleprinter;
 }
 
-class ClockWindow : public QMainWindow
+class FightclubTeleprinter : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit ClockWindow(QWidget *parent = 0);
-    ~ClockWindow();
+    explicit FightclubTeleprinter(QWidget *parent = 0);
+    ~FightclubTeleprinter();
     void setPort(uint);
     void setID(uint);
     void openAboutDialog();
@@ -51,7 +51,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
-    Ui::ClockWindow *ui;
+    Ui::FightclubTeleprinter *ui;
     BroadcastClient *bcastcli;
     SetupBroadcastDialog *setupbcastdial;
     bool aboutDialogOpen;
@@ -71,4 +71,4 @@ private slots:
     void updateTime();
 };
 
-#endif // CLOCKWINDOW_H
+#endif // TELEPRINTER_H

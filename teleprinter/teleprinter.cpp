@@ -16,16 +16,16 @@
 ****************************************************************************/
 
 
-#include "clockwindow.h"
-#include "ui_clockwindow.h"
+#include "teleprinter.h"
+#include "ui_teleprinter.h"
 
 #include "aboutdialog.h"
 #include "setupbroadcastdialog.h"
 
 
-ClockWindow::ClockWindow(QWidget *parent) :
+FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ClockWindow)
+    ui(new Ui::FightclubTeleprinter)
 {      
     ui->setupUi(this);
 
@@ -74,12 +74,12 @@ ClockWindow::ClockWindow(QWidget *parent) :
 }
 
 
-ClockWindow::~ClockWindow() {
+FightclubTeleprinter::~FightclubTeleprinter() {
     delete ui;
 }
 
 
-void ClockWindow::openAboutDialog() {
+void FightclubTeleprinter::openAboutDialog() {
     if(!aboutDialogOpen) {
         aboutDialogOpen = true;
         AboutDialog *ad = new AboutDialog(this);
@@ -89,7 +89,7 @@ void ClockWindow::openAboutDialog() {
 }
 
 
-void ClockWindow::openSetupBCastDialog() {
+void FightclubTeleprinter::openSetupBCastDialog() {
     if(setupbcastdial->exec()) {
         emit newPort(setupbcastdial->getBroadcastPort());
         emit newID(setupbcastdial->getBroadcastID());
@@ -97,22 +97,22 @@ void ClockWindow::openSetupBCastDialog() {
 }
 
 
-void ClockWindow::setPort(uint newport) {
+void FightclubTeleprinter::setPort(uint newport) {
     setupbcastdial->setPort(newport);
     emit newPort(newport);
 }
 
-void ClockWindow::setID(uint newid) {
+void FightclubTeleprinter::setID(uint newid) {
     setupbcastdial->setID(newid);
     emit newID(newid);
 }
 
 
-uint ClockWindow::getBcastPort() { return bcastcli->getBcastPort(); }
-uint ClockWindow::getBcastID()   { return bcastcli->getBcastSignature(); }
+uint FightclubTeleprinter::getBcastPort() { return bcastcli->getBcastPort(); }
+uint FightclubTeleprinter::getBcastID()   { return bcastcli->getBcastSignature(); }
 
 
-void ClockWindow::toggleRoomclock(bool showRClock) {
+void FightclubTeleprinter::toggleRoomclock(bool showRClock) {
     if(roomclock && !showRClock)        refreshtimer->stop();
     else if (!roomclock && showRClock)  refreshtimer->start(30);
 
@@ -121,7 +121,7 @@ void ClockWindow::toggleRoomclock(bool showRClock) {
 }
 
 
-void ClockWindow::updateElapsedTime(int elTime) {
+void FightclubTeleprinter::updateElapsedTime(int elTime) {
     if (roomclock) return;
     QString displayedTime = timeToString(elTime);
     ui->lcdtimedisplay->display(displayedTime);
@@ -129,7 +129,7 @@ void ClockWindow::updateElapsedTime(int elTime) {
 }
 
 
-QString ClockWindow::timeToString(int time) {
+QString FightclubTeleprinter::timeToString(int time) {
     QTime temp = QTime(0,0,0,0);
     temp = temp.addMSecs(time);
 
@@ -141,7 +141,7 @@ QString ClockWindow::timeToString(int time) {
 }
 
 
-void ClockWindow::updateTime() {
+void FightclubTeleprinter::updateTime() {
     QTime now = QTime::currentTime();
     QString displayNow = now.toString("HH:mm");
     if((now.second() % 2) != 0) displayNow[2] = ' ';
@@ -152,7 +152,7 @@ void ClockWindow::updateTime() {
 
 
 
-void ClockWindow::resizeEvent(QResizeEvent *event) {
+void FightclubTeleprinter::resizeEvent(QResizeEvent *event) {
     QFont phaselabelfont = ui->phaselabel->font();
     phaselabelfont.setPointSize(2 + height()*0.03);
 
@@ -167,7 +167,7 @@ void ClockWindow::resizeEvent(QResizeEvent *event) {
 }
 
 
-void ClockWindow::keyPressEvent(QKeyEvent *event) {
+void FightclubTeleprinter::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
         case Qt::Key_F1:
             openAboutDialog();

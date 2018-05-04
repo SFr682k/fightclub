@@ -16,7 +16,7 @@
 ****************************************************************************/
 
 
-#include "clockwindow.h"
+#include "teleprinter.h"
 #include <QApplication>
 #include <QCommandLineParser>
 
@@ -25,11 +25,11 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    a.setApplicationName("Fightclub Remote Clock Window");
-    a.setApplicationVersion("0.7");
+    a.setApplicationName("Fightclub Teleprinter");
+    a.setApplicationVersion("0.8alpha");
 
     QCommandLineParser cmdparser;
-    cmdparser.setApplicationDescription("Clock window for the Fightclub Client. Designed for use on remote machines.");
+    cmdparser.setApplicationDescription("Clock window for Fightclub Department, designed for use on remote machines.");
 
     cmdparser.addHelpOption();
     cmdparser.addVersionOption();
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     uint port = cmdparser.value(portappoption).toUInt();
     uint id = cmdparser.value(idappoption).toUInt();
 
-    ClockWindow w;
+    FightclubTeleprinter w;
     w.show();
 
     if(port > 0) w.setPort(port);
