@@ -20,7 +20,7 @@
 #include "ui_teleprinter.h"
 
 #include "aboutdialog.h"
-#include "setupbroadcastdialog.h"
+#include "teleprintersettings.h"
 
 
 FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
@@ -30,7 +30,7 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     ui->setupUi(this);
 
     bcastcli = new BroadcastClient(this);
-    setupbcastdial = new SetupBroadcastDialog(this);
+    setupbcastdial = new TeleprinterSettings(this);
 
 
 

@@ -16,15 +16,15 @@
 ****************************************************************************/
 
 
-#include "setupbroadcastdialog.h"
-#include "ui_setupbroadcastdialog.h"
+#include "teleprintersettings.h"
+#include "ui_teleprintersettings.h"
 
 #include <QInputDialog>
 #include <QMessageBox>
 
-SetupBroadcastDialog::SetupBroadcastDialog(QWidget *parent, unsigned int bcastport, unsigned int bcastid) :
+TeleprinterSettings::TeleprinterSettings(QWidget *parent, unsigned int bcastport, unsigned int bcastid) :
     QDialog(parent),
-    ui(new Ui::SetupBroadcastDialog) {
+    ui(new Ui::TeleprinterSettings) {
     ui->setupUi(this);
 
     port = bcastport;
@@ -34,8 +34,28 @@ SetupBroadcastDialog::SetupBroadcastDialog(QWidget *parent, unsigned int bcastpo
     locked = false;
 
 
+    ui->chooseFontBox->setEnabled(false);
+    ui->chooseScaleBox->setEnabled(false);
+
+    ui->showSecHand->setChecked(true);
+    ui->swissRClock->setChecked(true);
+
+
     connect(ui->defaultSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(applyDefaultSettings(bool)));
     connect(ui->customSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(enableCustomSettings(bool)));
+
+    connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
+    connect(ui->chooseFontBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(selFontChanged(QString)));
+
+    connect(ui->customScaleCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFontScale(bool)));
+    connect(ui->chooseScaleBox, SIGNAL(valueChanged(int)), this, SLOT(scaleFactorChanged(int)));
+
+    connect(ui->showSecHand, SIGNAL(toggled(bool)), this, SLOT(showSecondHand(bool)));
+
+    connect(ui->swissRClock, SIGNAL(clicked(bool)), this, SLOT(setSwissRClock(bool)));
+    connect(ui->smoothRClock, SIGNAL(clicked(bool)), this, SLOT(setSmoothRClock(bool)));
+    connect(ui->sharpRClock, SIGNAL(clicked(bool)), this, SLOT(setSharpRClock(bool)));
+
 
     connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
     connect(ui->applySettings, SIGNAL(clicked(bool)), this, SLOT(accept()));
@@ -44,12 +64,19 @@ SetupBroadcastDialog::SetupBroadcastDialog(QWidget *parent, unsigned int bcastpo
     setupSelections();
 }
 
-SetupBroadcastDialog::~SetupBroadcastDialog() {
+TeleprinterSettings::~TeleprinterSettings() {
     delete ui;
 }
 
 
-void SetupBroadcastDialog::setupSelections() {
+
+
+
+
+
+// BROADCAST SETTINGS -------------------------------------------------------------------
+
+void TeleprinterSettings::setupSelections() {
     if((port != 45454) || (id != 12345)) {
         ui->customSettingsRbttn->setChecked(true);
         ui->selBcastPort->setValue(port);
@@ -60,30 +87,30 @@ void SetupBroadcastDialog::setupSelections() {
     }
 }
 
-int SetupBroadcastDialog::getBroadcastPort() { return ui->selBcastPort->value(); }
-int SetupBroadcastDialog::getBroadcastID()   { return ui->selBcastID->value(); }
+int TeleprinterSettings::getBroadcastPort() { return ui->selBcastPort->value(); }
+int TeleprinterSettings::getBroadcastID()   { return ui->selBcastID->value(); }
 
 
-void SetupBroadcastDialog::setPort(uint newport) {
+void TeleprinterSettings::setPort(uint newport) {
     if(newport > 0) port = newport%65536;
     else            port = 45454;
     setupSelections();
 }
 
-void SetupBroadcastDialog::setID(uint newid) {
+void TeleprinterSettings::setID(uint newid) {
     id = newid;
     setupSelections();
 }
 
 
-void SetupBroadcastDialog::applyDefaultSettings(bool apply) {
+void TeleprinterSettings::applyDefaultSettings(bool apply) {
     if(apply) {
         ui->selBcastPort->setValue(45454);
         ui->selBcastID->setValue(12345);
     }
 }
 
-void SetupBroadcastDialog::enableCustomSettings(bool enabled) {
+void TeleprinterSettings::enableCustomSettings(bool enabled) {
     ui->bcastPortLabel->setEnabled(enabled);
     ui->selBcastPort->setEnabled(enabled);
     ui->bcastIDLabel->setEnabled(enabled);
@@ -91,7 +118,59 @@ void SetupBroadcastDialog::enableCustomSettings(bool enabled) {
 }
 
 
-void SetupBroadcastDialog::toggleLockedState() {
+
+
+
+
+
+// APPEARANCE SETTINGS ------------------------------------------------------------------
+
+void TeleprinterSettings::useCustomFont(bool customFont) {
+    ui->chooseFontBox->setEnabled(customFont);
+    emit fontChanged(customFont? ui->chooseFontBox->currentFont().family() : nullptr);
+}
+
+void TeleprinterSettings::selFontChanged(QString fontname) { emit fontChanged(fontname); }
+
+
+
+void TeleprinterSettings::useCustomFontScale(bool customScale) {
+    ui->chooseScaleBox->setEnabled(customScale);
+    emit fontScaleChanged(customScale? ui->chooseScaleBox->value()/100.0 : 1.0);
+}
+
+void TeleprinterSettings::scaleFactorChanged(int scale) { emit fontScaleChanged(scale/100.0); }
+
+
+
+
+
+
+
+// ROOMCLOCK SETTINGS -------------------------------------------------------------------
+
+void TeleprinterSettings::showSecondHand(bool show) {
+    ui->sechandmvmtCaption->setEnabled(show);
+    ui->smoothRClock->setEnabled(show);
+    ui->sharpRClock->setEnabled(show);
+    ui->swissRClock->setEnabled(show);
+    emit showRclockSecondHand(show);
+}
+
+
+void TeleprinterSettings::setSwissRClock(bool set)  { if(set) emit rclockBehaviorChanged(0); }
+void TeleprinterSettings::setSmoothRClock(bool set) { if(set) emit rclockBehaviorChanged(1); }
+void TeleprinterSettings::setSharpRClock(bool set)  { if(set) emit rclockBehaviorChanged(2); }
+
+
+
+
+
+
+
+// INTERNAL STUFF -----------------------------------------------------------------------
+
+void TeleprinterSettings::toggleLockedState() {
     if(!locked) {
         QString pwd1 = QInputDialog::getText(this, "Set password",
                                              "Please set a password:", QLineEdit::Password);
@@ -122,7 +201,7 @@ void SetupBroadcastDialog::toggleLockedState() {
         locked = false;
     }
 
-    ui->bcastSettings->setEnabled(!locked);
+    ui->settingsTabs->setEnabled(!locked);
     ui->lockSettings->setText(locked? "Unlock" : "Lock");
     ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.png")
                                     : QIcon(":/breeze-icons/object-locked-16.png"));
@@ -131,7 +210,7 @@ void SetupBroadcastDialog::toggleLockedState() {
 
 
 
-void SetupBroadcastDialog::keyPressEvent(QKeyEvent *event) {
+void TeleprinterSettings::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
         case Qt::Key_Enter:
             this->accept();

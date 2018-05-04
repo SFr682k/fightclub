@@ -16,29 +16,29 @@
 ****************************************************************************/
 
 
-#ifndef SETUPBROADCASTDIALOG_H
-#define SETUPBROADCASTDIALOG_H
+#ifndef TELEPRINTERSETTINGS_H
+#define TELEPRINTERSETTINGS_H
 
 #include <QDialog>
 #include <QKeyEvent>
 
 
 namespace Ui {
-class SetupBroadcastDialog;
+class TeleprinterSettings;
 }
 
-class SetupBroadcastDialog : public QDialog
+class TeleprinterSettings : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit SetupBroadcastDialog(QWidget *parent = 0, unsigned int port = 45454, unsigned int id = 12345);
-    ~SetupBroadcastDialog();
+    explicit TeleprinterSettings(QWidget *parent = 0, unsigned int port = 45454, unsigned int id = 12345);
+    ~TeleprinterSettings();
     int getBroadcastPort();
     int getBroadcastID();
 
 private:
-    Ui::SetupBroadcastDialog *ui;
+    Ui::TeleprinterSettings *ui;
     uint port;
     uint id;
     bool locked;
@@ -48,6 +48,13 @@ private:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
+signals:
+    void fontChanged(QString);
+    void fontScaleChanged(double);
+
+    void showRclockSecondHand(bool);
+    void rclockBehaviorChanged(int);
+
 public slots:
     void toggleLockedState();
     void setPort(uint);
@@ -56,6 +63,16 @@ public slots:
 private slots:
     void enableCustomSettings(bool);
     void applyDefaultSettings(bool);
+
+    void useCustomFont(bool);
+    void selFontChanged(QString);
+    void useCustomFontScale(bool);
+    void scaleFactorChanged(int);
+
+    void showSecondHand(bool);
+    void setSwissRClock(bool);
+    void setSmoothRClock(bool);
+    void setSharpRClock(bool);
 };
 
-#endif // SETUPBROADCASTDIALOG_H
+#endif // TELEPRINTERSETTINGS_H

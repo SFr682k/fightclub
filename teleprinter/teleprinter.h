@@ -26,7 +26,7 @@
 #include <QTimer>
 
 #include "broadcastclient.h"
-#include "setupbroadcastdialog.h"
+#include "teleprintersettings.h"
 
 namespace Ui {
 class FightclubTeleprinter;
@@ -53,7 +53,7 @@ protected:
 private:
     Ui::FightclubTeleprinter *ui;
     BroadcastClient *bcastcli;
-    SetupBroadcastDialog *setupbcastdial;
+    TeleprinterSettings *setupbcastdial;
     bool aboutDialogOpen;
     bool bcastSettingsOpen;
     QTimer *refreshtimer;
