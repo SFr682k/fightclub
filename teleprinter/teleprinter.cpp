@@ -22,7 +22,7 @@
 #include "aboutdialog.h"
 #include "teleprintersettings.h"
 
-#include <QDebug>
+
 
 FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     QMainWindow(parent),
@@ -34,8 +34,7 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     ui->problabel->setMouseTracking(true);
     ui->perflabel->setMouseTracking(true);
     ui->phaselabel->setMouseTracking(true);
-    ui->clockwidget->setMouseTracking(true);
-    ui->clockwidget->installEventFilter(this);
+    connect(ui->clockwidget, SIGNAL(mouseMoved()), this, SLOT(cursorMoved()));
     ui->lcdtimedisplay->setMouseTracking(true);
 
     hideCursorTimer = new QTimer();
@@ -255,14 +254,6 @@ void FightclubTeleprinter::mouseMoveEvent(QMouseEvent *event) {
     QWidget::mouseMoveEvent(event);
 }
 
-
-bool FightclubTeleprinter::eventFilter(QObject* object, QEvent* event) {
-    Q_UNUSED(object)
-    Q_UNUSED(event)
-    cursorMoved();
-
-    return false;
-}
 
 
 

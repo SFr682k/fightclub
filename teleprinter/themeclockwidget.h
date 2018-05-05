@@ -39,15 +39,6 @@ public:
     int getElapsedTime();
     int getMaximumTime();
 
-public slots:
-    void act();
-    void setMaximumTime(int ms);
-    void setRoomclock(bool roomclock);
-    void setElapsedTime(int ms);
-
-    void setRoomclockMode(int);
-    void showSecondHand(bool);
-
 private:
     QGraphicsScene *nscene;
     QGraphicsScene *rscene;
@@ -67,6 +58,22 @@ private:
     void actPie();
     bool isRoomclock();
     void resizeEvent(QResizeEvent *event);
+
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event) override;
+
+signals:
+    void mouseMoved();
+
+public slots:
+    void act();
+    void setMaximumTime(int ms);
+    void setRoomclock(bool roomclock);
+    void setElapsedTime(int ms);
+
+    void setRoomclockMode(int);
+    void showSecondHand(bool);
 };
 
 #endif

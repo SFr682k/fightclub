@@ -21,7 +21,6 @@
 
 #include <QMainWindow>
 
-#include <QEvent>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QString>
@@ -57,7 +56,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     Ui::FightclubTeleprinter *ui;
@@ -75,7 +73,6 @@ private:
 
     uint bcastPort, bcastID;
 
-    void cursorMoved();
     QTimer *hideCursorTimer;
 
 
@@ -91,6 +88,7 @@ private slots:
     void setWindowFont(QString);
     void setFontScale(double);
 
+    void cursorMoved();
     void hideCursor();
 };
 

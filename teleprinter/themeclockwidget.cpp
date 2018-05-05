@@ -26,11 +26,11 @@
 #include <QTime>
 
 
-#include <QDebug>
-
 ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     QGraphicsView(parent)
 {
+    this->setMouseTracking(true);
+
     nscene = new QGraphicsScene();
     setScene(nscene);
 
@@ -258,4 +258,11 @@ void ThemeClockWidget::showSecondHand(bool show) {
     secondHand->setVisible(show);
     secondHandBase->setVisible(show);
     secondRing->setVisible(show);
+}
+
+
+
+void ThemeClockWidget::mouseMoveEvent(QMouseEvent *event) {
+    emit mouseMoved();
+    QGraphicsView::mouseMoveEvent(event);
 }
