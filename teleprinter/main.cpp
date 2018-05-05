@@ -40,11 +40,25 @@ int main(int argc, char *argv[])
     QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID of the FightclubClient to listen to", "id [unsigned int]");
     cmdparser.addOption(idappoption);
 
+    QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
+    cmdparser.addOption(bmodeappoption);
+
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Start in fullscreen mode");
+    cmdparser.addOption(fscreenoption);
+
+    QCommandLineOption noconfoption("noconfig", "Disable configuration");
+    cmdparser.addOption(noconfoption);
+
+
     cmdparser.process(a);
 
 
     uint port = cmdparser.value(portappoption).toUInt();
     uint id = cmdparser.value(idappoption).toUInt();
+
+    bool batchmode = cmdparser.isSet(bmodeappoption);
+    bool fscrmode  = cmdparser.isSet(fscreenoption);
+    bool noconfig  = cmdparser.isSet(noconfoption);
 
     FightclubTeleprinter w;
     w.show();
@@ -52,10 +66,11 @@ int main(int argc, char *argv[])
     if(port > 0) w.setPort(port);
     if(id > 0)   w.setID(id);
 
-    w.openAboutDialog();
+    if(!batchmode)                               w.openAboutDialog();
+    if((!(port > 0) || !(id > 0)) && !batchmode) w.openSettingsDialog();
 
-    if(!(port > 0) || !(id > 0))
-        w.openSettingsDialog();
+    if(fscrmode) w.enterFullscreenMode();
+    if(noconfig) w.enterNoConfigMode();
 
     return a.exec();
 }

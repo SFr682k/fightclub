@@ -166,6 +166,12 @@ void FightclubTeleprinter::setFontScale(double newScale) {
 }
 
 
+
+
+void FightclubTeleprinter::enterFullscreenMode() { setWindowState(Qt::WindowFullScreen); }
+void FightclubTeleprinter::enterNoConfigMode()   { settingsdial->enterNoConfigMode(); }
+
+
 void FightclubTeleprinter::resizeEvent(QResizeEvent *event) {
     QFont phaselabelfont = ui->phaselabel->font();
     phaselabelfont.setPointSize((2 + height()*0.03)*fontScale);

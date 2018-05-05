@@ -209,6 +209,15 @@ void TeleprinterSettings::toggleLockedState() {
 
 
 
+void TeleprinterSettings::enterNoConfigMode() {
+    ui->settingsTabs->setEnabled(false);
+    locked = true;
+    lockedpwd = nullptr;
+    ui->lockSettings->setText("Locked");
+    ui->lockSettings->setIcon(QIcon(":/breeze-icons/object-locked-16.png"));
+    ui->lockSettings->setEnabled(false);
+}
+
 
 void TeleprinterSettings::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {

@@ -37,6 +37,8 @@ public:
     int getBroadcastPort();
     int getBroadcastID();
 
+    void enterNoConfigMode();
+
 private:
     Ui::TeleprinterSettings *ui;
     uint port;
