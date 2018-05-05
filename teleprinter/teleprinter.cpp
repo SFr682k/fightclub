@@ -22,16 +22,29 @@
 #include "aboutdialog.h"
 #include "teleprintersettings.h"
 
+#include <QDebug>
 
 FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FightclubTeleprinter)
 {      
     ui->setupUi(this);
+    QMainWindow::setMouseTracking(true);
+    ui->centralWidget->setMouseTracking(true);
+    ui->problabel->setMouseTracking(true);
+    ui->perflabel->setMouseTracking(true);
+    ui->phaselabel->setMouseTracking(true);
+    ui->clockwidget->setMouseTracking(true);
+    ui->clockwidget->installEventFilter(this);
+    ui->lcdtimedisplay->setMouseTracking(true);
+
+    hideCursorTimer = new QTimer();
+    hideCursorTimer->setInterval(5000);
+    connect(hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
+
 
     bcastcli = new BroadcastClient(this);
     settingsdial = new TeleprinterSettings(this);
-
 
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
@@ -41,7 +54,7 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
         ui->perflabel->setText(" ");
 
 
-    aboutDialogOpen = false;
+    aboutDialogOpen = false, settingsDialogOpen = false;
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
@@ -88,17 +101,25 @@ FightclubTeleprinter::~FightclubTeleprinter() {
 void FightclubTeleprinter::openAboutDialog() {
     if(!aboutDialogOpen) {
         aboutDialogOpen = true;
+        cursorMoved();
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
+        cursorMoved();
     }
 }
 
 
 void FightclubTeleprinter::openSettingsDialog() {
-    if(settingsdial->exec()) {
-        emit newPort(settingsdial->getBroadcastPort());
-        emit newID(settingsdial->getBroadcastID());
+    if(!settingsDialogOpen) {
+        settingsDialogOpen = true;
+        cursorMoved();
+        if(settingsdial->exec()) {
+            emit newPort(settingsdial->getBroadcastPort());
+            emit newID(settingsdial->getBroadcastID());
+        }
+        settingsDialogOpen = false;
+        cursorMoved();
     }
 }
 
@@ -168,8 +189,14 @@ void FightclubTeleprinter::setFontScale(double newScale) {
 
 
 
-void FightclubTeleprinter::enterFullscreenMode() { setWindowState(Qt::WindowFullScreen); }
+void FightclubTeleprinter::enterFullscreenMode() {
+    setWindowState(Qt::WindowFullScreen);
+    cursorMoved();
+}
+
 void FightclubTeleprinter::enterNoConfigMode()   { settingsdial->enterNoConfigMode(); }
+
+
 
 
 void FightclubTeleprinter::resizeEvent(QResizeEvent *event) {
@@ -199,13 +226,17 @@ void FightclubTeleprinter::keyPressEvent(QKeyEvent *event) {
             break;
 
         case Qt::Key_F:
-            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
                 setWindowState(Qt::WindowFullScreen);
+                cursorMoved();
+            }
             break;
 
         case Qt::Key_Escape:
-            if(windowState() == Qt::WindowFullScreen)
+            if(windowState() == Qt::WindowFullScreen) {
                 setWindowState(Qt::WindowMaximized);
+                cursorMoved();
+            }
             break;
 
         case Qt::Key_Q:
@@ -216,4 +247,33 @@ void FightclubTeleprinter::keyPressEvent(QKeyEvent *event) {
         default:
             QWidget::keyPressEvent(event);
     }
+}
+
+
+void FightclubTeleprinter::mouseMoveEvent(QMouseEvent *event) {
+    cursorMoved();
+    QWidget::mouseMoveEvent(event);
+}
+
+
+bool FightclubTeleprinter::eventFilter(QObject* object, QEvent* event) {
+    Q_UNUSED(object)
+    Q_UNUSED(event)
+    cursorMoved();
+
+    return false;
+}
+
+
+
+void FightclubTeleprinter::cursorMoved() {
+    QApplication::restoreOverrideCursor();
+    if((windowState() == Qt::WindowFullScreen) && !aboutDialogOpen && !settingsDialogOpen)
+        hideCursorTimer->start();
+    else hideCursorTimer->stop();
+}
+
+void FightclubTeleprinter::hideCursor() {
+    if(!aboutDialogOpen && !settingsDialogOpen)
+        QApplication::setOverrideCursor(Qt::BlankCursor);
 }

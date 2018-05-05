@@ -20,7 +20,10 @@
 #define TELEPRINTER_H
 
 #include <QMainWindow>
+
+#include <QEvent>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QString>
 #include <QTime>
 #include <QTimer>
@@ -53,18 +56,28 @@ public:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     Ui::FightclubTeleprinter *ui;
     BroadcastClient *bcastcli;
     TeleprinterSettings *settingsdial;
-    bool aboutDialogOpen;
+
+    bool aboutDialogOpen, settingsDialogOpen;
+
     QFont defaultFont;
     double fontScale;
+
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;
+
     uint bcastPort, bcastID;
+
+    void cursorMoved();
+    QTimer *hideCursorTimer;
+
 
 signals:
     void newPort(uint);
@@ -77,6 +90,8 @@ private slots:
 
     void setWindowFont(QString);
     void setFontScale(double);
+
+    void hideCursor();
 };
 
 #endif // TELEPRINTER_H

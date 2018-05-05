@@ -72,5 +72,6 @@ int main(int argc, char *argv[])
     if(fscrmode) w.enterFullscreenMode();
     if(noconfig) w.enterNoConfigMode();
 
+
     return a.exec();
 }
