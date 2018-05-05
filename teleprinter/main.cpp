@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Teleprinter");
-    a.setApplicationVersion("0.8alpha");
+    a.setApplicationVersion("0.8");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("Clock window for Fightclub Department, designed for use on remote machines.");
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     QCommandLineOption portappoption(QStringList() << "p" << "port", "Port to listen on", "port [unsigned int]");
     cmdparser.addOption(portappoption);
 
-    QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID of the FightclubClient to listen to", "id [unsigned int]");
+    QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID of the Fightclub Department to listen to", "id [unsigned int]");
     cmdparser.addOption(idappoption);
 
     QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");

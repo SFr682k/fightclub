@@ -3,8 +3,8 @@
         <file>gpl-v3-logo.png</file>
     </qresource>
     <qresource>
-        <file>breeze-icons/dialog-ok-apply-16.png</file>
-        <file>breeze-icons/object-locked-16.png</file>
-        <file>breeze-icons/object-unlocked-16.png</file>
+        <file>breeze-icons/dialog-ok-apply-16.svg</file>
+        <file>breeze-icons/object-locked-16.svg</file>
+        <file>breeze-icons/object-unlocked-16.svg</file>
     </qresource>
 </RCC>
