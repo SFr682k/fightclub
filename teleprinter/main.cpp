@@ -16,7 +16,7 @@
 ****************************************************************************/
 
 
-#include "clockwindow.h"
+#include "teleprinter.h"
 #include <QApplication>
 #include <QCommandLineParser>
 
@@ -25,11 +25,11 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    a.setApplicationName("Fightclub Remote Clock Window");
-    a.setApplicationVersion("0.7");
+    a.setApplicationName("Fightclub Teleprinter");
+    a.setApplicationVersion("0.8");
 
     QCommandLineParser cmdparser;
-    cmdparser.setApplicationDescription("Clock window for the Fightclub Client. Designed for use on remote machines.");
+    cmdparser.setApplicationDescription("Clock window for Fightclub Department, designed for use on remote machines.");
 
     cmdparser.addHelpOption();
     cmdparser.addVersionOption();
@@ -37,8 +37,18 @@ int main(int argc, char *argv[])
     QCommandLineOption portappoption(QStringList() << "p" << "port", "Port to listen on", "port [unsigned int]");
     cmdparser.addOption(portappoption);
 
-    QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID of the FightclubClient to listen to", "id [unsigned int]");
+    QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID of the Fightclub Department to listen to", "id [unsigned int]");
     cmdparser.addOption(idappoption);
+
+    QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
+    cmdparser.addOption(bmodeappoption);
+
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Start in fullscreen mode");
+    cmdparser.addOption(fscreenoption);
+
+    QCommandLineOption noconfoption("noconfig", "Disable configuration");
+    cmdparser.addOption(noconfoption);
+
 
     cmdparser.process(a);
 
@@ -46,16 +56,22 @@ int main(int argc, char *argv[])
     uint port = cmdparser.value(portappoption).toUInt();
     uint id = cmdparser.value(idappoption).toUInt();
 
-    ClockWindow w;
+    bool batchmode = cmdparser.isSet(bmodeappoption);
+    bool fscrmode  = cmdparser.isSet(fscreenoption);
+    bool noconfig  = cmdparser.isSet(noconfoption);
+
+    FightclubTeleprinter w;
     w.show();
 
     if(port > 0) w.setPort(port);
     if(id > 0)   w.setID(id);
 
-    w.openAboutDialog();
+    if(!batchmode)                               w.openAboutDialog();
+    if((!(port > 0) || !(id > 0)) && !batchmode) w.openSettingsDialog();
 
-    if(!(port > 0) || !(id > 0))
-        w.openSetupBCastDialog();
+    if(fscrmode) w.enterFullscreenMode();
+    if(noconfig) w.enterNoConfigMode();
+
 
     return a.exec();
 }

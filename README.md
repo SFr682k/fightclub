@@ -3,7 +3,7 @@
 **Current stable, distributed versions:**
 
  - Department 0.5
- - Remote Clock Window 0.7
+ - Teleprinter 0.8
  - Dashboard 0.1
 
 
@@ -15,7 +15,7 @@ Currently, heavy development is in progress, so design, workflow and requirement
 Fightclub currently consists of the following components:
 
  - *Fightclub Department*, an application for timing a physics fight.
- - *Fightclub Remote Clock Window*, a remote clock window for use on remote machines inside the local network.
+ - *Fightclub Teleprinter*, a remote clock window for use on remote machines inside the local network.
  - *Fightclub Dashboard*, displaying the state of multiple clients
 
 

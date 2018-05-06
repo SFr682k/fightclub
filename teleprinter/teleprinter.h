@@ -16,50 +16,65 @@
 ****************************************************************************/
 
 
-#ifndef CLOCKWINDOW_H
-#define CLOCKWINDOW_H
+#ifndef TELEPRINTER_H
+#define TELEPRINTER_H
 
 #include <QMainWindow>
+
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QString>
 #include <QTime>
 #include <QTimer>
 
 #include "broadcastclient.h"
-#include "setupbroadcastdialog.h"
+#include "teleprintersettings.h"
 
 namespace Ui {
-class ClockWindow;
+class FightclubTeleprinter;
 }
 
-class ClockWindow : public QMainWindow
+class FightclubTeleprinter : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit ClockWindow(QWidget *parent = 0);
-    ~ClockWindow();
+    explicit FightclubTeleprinter(QWidget *parent = 0);
+    ~FightclubTeleprinter();
     void setPort(uint);
     void setID(uint);
     void openAboutDialog();
-    void openSetupBCastDialog();
+    void openSettingsDialog();
     uint getBcastPort();
     uint getBcastID();
+
+    void enterFullscreenMode();
+    void enterNoConfigMode();
+
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
-    Ui::ClockWindow *ui;
+    Ui::FightclubTeleprinter *ui;
     BroadcastClient *bcastcli;
-    SetupBroadcastDialog *setupbcastdial;
-    bool aboutDialogOpen;
-    bool bcastSettingsOpen;
+    TeleprinterSettings *settingsdial;
+
+    bool aboutDialogOpen, settingsDialogOpen;
+
+    QFont defaultFont;
+    double fontScale;
+
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;
+
     uint bcastPort, bcastID;
+
+    QTimer *hideCursorTimer;
+
 
 signals:
     void newPort(uint);
@@ -69,6 +84,12 @@ private slots:
     void toggleRoomclock(bool);
     void updateElapsedTime(int);
     void updateTime();
+
+    void setWindowFont(QString);
+    void setFontScale(double);
+
+    void cursorMoved();
+    void hideCursor();
 };
 
-#endif // CLOCKWINDOW_H
+#endif // TELEPRINTER_H

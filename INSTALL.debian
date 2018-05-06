@@ -21,15 +21,15 @@ make
 sudo cp fightclub-department /usr/local/bin
 cd ..
 
-# Build the clock window and install the binary on the local system
+# Build Fightclub Teleprinter and install the binary on the local system
 
-cd remoteclockwindow
-qmake fightclub-remoteclockwindow.pro
+cd teleprinter
+qmake fightclub-teleprinter.pro
 make
-sudo cp fightclub-remoteclockwindow /usr/local/bin
+sudo cp fightclub-teleprinter /usr/local/bin
 cd ..
 
-# Build the dashboard and install the binary on the local system
+# Build Fightclub Dashboard and install the binary on the local system
 
 cd dashboard
 qmake fightclub-dashboard.pro

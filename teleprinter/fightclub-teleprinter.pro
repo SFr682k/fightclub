@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg network
+QT       += core gui network svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = fightclub-remoteclockwindow
+TARGET = fightclub-teleprinter
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,21 +25,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    clockwindow.cpp \
     broadcastclient.cpp \
     aboutdialog.cpp \
-    setupbroadcastdialog.cpp
+    teleprinter.cpp \
+    teleprintersettings.cpp
 
 HEADERS += \
-    clockwindow.h \
     broadcastclient.h \
     aboutdialog.h \
-    setupbroadcastdialog.h
+    teleprinter.h \
+    teleprintersettings.h
 
 FORMS += \
-    clockwindow.ui \
     aboutdialog.ui \
-    setupbroadcastdialog.ui
+    teleprinter.ui \
+    teleprintersettings.ui
 
 OTHER_FILES += \
     gpl_v3_logo.png

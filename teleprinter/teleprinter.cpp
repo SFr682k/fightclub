@@ -16,22 +16,34 @@
 ****************************************************************************/
 
 
-#include "clockwindow.h"
-#include "ui_clockwindow.h"
+#include "teleprinter.h"
+#include "ui_teleprinter.h"
 
 #include "aboutdialog.h"
-#include "setupbroadcastdialog.h"
+#include "teleprintersettings.h"
 
 
-ClockWindow::ClockWindow(QWidget *parent) :
+
+FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ClockWindow)
+    ui(new Ui::FightclubTeleprinter)
 {      
     ui->setupUi(this);
+    QMainWindow::setMouseTracking(true);
+    ui->centralWidget->setMouseTracking(true);
+    ui->problabel->setMouseTracking(true);
+    ui->perflabel->setMouseTracking(true);
+    ui->phaselabel->setMouseTracking(true);
+    connect(ui->clockwidget, SIGNAL(mouseMoved()), this, SLOT(cursorMoved()));
+    ui->lcdtimedisplay->setMouseTracking(true);
+
+    hideCursorTimer = new QTimer();
+    hideCursorTimer->setInterval(5000);
+    connect(hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
+
 
     bcastcli = new BroadcastClient(this);
-    setupbcastdial = new SetupBroadcastDialog(this);
-
+    settingsdial = new TeleprinterSettings(this);
 
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
@@ -41,9 +53,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
         ui->perflabel->setText(" ");
 
 
-    aboutDialogOpen = false;
-    bcastSettingsOpen = false;
-
+    aboutDialogOpen = false, settingsDialogOpen = false;
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
@@ -56,6 +66,8 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
     roomclock = true;
 
+    defaultFont = font();
+    fontScale = 1;
 
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
     connect(bcastcli, SIGNAL(elapsedTimeUpdate(int)), this, SLOT(updateElapsedTime(int)));
@@ -70,49 +82,63 @@ ClockWindow::ClockWindow(QWidget *parent) :
     connect(this, SIGNAL(newPort(uint)), bcastcli, SLOT(setListeningPort(uint)));
     connect(this, SIGNAL(newID(uint)), bcastcli, SLOT(setSignature(uint)));
 
+    connect(settingsdial, SIGNAL(fontChanged(QString)), this, SLOT(setWindowFont(QString)));
+    connect(settingsdial, SIGNAL(fontScaleChanged(double)), this, SLOT(setFontScale(double)));
+
+    connect(settingsdial, SIGNAL(showRclockSecondHand(bool)), ui->clockwidget, SLOT(showSecondHand(bool)));
+    connect(settingsdial, SIGNAL(rclockBehaviorChanged(int)), ui->clockwidget, SLOT(setRoomclockMode(int)));
+
     ui->clockwidget->setRoomclock(true);
 }
 
 
-ClockWindow::~ClockWindow() {
+FightclubTeleprinter::~FightclubTeleprinter() {
     delete ui;
 }
 
 
-void ClockWindow::openAboutDialog() {
+void FightclubTeleprinter::openAboutDialog() {
     if(!aboutDialogOpen) {
         aboutDialogOpen = true;
+        cursorMoved();
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
+        cursorMoved();
     }
 }
 
 
-void ClockWindow::openSetupBCastDialog() {
-    if(setupbcastdial->exec()) {
-        emit newPort(setupbcastdial->getBroadcastPort());
-        emit newID(setupbcastdial->getBroadcastID());
+void FightclubTeleprinter::openSettingsDialog() {
+    if(!settingsDialogOpen) {
+        settingsDialogOpen = true;
+        cursorMoved();
+        if(settingsdial->exec()) {
+            emit newPort(settingsdial->getBroadcastPort());
+            emit newID(settingsdial->getBroadcastID());
+        }
+        settingsDialogOpen = false;
+        cursorMoved();
     }
 }
 
 
-void ClockWindow::setPort(uint newport) {
-    setupbcastdial->setPort(newport);
+void FightclubTeleprinter::setPort(uint newport) {
+    settingsdial->setPort(newport);
     emit newPort(newport);
 }
 
-void ClockWindow::setID(uint newid) {
-    setupbcastdial->setID(newid);
+void FightclubTeleprinter::setID(uint newid) {
+    settingsdial->setID(newid);
     emit newID(newid);
 }
 
 
-uint ClockWindow::getBcastPort() { return bcastcli->getBcastPort(); }
-uint ClockWindow::getBcastID()   { return bcastcli->getBcastSignature(); }
+uint FightclubTeleprinter::getBcastPort() { return bcastcli->getBcastPort(); }
+uint FightclubTeleprinter::getBcastID()   { return bcastcli->getBcastSignature(); }
 
 
-void ClockWindow::toggleRoomclock(bool showRClock) {
+void FightclubTeleprinter::toggleRoomclock(bool showRClock) {
     if(roomclock && !showRClock)        refreshtimer->stop();
     else if (!roomclock && showRClock)  refreshtimer->start(30);
 
@@ -121,7 +147,7 @@ void ClockWindow::toggleRoomclock(bool showRClock) {
 }
 
 
-void ClockWindow::updateElapsedTime(int elTime) {
+void FightclubTeleprinter::updateElapsedTime(int elTime) {
     if (roomclock) return;
     QString displayedTime = timeToString(elTime);
     ui->lcdtimedisplay->display(displayedTime);
@@ -129,7 +155,7 @@ void ClockWindow::updateElapsedTime(int elTime) {
 }
 
 
-QString ClockWindow::timeToString(int time) {
+QString FightclubTeleprinter::timeToString(int time) {
     QTime temp = QTime(0,0,0,0);
     temp = temp.addMSecs(time);
 
@@ -141,7 +167,7 @@ QString ClockWindow::timeToString(int time) {
 }
 
 
-void ClockWindow::updateTime() {
+void FightclubTeleprinter::updateTime() {
     QTime now = QTime::currentTime();
     QString displayNow = now.toString("HH:mm");
     if((now.second() % 2) != 0) displayNow[2] = ' ';
@@ -152,12 +178,32 @@ void ClockWindow::updateTime() {
 
 
 
-void ClockWindow::resizeEvent(QResizeEvent *event) {
+void FightclubTeleprinter::setWindowFont(QString family) { this->setFont((family == nullptr)? defaultFont : QFont(family)); }
+
+void FightclubTeleprinter::setFontScale(double newScale) {
+    if(newScale > 0.5) fontScale = newScale;
+    resizeEvent(new QResizeEvent(QSize(width(),height()),QSize(width(),height())));
+}
+
+
+
+
+void FightclubTeleprinter::enterFullscreenMode() {
+    setWindowState(Qt::WindowFullScreen);
+    cursorMoved();
+}
+
+void FightclubTeleprinter::enterNoConfigMode()   { settingsdial->enterNoConfigMode(); }
+
+
+
+
+void FightclubTeleprinter::resizeEvent(QResizeEvent *event) {
     QFont phaselabelfont = ui->phaselabel->font();
-    phaselabelfont.setPointSize(2 + height()*0.03);
+    phaselabelfont.setPointSize((2 + height()*0.03)*fontScale);
 
     QFont infolabelfont = ui->perflabel->font();
-    infolabelfont.setPointSize(4 + height()*0.015);
+    infolabelfont.setPointSize((4 + height()*0.015)*fontScale);
 
     ui->phaselabel->setFont(phaselabelfont);
     ui->problabel->setFont(infolabelfont);
@@ -167,23 +213,29 @@ void ClockWindow::resizeEvent(QResizeEvent *event) {
 }
 
 
-void ClockWindow::keyPressEvent(QKeyEvent *event) {
+void FightclubTeleprinter::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
         case Qt::Key_F1:
             openAboutDialog();
             break;
 
-        case Qt::Key_B:
+        case Qt::Key_S:
             if(QApplication::keyboardModifiers() & Qt::ControlModifier)
-                openSetupBCastDialog();
+                openSettingsDialog();
             break;
 
         case Qt::Key_F:
-            setWindowState(Qt::WindowFullScreen);
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+                setWindowState(Qt::WindowFullScreen);
+                cursorMoved();
+            }
             break;
 
         case Qt::Key_Escape:
-            if(windowState() == Qt::WindowFullScreen) setWindowState(Qt::WindowMaximized);
+            if(windowState() == Qt::WindowFullScreen) {
+                setWindowState(Qt::WindowMaximized);
+                cursorMoved();
+            }
             break;
 
         case Qt::Key_Q:
@@ -194,4 +246,25 @@ void ClockWindow::keyPressEvent(QKeyEvent *event) {
         default:
             QWidget::keyPressEvent(event);
     }
+}
+
+
+void FightclubTeleprinter::mouseMoveEvent(QMouseEvent *event) {
+    cursorMoved();
+    QWidget::mouseMoveEvent(event);
+}
+
+
+
+
+void FightclubTeleprinter::cursorMoved() {
+    QApplication::restoreOverrideCursor();
+    if((windowState() == Qt::WindowFullScreen) && !aboutDialogOpen && !settingsDialogOpen)
+        hideCursorTimer->start();
+    else hideCursorTimer->stop();
+}
+
+void FightclubTeleprinter::hideCursor() {
+    if(!aboutDialogOpen && !settingsDialogOpen)
+        QApplication::setOverrideCursor(Qt::BlankCursor);
 }

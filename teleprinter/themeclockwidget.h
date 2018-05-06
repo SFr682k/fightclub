@@ -38,11 +38,7 @@ public:
     ~ThemeClockWidget();
     int getElapsedTime();
     int getMaximumTime();
-public slots:
-    void act();
-    void setMaximumTime(int ms);
-    void setRoomclock(bool roomclock);
-    void setElapsedTime(int ms);
+
 private:
     QGraphicsScene *nscene;
     QGraphicsScene *rscene;
@@ -56,11 +52,28 @@ private:
     QGraphicsEllipseItem *fg, *mg, *bg, *ring, *focus, *focus2;
     int time, maxtime;
     bool roomclock;
+    int roomclockMode;
 
     void actRoomclock();
     void actPie();
     bool isRoomclock();
     void resizeEvent(QResizeEvent *event);
+
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event) override;
+
+signals:
+    void mouseMoved();
+
+public slots:
+    void act();
+    void setMaximumTime(int ms);
+    void setRoomclock(bool roomclock);
+    void setElapsedTime(int ms);
+
+    void setRoomclockMode(int);
+    void showSecondHand(bool);
 };
 
 #endif
