@@ -7,7 +7,7 @@
  - Dashboard 0.1
 
 
-## About Fightclub
+### About Fightclub
 Fightclub aims to become an enhanced clock system for the [International Young Physicist's Tournament (IYPT)](http://iypt.org).
 Currently, heavy development is in progress, so design, workflow and requirements may change between two versions and result in incompatibilities.
 
@@ -24,9 +24,14 @@ Following components are considerd as “useful” and may be added soon:
  - *Fightclub Disperser*, a tool for duplicating broadcast signals emitted by Fightclub Department
  - *Fightclub Nano*, a clock window with an own timing engine, but not as powerful as *Fightclub Department*
 
+ 
+### Installation
+ - **Linux:** Users of Linux systems should compile Fightclub binaries from source. An [Installation script for Debian-based distributions](INSTALL.debian) is provided. Users of other distributions may refer to it, however, some minor modifications may be required.
+ - **Windows:** For Windows, pre-compiled binaries are available in the [Releases section](https://github.com/SFr682k/fightclub/releases). Please note that the provided Windows binaries are not generated after a new release and therefore might be outdated.
+ 
 
-## Fightclub Department
-Fightclub Department uses plain text files for loading data. They can be created and edited using a common text editor.  
+### Notes on data files
+Fightclub applications use plain text files for loading data. They can be created and edited using a common text editor.  
 Please review the [requirements on these data files](docs/fightclub-file-requirements.pdf).
 
 ### Screenshots
@@ -44,21 +49,16 @@ For other points of order, the current time may be displayed.
 
 
 
-
-## Legal Notes
 ### License
-Fightclub is licensed under version 3 of the GNU General Public License.  
+Fightclub applications are licensed under version 3 of the GNU General Public License.  
 Please review the following information to ensure the GNU General Public License version 3.0 requirements will be met:
 [http://www.gnu.org/copyleft/gpl.html](http://www.gnu.org/copyleft/gpl.html)
 
 
 
 ### Third party libraries
-Fightclub uses:
+Fightclub applications use:
 
- - the Qt framework,
- - the “Breeze” icon theme and
+ - the [Qt](https://www.qt.io/) framework,
+ - the [“Breeze” icon theme](https://github.com/kde/breeze-icons) and
  - some components of the [QIYPTClock](https://github.com/drogenlied/QIYPTClock)
-
-The respective copyright holders are listed in the headers of the source files and in the application's “About” dialog.
-  
