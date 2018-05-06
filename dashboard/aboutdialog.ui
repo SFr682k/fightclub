@@ -290,7 +290,7 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="thirdparty">
       <attribute name="title">
-       <string>Seite</string>
+       <string>Third Party Libraries</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>

@@ -148,7 +148,7 @@
           </property>
           <property name="icon">
            <iconset resource="resources.qrc">
-            <normaloff>:/breeze-icons/document-open-24.png</normaloff>:/breeze-icons/document-open-24.png</iconset>
+            <normaloff>:/breeze-icons/document-open-24.svg</normaloff>:/breeze-icons/document-open-24.svg</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -183,7 +183,7 @@
           </property>
           <property name="icon">
            <iconset resource="resources.qrc">
-            <normaloff>:/breeze-icons/edit-clear-24.png</normaloff>:/breeze-icons/edit-clear-24.png</iconset>
+            <normaloff>:/breeze-icons/edit-clear-24.svg</normaloff>:/breeze-icons/edit-clear-24.svg</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -220,7 +220,7 @@
        </property>
        <property name="icon">
         <iconset resource="resources.qrc">
-         <normaloff>:/breeze-icons/object-locked-16.png</normaloff>:/breeze-icons/object-locked-16.png</iconset>
+         <normaloff>:/breeze-icons/object-locked-16.svg</normaloff>:/breeze-icons/object-locked-16.svg</iconset>
        </property>
       </widget>
      </item>
@@ -244,7 +244,7 @@
        </property>
        <property name="icon">
         <iconset resource="resources.qrc">
-         <normaloff>:/breeze-icons/dialog-ok-apply-16.png</normaloff>:/breeze-icons/dialog-ok-apply-16.png</iconset>
+         <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
        </property>
       </widget>
      </item>

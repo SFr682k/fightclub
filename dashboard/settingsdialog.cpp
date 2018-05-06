@@ -164,8 +164,8 @@ void SettingsDialog::toggleLockedState() {
     ui->departmentBox->setEnabled(!locked);
 
     ui->lockSettings->setText(locked? "Unlock" : "Lock");
-    ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.png")
-                                    : QIcon(":/breeze-icons/object-locked-16.png"));
+    ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.svg")
+                                    : QIcon(":/breeze-icons/object-locked-16.svg"));
 }
 
 
