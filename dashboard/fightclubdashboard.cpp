@@ -38,6 +38,7 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     ui->setupUi(this);
 
     defaultFont = font();
+    fontScale = 1.0;
 
 
     if(ui->tournamentname->text().contains("<empty>", Qt::CaseInsensitive))
@@ -56,6 +57,7 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     connect(settingsdial, SIGNAL(tournamentNameChanged(QString)), ui->tournamentname, SLOT(setText(QString)));
     connect(settingsdial, SIGNAL(displayCTimeChanged(bool)), this, SLOT(setDisplayCurrTime(bool)));
     connect(settingsdial, SIGNAL(fontChanged(QString)), this, SLOT(setApplicationFont(QString)));
+    connect(settingsdial, SIGNAL(fontScaleChanged(double)), this, SLOT(setFontScale(double)));
 
     refreshtimer = new QTimer();
     refreshtimer->start(30);
@@ -129,6 +131,7 @@ void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {
     currentGrid->addWidget(depBox, numberOfDepartments % 5, 0);
 
     connect(this, SIGNAL(screenSizeChanged(int)), depBox, SLOT(onResizeEvent(int)));
+    connect(this, SIGNAL(fontScaleChanged(double)), depBox, SLOT(setFontScale(double)));
 
     numberOfDepartments++;
     if(container->count() > 1)
@@ -176,17 +179,25 @@ void FightclubDashboard::updateTimeDisplay() {
 void FightclubDashboard::setDisplayCurrTime(bool display) { displayCurrTime = display; }
 
 
+
 void FightclubDashboard::setApplicationFont(QString font)
     { this->setFont((font == nullptr)? defaultFont : QFont(font)); }
+
+void FightclubDashboard::setFontScale(double newScale) {
+    if(newScale > 0.5) fontScale = newScale;
+    emit fontScaleChanged(newScale);
+    resizeEvent(new QResizeEvent(QSize(width(),height()),QSize(width(),height())));
+}
+
 
 
 void FightclubDashboard::resizeEvent(QResizeEvent *event) {
     QFont tnamefont = ui->tournamentname->font();
-    tnamefont.setPointSize(height()*0.026);
+    tnamefont.setPointSize((height()*0.026)*fontScale);
     ui->tournamentname->setFont(tnamefont);
 
     QFont pagelabelfont = ui->currentpagelabel->font();
-    pagelabelfont.setPointSize(height()*0.02);
+    pagelabelfont.setPointSize((height()*0.02)*fontScale);
     ui->currentpagelabel->setFont(pagelabelfont);
 
     emit screenSizeChanged(height());

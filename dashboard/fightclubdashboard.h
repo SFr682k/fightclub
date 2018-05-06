@@ -50,8 +50,9 @@ private:
     Ui::FightclubDashboard *ui;
     SettingsDialog *settingsdial;
 
-    QFont defaultFont;
     bool displayCurrTime;
+    QFont defaultFont;
+    double fontScale;
 
     MultiBroadcastClient *mbcastclient;
     bool aboutDialogOpen;
@@ -68,6 +69,7 @@ protected:
 
 
 signals:
+    void fontScaleChanged(double);
     void screenSizeChanged(int);
 
 
@@ -78,6 +80,7 @@ private slots:
     void updateTimeDisplay();
     void setDisplayCurrTime(bool);
     void setApplicationFont(QString);
+    void setFontScale(double);
 };
 
 #endif // FIGHTCLUBDASHBOARD_H

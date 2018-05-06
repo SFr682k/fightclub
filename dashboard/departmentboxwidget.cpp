@@ -31,6 +31,8 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     maximumTime = 1;
     roomclock = true;
 
+    fontScale = 1.0;
+
 
     QGridLayout *root = new QGridLayout();
     root->setSpacing(0);
@@ -166,22 +168,25 @@ void DepartmentBoxWidget::updatePhaseProgress() {
 
 QFont DepartmentBoxWidget::getBoxTitleFont(int windowHeight) {
     QFont tmp = font();
-    tmp.setPointSize(windowHeight*0.019);
+    tmp.setPointSize((windowHeight*0.019)*fontScale);
     return tmp;
 }
 
 QFont DepartmentBoxWidget::getPerflabelFont(int windowHeight) {
     QFont tmp = font();
-    tmp.setPointSize(windowHeight*0.019);
+    tmp.setPointSize((windowHeight*0.019)*fontScale);
     return tmp;
 }
 
 QFont DepartmentBoxWidget::getPhaselabelFont(int windowHeight) {
     QFont tmp = font();
-    tmp.setPointSize(windowHeight*0.02);
+    tmp.setPointSize((windowHeight*0.02)*fontScale);
     tmp.setBold(true);
     return tmp;
 }
+
+void DepartmentBoxWidget::setFontScale(double newScale) { if(newScale > 0.5) fontScale = newScale; }
+
 
 
 void DepartmentBoxWidget::onResizeEvent(int windowHeight) {

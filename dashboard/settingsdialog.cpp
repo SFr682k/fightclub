@@ -43,6 +43,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->customFontCBox->setChecked(false);
     ui->chooseFontBox->setEnabled(false);
+    ui->chooseScaleBox->setEnabled(false);
 
     ui->departmentListDescr->setText(" ");
     ui->unloadDepartmentList->setEnabled(false);
@@ -56,8 +57,13 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
     connect(ui->chooseFontBox, SIGNAL(activated(QString)), this, SLOT(selFontChanged(QString)));
 
+    connect(ui->customScaleCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFontScale(bool)));
+    connect(ui->chooseScaleBox, SIGNAL(valueChanged(int)), this, SLOT(scaleFactorChanged(int)));
+
+
     connect(ui->loadDepartmentList, SIGNAL(clicked(bool)), this, SLOT(loadDepList()));
     connect(ui->unloadDepartmentList, SIGNAL(clicked(bool)), this, SLOT(unloadDepList()));
+
 
     connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
     connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
@@ -90,6 +96,15 @@ void SettingsDialog::useCustomFont(bool customFont) {
 }
 
 void SettingsDialog::selFontChanged(QString fontname) { emit fontChanged(fontname); }
+
+
+
+void SettingsDialog::useCustomFontScale(bool customScale) {
+    ui->chooseScaleBox->setEnabled(customScale);
+    emit fontScaleChanged(customScale? ui->chooseScaleBox->value()/100.0 : 1.0);
+}
+
+void SettingsDialog::scaleFactorChanged(int scale) { emit fontScaleChanged(scale/100.0); }
 
 
 
@@ -160,8 +175,7 @@ void SettingsDialog::toggleLockedState() {
         locked = false;
     }
 
-    ui->appearanceSettings->setEnabled(!locked);
-    ui->departmentBox->setEnabled(!locked);
+    ui->configTabs->setEnabled(!locked);
 
     ui->lockSettings->setText(locked? "Unlock" : "Lock");
     ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.svg")
