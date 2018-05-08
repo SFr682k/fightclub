@@ -55,9 +55,9 @@ private:
     double fontScale;
 
     MultiBroadcastClient *mbcastclient;
-    bool aboutDialogOpen;
+    bool aboutDialogOpen, settingsDialogOpen;
     int numberOfDepartments;
-    QTimer *refreshtimer, *switchpagetimer;
+    QTimer *refreshtimer, *switchpagetimer, *hideCursorTimer;
 
     QStackedWidget *container;
     QGridLayout *currentGrid;
@@ -66,6 +66,7 @@ private:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 
 signals:
@@ -81,6 +82,9 @@ private slots:
     void setDisplayCurrTime(bool);
     void setApplicationFont(QString);
     void setFontScale(double);
+    
+    void cursorMoved();
+    void hideCursor();
 };
 
 #endif // FIGHTCLUBDASHBOARD_H

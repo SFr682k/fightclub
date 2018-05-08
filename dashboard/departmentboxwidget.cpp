@@ -48,6 +48,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     titlelabel = new QLabel(clockTitle);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     titlelabel->setFont(getBoxTitleFont(parent->height()));
+    titlelabel->setMouseTracking(true);
     root->addWidget(titlelabel,0,0,1,2);
 
 
@@ -61,6 +62,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     progressbar->setTextVisible(false);
     progressbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setProgressBarHeight(parent->height());
+    progressbar->setMouseTracking(true);
     progresslayout->addWidget(progressbar,0,0);
 
 
@@ -68,6 +70,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     phaselabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     phaselabel->setAlignment(Qt::AlignTop);
     phaselabel->setFont(getPhaselabelFont(parent->height()));
+    phaselabel->setMouseTracking(true);
     root->addWidget(phaselabel,2,0);
 
 
@@ -75,6 +78,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     perflabel->setAlignment(Qt::AlignTop);
     perflabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     perflabel->setFont(getPerflabelFont(parent->height()));
+    perflabel->setMouseTracking(true);
     root->addWidget(perflabel,3,0);
 
 
@@ -84,6 +88,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     setTimeDisplayHeight(parent->height());
     timedisplay->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
     timedisplay->setFrameStyle(QFrame::NoFrame);
+    timedisplay->setMouseTracking(true);
     root->addWidget(timedisplay,2,1,2,1);
 
 
