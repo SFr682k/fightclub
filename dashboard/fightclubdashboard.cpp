@@ -30,7 +30,6 @@
 
 
 
-
 FightclubDashboard::FightclubDashboard(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FightclubDashboard)
@@ -111,6 +110,7 @@ void FightclubDashboard::openAboutDialog() {
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
+        cursorMoved();
     }
 }
 
@@ -120,6 +120,7 @@ void FightclubDashboard::openSettingsDialog() {
         cursorMoved();
         settingsdial->exec();
         settingsDialogOpen = false;
+        cursorMoved();
     }
 }
 
@@ -273,7 +274,7 @@ void FightclubDashboard::mouseMoveEvent(QMouseEvent *event) {
 
 
 void FightclubDashboard::cursorMoved() {
-    QApplication::restoreOverrideCursor();
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
     if((windowState() == Qt::WindowFullScreen) && !aboutDialogOpen && !settingsDialogOpen)
         hideCursorTimer->start();
     else hideCursorTimer->stop();
