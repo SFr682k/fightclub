@@ -33,14 +33,34 @@ int main(int argc, char *argv[])
     cmdparser.addHelpOption();
     cmdparser.addVersionOption();
 
+    QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
+    cmdparser.addOption(bmodeappoption);
+
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Start in fullscreen mode");
+    cmdparser.addOption(fscreenoption);
+
+    QCommandLineOption noconfoption("noconfig", "Disable configuration");
+    cmdparser.addOption(noconfoption);
+
     cmdparser.process(a);
+
+
+    bool batchmode = cmdparser.isSet(bmodeappoption);
+    bool fscrmode  = cmdparser.isSet(fscreenoption);
+    bool noconfig  = cmdparser.isSet(noconfoption);
 
 
     FightclubDashboard w;
     w.show();
 
-    w.openAboutDialog();
-    w.openSettingsDialog();
+
+
+    if(fscrmode) w.enterFullscreenMode();
+    if(noconfig) w.enterNoConfigMode();
+
+    if(!batchmode)              w.openAboutDialog();
+    if(!batchmode && !noconfig) w.openSettingsDialog();
+
 
     return a.exec();
 }

@@ -43,6 +43,8 @@ class FightclubDashboard : public QMainWindow
 public:
     explicit FightclubDashboard(QWidget *parent = 0);
     ~FightclubDashboard();
+    void enterFullscreenMode();
+    void enterNoConfigMode();
     void openAboutDialog();
     void openSettingsDialog();
 

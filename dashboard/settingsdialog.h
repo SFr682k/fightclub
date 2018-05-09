@@ -33,14 +33,20 @@ class SettingsDialog : public QDialog
 public:
     explicit SettingsDialog(QWidget *parent = 0);
     ~SettingsDialog();
+    int exec();
+
+    void enterNoConfigMode();
+
 
 private:
+    QWidget *fcDashboard;
     Ui::SettingsDialog *ui;
 
     QString previousPath;
 
     bool locked;
     QString lockedpwd;
+
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

@@ -102,6 +102,12 @@ FightclubDashboard::~FightclubDashboard() {
 
 
 
+void FightclubDashboard::enterFullscreenMode() {
+    setWindowState(Qt::WindowFullScreen);
+    cursorMoved();
+}
+
+void FightclubDashboard::enterNoConfigMode() { settingsdial->enterNoConfigMode(); }
 
 void FightclubDashboard::openAboutDialog() {
     if(!aboutDialogOpen) {

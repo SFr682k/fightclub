@@ -34,6 +34,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    fcDashboard = parent;
+
     previousPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).value(0);
 
     ui->dispTournamentNameCBox->setChecked(false);
@@ -74,6 +76,14 @@ SettingsDialog::~SettingsDialog() {
     delete ui;
 }
 
+
+int SettingsDialog::exec() {
+    if(locked && (lockedpwd == nullptr)) {
+        QMessageBox::critical(fcDashboard, "Nice try …",
+                              "Configuration of Fightclub Department is (currently) disabled.");
+        return 0;
+    } else return QDialog::exec();
+}
 
 
 void SettingsDialog::displayTournamentName(bool display) {
@@ -181,6 +191,17 @@ void SettingsDialog::toggleLockedState() {
     ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.svg")
                                     : QIcon(":/breeze-icons/object-locked-16.svg"));
 }
+
+
+void SettingsDialog::enterNoConfigMode() {
+    ui->configTabs->setEnabled(false);
+    locked = true;
+    lockedpwd = nullptr;
+    ui->lockSettings->setText("Locked");
+    ui->lockSettings->setIcon(QIcon(":/breeze-icons/object-locked-16.svg"));
+    ui->lockSettings->setEnabled(false);
+}
+
 
 
 void SettingsDialog::keyPressEvent(QKeyEvent *event) {
