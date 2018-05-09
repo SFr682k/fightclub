@@ -130,6 +130,9 @@ void FightclubDashboard::openSettingsDialog() {
     }
 }
 
+void FightclubDashboard::openDepartmentsFile(QString file)
+    { settingsdial->loadDepList(file); }
+
 
 
 void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {

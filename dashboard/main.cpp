@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -36,13 +37,18 @@ int main(int argc, char *argv[])
     QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
     cmdparser.addOption(bmodeappoption);
 
-    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Start in fullscreen mode");
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Launch in fullscreen mode.");
     cmdparser.addOption(fscreenoption);
 
-    QCommandLineOption noconfoption("noconfig", "Disable configuration");
+    QCommandLineOption noconfoption("noconfig", "Disable configuration.");
     cmdparser.addOption(noconfoption);
 
+
+    cmdparser.addPositionalArgument("listofdeps", "[Optional]\nA Fightclub Exchange File containing a list of departments.");
+
+
     cmdparser.process(a);
+    const QStringList posArgs = cmdparser.positionalArguments();
 
 
     bool batchmode = cmdparser.isSet(bmodeappoption);
@@ -54,6 +60,7 @@ int main(int argc, char *argv[])
     w.show();
 
 
+    if(posArgs.length() > 0) { w.openDepartmentsFile(posArgs.at(0)); }
 
     if(fscrmode) w.enterFullscreenMode();
     if(noconfig) w.enterNoConfigMode();

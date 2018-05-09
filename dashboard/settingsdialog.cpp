@@ -125,22 +125,26 @@ void SettingsDialog::loadDepList() {
     if(selectDepFileDialog->exec()) {
         QString file = selectDepFileDialog->selectedFiles().value(0);
 
-        FilePropertyParser *fpp = new FilePropertyParser(file);
-
-        if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("departments", Qt::CaseInsensitive))) {
-            QMessageBox::critical(this, "Wrong file format",
-                                  "You requested a departments file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
-            return;
-        }
-
-        emit loadListOfDepartments(file);
+        loadDepList(file);
         previousPath = selectDepFileDialog->directory().absolutePath();
-
-
-        ui->departmentListTitle->setText(fpp->getTitle());
-        ui->departmentListDescr->setText(fpp->getDescription());
-        ui->unloadDepartmentList->setEnabled(true);
     }
+}
+
+
+void SettingsDialog::loadDepList(QString file) {
+    FilePropertyParser *fpp = new FilePropertyParser(file);
+
+    if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("departments", Qt::CaseInsensitive))) {
+        QMessageBox::critical(this, "Wrong file format",
+                              "You requested a departments file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+        return;
+    }
+
+    emit loadListOfDepartments(file);
+
+    ui->departmentListTitle->setText(fpp->getTitle());
+    ui->departmentListDescr->setText(fpp->getDescription());
+    ui->unloadDepartmentList->setEnabled(true);
 }
 
 

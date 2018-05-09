@@ -47,6 +47,7 @@ public:
     void enterNoConfigMode();
     void openAboutDialog();
     void openSettingsDialog();
+    void openDepartmentsFile(QString);
 
 private:
     Ui::FightclubDashboard *ui;

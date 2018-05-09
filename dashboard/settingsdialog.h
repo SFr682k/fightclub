@@ -35,6 +35,7 @@ public:
     ~SettingsDialog();
     int exec();
 
+    void loadDepList(QString);
     void enterNoConfigMode();
 
 
