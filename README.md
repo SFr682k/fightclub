@@ -4,7 +4,7 @@
 
  - Department 0.5
  - Teleprinter 0.8
- - Dashboard 0.1
+ - Dashboard 0.2
 
 
 ### About Fightclub
@@ -28,11 +28,27 @@ Following components are considerd as “useful” and may be added soon:
 ### Installation
  - **Linux:** Users of Linux systems should compile Fightclub binaries from source. An [Installation script for Debian-based distributions](INSTALL.debian) is provided. Users of other distributions may refer to it, however, some minor modifications may be required.
  - **Windows:** For Windows, pre-compiled binaries are available in the [Releases section](https://github.com/SFr682k/fightclub/releases). Please note that the provided Windows binaries are not generated after a new release and therefore might be outdated.
- 
+
 
 ### Notes on data files
 Fightclub applications use plain text files for loading data. They can be created and edited using a common text editor.  
 Please review the [requirements on these data files](docs/fightclub-file-requirements.pdf).
+
+
+### Command Line Interface
+Fightclub Teleprinter and Fightclub Dashboard provide a command line interface.  
+Command line syntax and available options can be displayed by calling the respective application together with the `-h` or `--help` option.
+
+
+### Common hotkeys
+Most Fightclub applications support the following hotkeys:
+
+ - `Ctrl + F` for entering fullscreen mode,
+ - `Esc` for leaving fullscreen mode and closing dialogs,
+ - `Ctrl + Shift + S` for opening the application’s settings,
+ - `F1` for opening the “About” dialog and
+ - `Ctrl + Q` for closing the application
+
 
 ### Screenshots
 Fightclub Department is equipped with a clear, intuitive interface for managing the physics fight.  
@@ -43,6 +59,9 @@ During a physics fight, the embedded clock window displays elapsed time as well 
 
 For other points of order, the current time may be displayed.  
 ![The clock window during a break](docs/screenshot-roomclock.png)
+
+The state of multiple Fightclub Departments can be seen on the Fightclub Dashboard:  
+![The state of multiple Departments displayed on the Dashboard](docs/screenshot-dashboard.png)
 
 
 
