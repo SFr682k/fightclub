@@ -33,14 +33,21 @@ class SettingsDialog : public QDialog
 public:
     explicit SettingsDialog(QWidget *parent = 0);
     ~SettingsDialog();
+    int exec();
+
+    void loadDepList(QString);
+    void enterNoConfigMode();
+
 
 private:
+    QWidget *fcDashboard;
     Ui::SettingsDialog *ui;
 
     QString previousPath;
 
     bool locked;
     QString lockedpwd;
+
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -49,6 +56,8 @@ signals:
     void tournamentNameChanged(QString);
     void displayCTimeChanged(bool);
     void fontChanged(QString);
+    void fontScaleChanged(double);
+
     void loadListOfDepartments(QString);
     void unloadListOfDepartments();
 
@@ -58,6 +67,8 @@ private slots:
     void displayCurrentTime(bool);
     void useCustomFont(bool);
     void selFontChanged(QString);
+    void useCustomFontScale(bool);
+    void scaleFactorChanged(int);
 
     void loadDepList();
     void unloadDepList();

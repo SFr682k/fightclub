@@ -30,14 +30,23 @@
 
 
 
-
 FightclubDashboard::FightclubDashboard(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::FightclubDashboard)
 {
     ui->setupUi(this);
 
+    QMainWindow::setMouseTracking(true);
+    ui->centralWidget->setMouseTracking(true);
+    ui->tournamentname->setMouseTracking(true);
+    ui->currenttime->setMouseTracking(true);
+    ui->line->setMouseTracking(true);
+    ui->currentpagelabel->setMouseTracking(true);
+    ui->frame->setMouseTracking(true);
+    ui->container->setMouseTracking(true);
+    
     defaultFont = font();
+    fontScale = 1.0;
 
 
     if(ui->tournamentname->text().contains("<empty>", Qt::CaseInsensitive))
@@ -50,12 +59,13 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     numberOfDepartments = 0;
 
 
-    aboutDialogOpen = false;
+    aboutDialogOpen = false, settingsDialogOpen = false;
     settingsdial = new SettingsDialog(this);
 
     connect(settingsdial, SIGNAL(tournamentNameChanged(QString)), ui->tournamentname, SLOT(setText(QString)));
     connect(settingsdial, SIGNAL(displayCTimeChanged(bool)), this, SLOT(setDisplayCurrTime(bool)));
     connect(settingsdial, SIGNAL(fontChanged(QString)), this, SLOT(setApplicationFont(QString)));
+    connect(settingsdial, SIGNAL(fontScaleChanged(double)), this, SLOT(setFontScale(double)));
 
     refreshtimer = new QTimer();
     refreshtimer->start(30);
@@ -65,8 +75,11 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     switchpagetimer = new QTimer();
     switchpagetimer->setInterval(6000);
 
+    hideCursorTimer = new QTimer();
+    hideCursorTimer->setInterval(5000);
+    connect(hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
 
-    mbcastclient = new MultiBroadcastClient(this);  
+    mbcastclient = new MultiBroadcastClient(this);
 
     connect(settingsdial, SIGNAL(loadListOfDepartments(QString)), mbcastclient, SLOT(loadFromFile(QString)));
     connect(settingsdial, SIGNAL(unloadListOfDepartments()), mbcastclient, SLOT(unloadList()));
@@ -89,18 +102,36 @@ FightclubDashboard::~FightclubDashboard() {
 
 
 
+void FightclubDashboard::enterFullscreenMode() {
+    setWindowState(Qt::WindowFullScreen);
+    cursorMoved();
+}
+
+void FightclubDashboard::enterNoConfigMode() { settingsdial->enterNoConfigMode(); }
 
 void FightclubDashboard::openAboutDialog() {
     if(!aboutDialogOpen) {
         aboutDialogOpen = true;
+        cursorMoved();
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
+        cursorMoved();
     }
 }
 
+void FightclubDashboard::openSettingsDialog() {
+    if(!settingsDialogOpen) {
+        settingsDialogOpen = true;
+        cursorMoved();
+        settingsdial->exec();
+        settingsDialogOpen = false;
+        cursorMoved();
+    }
+}
 
-void FightclubDashboard::openSettingsDialog() { if(settingsdial->exec()) {} }
+void FightclubDashboard::openDepartmentsFile(QString file)
+    { settingsdial->loadDepList(file); }
 
 
 
@@ -108,6 +139,7 @@ void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {
     if(numberOfDepartments/5 >= container->count()) {
         // All pages of the clock container are full
         QWidget *newPage = new QWidget();
+        newPage->setMouseTracking(true);
 
         QGridLayout *containerGrid = new QGridLayout();
         containerGrid->setMargin(0);
@@ -126,9 +158,11 @@ void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {
     }
 
     DepartmentBoxWidget *depBox = new DepartmentBoxWidget(signalHelper, this);
+    depBox->setMouseTracking(true);
     currentGrid->addWidget(depBox, numberOfDepartments % 5, 0);
 
     connect(this, SIGNAL(screenSizeChanged(int)), depBox, SLOT(onResizeEvent(int)));
+    connect(this, SIGNAL(fontScaleChanged(double)), depBox, SLOT(setFontScale(double)));
 
     numberOfDepartments++;
     if(container->count() > 1)
@@ -139,9 +173,9 @@ void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {
 
 void FightclubDashboard::removeAllDepartmentBoxes() {
     for(int i = container->count(); i >= 0; i--) {
-        QWidget* depBox = container->widget(i);
-        container->removeWidget(depBox);
-        depBox->deleteLater();
+        QWidget* depBoxPage = container->widget(i);
+        container->removeWidget(depBoxPage);
+        depBoxPage->deleteLater();
     }
 
     numberOfDepartments = 0;
@@ -176,17 +210,25 @@ void FightclubDashboard::updateTimeDisplay() {
 void FightclubDashboard::setDisplayCurrTime(bool display) { displayCurrTime = display; }
 
 
+
 void FightclubDashboard::setApplicationFont(QString font)
     { this->setFont((font == nullptr)? defaultFont : QFont(font)); }
+
+void FightclubDashboard::setFontScale(double newScale) {
+    if(newScale > 0.5) fontScale = newScale;
+    emit fontScaleChanged(newScale);
+    resizeEvent(new QResizeEvent(QSize(width(),height()),QSize(width(),height())));
+}
+
 
 
 void FightclubDashboard::resizeEvent(QResizeEvent *event) {
     QFont tnamefont = ui->tournamentname->font();
-    tnamefont.setPointSize(height()*0.026);
+    tnamefont.setPointSize((height()*0.026)*fontScale);
     ui->tournamentname->setFont(tnamefont);
 
     QFont pagelabelfont = ui->currentpagelabel->font();
-    pagelabelfont.setPointSize(height()*0.02);
+    pagelabelfont.setPointSize((height()*0.02)*fontScale);
     ui->currentpagelabel->setFont(pagelabelfont);
 
     emit screenSizeChanged(height());
@@ -203,12 +245,17 @@ void FightclubDashboard::keyPressEvent(QKeyEvent *event) {
             break;
 
         case Qt::Key_F:
-            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
                 setWindowState(Qt::WindowFullScreen);
+                cursorMoved();
+            }
             break;
 
         case Qt::Key_Escape:
-            if(windowState() == Qt::WindowFullScreen) setWindowState(Qt::WindowMaximized);
+            if(windowState() == Qt::WindowFullScreen) {
+                setWindowState(Qt::WindowMaximized);
+                cursorMoved();
+            }
             break;
 
         case Qt::Key_Q:
@@ -225,4 +272,24 @@ void FightclubDashboard::keyPressEvent(QKeyEvent *event) {
         default:
             QWidget::keyPressEvent(event);
     }
+}
+
+void FightclubDashboard::mouseMoveEvent(QMouseEvent *event) {
+    cursorMoved();
+    QWidget::mouseMoveEvent(event);
+}
+
+
+
+
+void FightclubDashboard::cursorMoved() {
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    if((windowState() == Qt::WindowFullScreen) && !aboutDialogOpen && !settingsDialogOpen)
+        hideCursorTimer->start();
+    else hideCursorTimer->stop();
+}
+
+void FightclubDashboard::hideCursor() {
+    if(!aboutDialogOpen && !settingsDialogOpen)
+        QApplication::setOverrideCursor(Qt::BlankCursor);
 }

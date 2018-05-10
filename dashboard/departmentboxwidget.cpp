@@ -31,6 +31,8 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     maximumTime = 1;
     roomclock = true;
 
+    fontScale = 1.0;
+
 
     QGridLayout *root = new QGridLayout();
     root->setSpacing(0);
@@ -46,6 +48,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     titlelabel = new QLabel(clockTitle);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     titlelabel->setFont(getBoxTitleFont(parent->height()));
+    titlelabel->setMouseTracking(true);
     root->addWidget(titlelabel,0,0,1,2);
 
 
@@ -59,6 +62,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     progressbar->setTextVisible(false);
     progressbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setProgressBarHeight(parent->height());
+    progressbar->setMouseTracking(true);
     progresslayout->addWidget(progressbar,0,0);
 
 
@@ -66,6 +70,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     phaselabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     phaselabel->setAlignment(Qt::AlignTop);
     phaselabel->setFont(getPhaselabelFont(parent->height()));
+    phaselabel->setMouseTracking(true);
     root->addWidget(phaselabel,2,0);
 
 
@@ -73,6 +78,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     perflabel->setAlignment(Qt::AlignTop);
     perflabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     perflabel->setFont(getPerflabelFont(parent->height()));
+    perflabel->setMouseTracking(true);
     root->addWidget(perflabel,3,0);
 
 
@@ -82,6 +88,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     setTimeDisplayHeight(parent->height());
     timedisplay->setSegmentStyle(QLCDNumber::SegmentStyle::Flat);
     timedisplay->setFrameStyle(QFrame::NoFrame);
+    timedisplay->setMouseTracking(true);
     root->addWidget(timedisplay,2,1,2,1);
 
 
@@ -166,22 +173,25 @@ void DepartmentBoxWidget::updatePhaseProgress() {
 
 QFont DepartmentBoxWidget::getBoxTitleFont(int windowHeight) {
     QFont tmp = font();
-    tmp.setPointSize(windowHeight*0.019);
+    tmp.setPointSize((windowHeight*0.019)*fontScale);
     return tmp;
 }
 
 QFont DepartmentBoxWidget::getPerflabelFont(int windowHeight) {
     QFont tmp = font();
-    tmp.setPointSize(windowHeight*0.019);
+    tmp.setPointSize((windowHeight*0.019)*fontScale);
     return tmp;
 }
 
 QFont DepartmentBoxWidget::getPhaselabelFont(int windowHeight) {
     QFont tmp = font();
-    tmp.setPointSize(windowHeight*0.02);
+    tmp.setPointSize((windowHeight*0.02)*fontScale);
     tmp.setBold(true);
     return tmp;
 }
+
+void DepartmentBoxWidget::setFontScale(double newScale) { if(newScale > 0.5) fontScale = newScale; }
+
 
 
 void DepartmentBoxWidget::onResizeEvent(int windowHeight) {

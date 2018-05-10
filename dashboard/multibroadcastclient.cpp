@@ -54,7 +54,7 @@ void MultiBroadcastClient::loadFromFile(QString path) {
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList sl = line.split(QChar('\t'));
-        if(sl.size() == 3){
+        if(sl.size() > 2) {
              int port = sl.value(0).toInt();
              int signature = sl.value(1).toInt();
              QString title = sl.at(2);

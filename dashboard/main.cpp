@@ -20,12 +20,13 @@
 #include <QApplication>
 #include <QCommandLineParser>
 
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Dashboard");
-    a.setApplicationVersion("0.1");
+    a.setApplicationVersion("0.2");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("Display the state of multiple Fightclub Departments.");
@@ -33,14 +34,40 @@ int main(int argc, char *argv[])
     cmdparser.addHelpOption();
     cmdparser.addVersionOption();
 
+    QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
+    cmdparser.addOption(bmodeappoption);
+
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Launch in fullscreen mode.");
+    cmdparser.addOption(fscreenoption);
+
+    QCommandLineOption noconfoption("noconfig", "Disable configuration.");
+    cmdparser.addOption(noconfoption);
+
+
+    cmdparser.addPositionalArgument("listofdeps", "[Optional]\nA Fightclub Exchange File containing a list of departments.");
+
+
     cmdparser.process(a);
+    const QStringList posArgs = cmdparser.positionalArguments();
+
+
+    bool batchmode = cmdparser.isSet(bmodeappoption);
+    bool fscrmode  = cmdparser.isSet(fscreenoption);
+    bool noconfig  = cmdparser.isSet(noconfoption);
 
 
     FightclubDashboard w;
     w.show();
 
-    w.openAboutDialog();
-    w.openSettingsDialog();
+
+    if(posArgs.length() > 0) { w.openDepartmentsFile(posArgs.at(0)); }
+
+    if(fscrmode) w.enterFullscreenMode();
+    if(noconfig) w.enterNoConfigMode();
+
+    if(!batchmode)              w.openAboutDialog();
+    if(!batchmode && !noconfig) w.openSettingsDialog();
+
 
     return a.exec();
 }

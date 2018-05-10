@@ -34,6 +34,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    fcDashboard = parent;
+
     previousPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).value(0);
 
     ui->dispTournamentNameCBox->setChecked(false);
@@ -43,6 +45,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->customFontCBox->setChecked(false);
     ui->chooseFontBox->setEnabled(false);
+    ui->chooseScaleBox->setEnabled(false);
 
     ui->departmentListDescr->setText(" ");
     ui->unloadDepartmentList->setEnabled(false);
@@ -56,8 +59,13 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
     connect(ui->chooseFontBox, SIGNAL(activated(QString)), this, SLOT(selFontChanged(QString)));
 
+    connect(ui->customScaleCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFontScale(bool)));
+    connect(ui->chooseScaleBox, SIGNAL(valueChanged(int)), this, SLOT(scaleFactorChanged(int)));
+
+
     connect(ui->loadDepartmentList, SIGNAL(clicked(bool)), this, SLOT(loadDepList()));
     connect(ui->unloadDepartmentList, SIGNAL(clicked(bool)), this, SLOT(unloadDepList()));
+
 
     connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
     connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
@@ -68,6 +76,14 @@ SettingsDialog::~SettingsDialog() {
     delete ui;
 }
 
+
+int SettingsDialog::exec() {
+    if(locked && (lockedpwd == nullptr)) {
+        QMessageBox::critical(fcDashboard, "Nice try …",
+                              "Configuration of Fightclub Department is (currently) disabled.");
+        return 0;
+    } else return QDialog::exec();
+}
 
 
 void SettingsDialog::displayTournamentName(bool display) {
@@ -93,6 +109,15 @@ void SettingsDialog::selFontChanged(QString fontname) { emit fontChanged(fontnam
 
 
 
+void SettingsDialog::useCustomFontScale(bool customScale) {
+    ui->chooseScaleBox->setEnabled(customScale);
+    emit fontScaleChanged(customScale? ui->chooseScaleBox->value()/100.0 : 1.0);
+}
+
+void SettingsDialog::scaleFactorChanged(int scale) { emit fontScaleChanged(scale/100.0); }
+
+
+
 void SettingsDialog::loadDepList() {
     QFileDialog *selectDepFileDialog
                 = new QFileDialog(this, "Select a departments file", previousPath, "Fightclub departments files (*.fcdeps)");
@@ -100,22 +125,26 @@ void SettingsDialog::loadDepList() {
     if(selectDepFileDialog->exec()) {
         QString file = selectDepFileDialog->selectedFiles().value(0);
 
-        FilePropertyParser *fpp = new FilePropertyParser(file);
-
-        if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("departments", Qt::CaseInsensitive))) {
-            QMessageBox::critical(this, "Wrong file format",
-                                  "You requested a departments file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
-            return;
-        }
-
-        emit loadListOfDepartments(file);
+        loadDepList(file);
         previousPath = selectDepFileDialog->directory().absolutePath();
-
-
-        ui->departmentListTitle->setText(fpp->getTitle());
-        ui->departmentListDescr->setText(fpp->getDescription());
-        ui->unloadDepartmentList->setEnabled(true);
     }
+}
+
+
+void SettingsDialog::loadDepList(QString file) {
+    FilePropertyParser *fpp = new FilePropertyParser(file);
+
+    if(!(fpp->getFileType() == nullptr || fpp->getFileType().contains("departments", Qt::CaseInsensitive))) {
+        QMessageBox::critical(this, "Wrong file format",
+                              "You requested a departments file, but " + QFileInfo(file).fileName() + " is a " + fpp->getFileType() + " file.");
+        return;
+    }
+
+    emit loadListOfDepartments(file);
+
+    ui->departmentListTitle->setText(fpp->getTitle());
+    ui->departmentListDescr->setText(fpp->getDescription());
+    ui->unloadDepartmentList->setEnabled(true);
 }
 
 
@@ -160,13 +189,23 @@ void SettingsDialog::toggleLockedState() {
         locked = false;
     }
 
-    ui->appearanceSettings->setEnabled(!locked);
-    ui->departmentBox->setEnabled(!locked);
+    ui->configTabs->setEnabled(!locked);
 
     ui->lockSettings->setText(locked? "Unlock" : "Lock");
-    ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.png")
-                                    : QIcon(":/breeze-icons/object-locked-16.png"));
+    ui->lockSettings->setIcon(locked? QIcon(":/breeze-icons/object-unlocked-16.svg")
+                                    : QIcon(":/breeze-icons/object-locked-16.svg"));
 }
+
+
+void SettingsDialog::enterNoConfigMode() {
+    ui->configTabs->setEnabled(false);
+    locked = true;
+    lockedpwd = nullptr;
+    ui->lockSettings->setText("Locked");
+    ui->lockSettings->setIcon(QIcon(":/breeze-icons/object-locked-16.svg"));
+    ui->lockSettings->setEnabled(false);
+}
+
 
 
 void SettingsDialog::keyPressEvent(QKeyEvent *event) {

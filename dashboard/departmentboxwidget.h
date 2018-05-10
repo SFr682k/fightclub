@@ -43,6 +43,9 @@ private:
     QProgressBar *progressbar;
     QLCDNumber *timedisplay;
 
+    double fontScale;
+
+
 private slots:
     void updateElapsedTime(int);
     void updateMaximumTime(int);
@@ -57,6 +60,7 @@ private slots:
     void setProgressBarHeight(int);
 
 public slots:
+    void setFontScale(double);
     void onResizeEvent(int);
 };
 
