@@ -63,14 +63,16 @@ int main(int argc, char *argv[])
     FightclubTeleprinter w;
     w.show();
 
+
+    if(fscrmode) w.enterFullscreenMode();
+    if(noconfig) w.enterNoConfigMode();
+
+
     if(port > 0) w.setPort(port);
     if(id > 0)   w.setID(id);
 
     if(!batchmode)                               w.openAboutDialog();
     if((!(port > 0) || !(id > 0)) && !batchmode) w.openSettingsDialog();
-
-    if(fscrmode) w.enterFullscreenMode();
-    if(noconfig) w.enterNoConfigMode();
 
 
     return a.exec();
