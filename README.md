@@ -3,7 +3,7 @@
 **Current stable, distributed versions:**
 
  - Department 0.5
- - Teleprinter 0.8
+ - Teleprinter 0.9
  - Dashboard 0.2
 
 
