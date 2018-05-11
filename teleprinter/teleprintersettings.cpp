@@ -27,6 +27,8 @@ TeleprinterSettings::TeleprinterSettings(QWidget *parent, unsigned int bcastport
     ui(new Ui::TeleprinterSettings) {
     ui->setupUi(this);
 
+    fcTeleprinter = parent;
+
     port = bcastport;
     id = bcastid;
     setupSelections();
@@ -66,6 +68,15 @@ TeleprinterSettings::TeleprinterSettings(QWidget *parent, unsigned int bcastport
 
 TeleprinterSettings::~TeleprinterSettings() {
     delete ui;
+}
+
+
+int TeleprinterSettings::exec() {
+    if(locked && (lockedpwd == nullptr)) {
+        QMessageBox::critical(fcTeleprinter, "Nice try …",
+                              "Configuration of Fightclub Teleprinter is (currently) disabled.");
+        return 0;
+    } else return QDialog::exec();
 }
 
 

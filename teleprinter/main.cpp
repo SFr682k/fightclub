@@ -71,8 +71,9 @@ int main(int argc, char *argv[])
     if(port > 0) w.setPort(port);
     if(id > 0)   w.setID(id);
 
-    if(!batchmode)                               w.openAboutDialog();
-    if((!(port > 0) || !(id > 0)) && !batchmode) w.openSettingsDialog();
+    if(!batchmode)                 w.openAboutDialog();
+    if((!(port > 0) || !(id > 0))
+       && !batchmode && !noconfig) w.openSettingsDialog();
 
 
     return a.exec();
