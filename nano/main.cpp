@@ -18,12 +18,30 @@
 
 #include "fightclubnano.h"
 #include <QApplication>
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    a.setApplicationName("Fightclub Nano");
+    a.setApplicationVersion("0.1alpha");
+
+    QCommandLineParser cmdparser;
+
+    cmdparser.setApplicationDescription("A clock window with an integrated control interface");
+
+    cmdparser.addHelpOption();
+    cmdparser.addVersionOption();
+
+
+    cmdparser.process(a);
+
+
     FightclubNano w;
     w.show();
+
+    w.openAboutDialog();
 
     return a.exec();
 }

@@ -21,6 +21,8 @@
 
 #include <QMainWindow>
 
+#include <QTimer>
+
 namespace Ui {
 class FightclubNano;
 }
@@ -33,8 +35,19 @@ public:
     explicit FightclubNano(QWidget *parent = 0);
     ~FightclubNano();
 
+    void openAboutDialog();
+
 private:
     Ui::FightclubNano *ui;
+
+    bool roomclock;
+
+    QTimer *refreshtimer;
+    bool aboutDialogOpen;
+
+
+private slots:
+    void updateLCDDisplay();
 };
 
 #endif // FIGHTCLUBNANO_H
