@@ -148,6 +148,7 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     rscene->addItem(secondRing);
 
     roomclockMode = 0;
+    showSHand     = 1;
 }
 
 
@@ -193,7 +194,7 @@ void ThemeClockWidget::actRoomclock() {
     double secondHandPos;
 
 
-    switch (roomclockMode) {        
+    switch (roomclockMode*showSHand) {
         default: // Swiss
             if(now.second() < 58) secondHandPos = 180.0 + 6.0*((int) ((now.second()*1000 + now.msec())*60/58)/1000
                                                                + 0.5-0.5*cos((((now.second()*1000 + now.msec())*60/58)%1000)/1000.0*3.14159));
@@ -258,6 +259,8 @@ void ThemeClockWidget::showSecondHand(bool show) {
     secondHand->setVisible(show);
     secondHandBase->setVisible(show);
     secondRing->setVisible(show);
+    showSHand = show? 1 : -1;
+    actRoomclock();
 }
 
 

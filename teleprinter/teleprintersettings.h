@@ -34,6 +34,9 @@ class TeleprinterSettings : public QDialog
 public:
     explicit TeleprinterSettings(QWidget *parent = 0, unsigned int port = 45454, unsigned int id = 12345);
     ~TeleprinterSettings();
+
+    int exec();
+
     int getBroadcastPort();
     int getBroadcastID();
 
@@ -41,6 +44,8 @@ public:
 
 private:
     Ui::TeleprinterSettings *ui;
+    QWidget *fcTeleprinter;
+
     uint port;
     uint id;
     bool locked;

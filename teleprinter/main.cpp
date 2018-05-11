@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Teleprinter");
-    a.setApplicationVersion("0.8");
+    a.setApplicationVersion("0.9");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("Clock window for Fightclub Department, designed for use on remote machines.");
@@ -63,14 +63,17 @@ int main(int argc, char *argv[])
     FightclubTeleprinter w;
     w.show();
 
-    if(port > 0) w.setPort(port);
-    if(id > 0)   w.setID(id);
-
-    if(!batchmode)                               w.openAboutDialog();
-    if((!(port > 0) || !(id > 0)) && !batchmode) w.openSettingsDialog();
 
     if(fscrmode) w.enterFullscreenMode();
     if(noconfig) w.enterNoConfigMode();
+
+
+    if(port > 0) w.setPort(port);
+    if(id > 0)   w.setID(id);
+
+    if(!batchmode)                 w.openAboutDialog();
+    if((!(port > 0) || !(id > 0))
+       && !batchmode && !noconfig) w.openSettingsDialog();
 
 
     return a.exec();

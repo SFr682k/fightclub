@@ -220,7 +220,8 @@ void FightclubTeleprinter::keyPressEvent(QKeyEvent *event) {
             break;
 
         case Qt::Key_S:
-            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+            if((QApplication::keyboardModifiers() & Qt::ControlModifier)
+                    && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
                 openSettingsDialog();
             break;
 
@@ -258,7 +259,7 @@ void FightclubTeleprinter::mouseMoveEvent(QMouseEvent *event) {
 
 
 void FightclubTeleprinter::cursorMoved() {
-    QApplication::restoreOverrideCursor();
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
     if((windowState() == Qt::WindowFullScreen) && !aboutDialogOpen && !settingsDialogOpen)
         hideCursorTimer->start();
     else hideCursorTimer->stop();

@@ -52,7 +52,7 @@ private:
     QGraphicsEllipseItem *fg, *mg, *bg, *ring, *focus, *focus2;
     int time, maxtime;
     bool roomclock;
-    int roomclockMode;
+    int roomclockMode, showSHand;
 
     void actRoomclock();
     void actPie();
