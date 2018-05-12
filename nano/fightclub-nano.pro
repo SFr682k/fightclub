@@ -27,12 +27,16 @@ SOURCES += \
     main.cpp \
     fightclubnano.cpp \
     aboutdialog.cpp \
-    clocklogic.cpp
+    clocklogic.cpp \
+    listadapter.cpp \
+    phaselistmodel.cpp
 
 HEADERS += \
     fightclubnano.h \
     aboutdialog.h \
-    clocklogic.h
+    clocklogic.h \
+    listadapter.h \
+    phaselistmodel.h
 
 FORMS += \
     fightclubnano.ui \

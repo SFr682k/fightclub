@@ -38,9 +38,14 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
 
     clklgk = new ClockLogic();
+    lstadapt = new ListAdapter();
+
 
     refreshtimer = new QTimer();
 
+
+    connect(ui->actionBwd, SIGNAL(triggered(bool)), lstadapt, SLOT(bwd()));
+    connect(ui->actionFwd, SIGNAL(triggered(bool)), lstadapt, SLOT(fwd()));
 
     connect(ui->actionStartPause, SIGNAL(triggered(bool)), clklgk, SLOT(startOrPause()));
     connect(ui->actionStartPause, SIGNAL(triggered(bool)), this, SLOT(toggleStartStopBttn()));
@@ -54,9 +59,29 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(refreshtimer, SIGNAL(timeout()), this, SLOT(updateLCDDisplay()));
 
 
+
+    connect(lstadapt, SIGNAL(enablePrevPhaseButton(bool)), ui->actionBwd, SLOT(setEnabled(bool)));
+    connect(lstadapt, SIGNAL(enableNextPhaseButton(bool)), ui->actionFwd, SLOT(setEnabled(bool)));
+
+
+    connect(lstadapt, SIGNAL(resetTime()), clklgk, SLOT(resetTime()));
+
+    connect(lstadapt, SIGNAL(maximumTimeChanged(int)), ui->clockwidget, SLOT(setMaximumTime(int)));
+
+    connect(lstadapt, SIGNAL(phaseLabelChanged(QString)), ui->phaselabel, SLOT(setText(QString)));
+
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->clockwidget, SLOT(setRoomclock(bool)));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), clklgk, SLOT(setRoomclock(bool)));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), this, SLOT(setRoomclock(bool)));
+
+
+
+    lstadapt->setUpPhaseSwitchingButtons();
     refreshtimer->start(30);
 
     aboutDialogOpen = false;
+
+    lstadapt->loadPhasesListFromFile("foo.fcphases");
 }
 
 
@@ -78,24 +103,12 @@ void FightclubNano::openAboutDialog() {
 
 
 void FightclubNano::toggleStartStopBttn() {
-
     if(clklgk->isRunning()) {
-        /*
-        if(clklgk->isRoomclock() && ui->phasefwd->isEnabled()) lstadapt->nextPhase();
-        else if((lstadapt->getCurrentStage() == -1) && (lstadapt->getCurrentPhase() == -1))
-            lstadapt->nextPhase();
-        */
-
-        if(roomclock) {
-            roomclock = false;
-            ui->clockwidget->setRoomclock(false);
-            clklgk->setRoomclock(false);
-            ui->clockwidget->setMaximumTime(60000);
-        }
+        if(clklgk->isRoomclock() && ui->actionFwd->isEnabled()) lstadapt->nextPhase();
+        else if(lstadapt->getCurrentPhase() == -1) lstadapt->nextPhase();
 
         ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-pause-24.svg"));
     } else ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-start-24.svg"));
-
 }
 
 
@@ -110,3 +123,7 @@ void FightclubNano::updateLCDDisplay() {
 
     ui->lcdtimedisplay->display(displayNow);
 }
+
+
+
+void FightclubNano::setRoomclock(bool rclk) { roomclock = rclk; }

@@ -96,4 +96,5 @@ QString ClockLogic::timeToString(int ms) {
 }
 
 
-bool ClockLogic::isRunning() { return running; }
+bool ClockLogic::isRunning()   { return running; }
+bool ClockLogic::isRoomclock() { return roomclock; }

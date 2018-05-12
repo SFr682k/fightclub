@@ -107,10 +107,11 @@
    <addaction name="actionBwd"/>
    <addaction name="actionStartPause"/>
    <addaction name="actionReset"/>
-   <addaction name="actionGoFwd"/>
+   <addaction name="actionFwd"/>
    <addaction name="separator"/>
+   <addaction name="actionMinus10"/>
    <addaction name="actionSetTime"/>
-   <addaction name="separator"/>
+   <addaction name="actionPlus10"/>
   </widget>
   <action name="actionBwd">
    <property name="icon">
@@ -121,7 +122,7 @@
     <string>Go Backward</string>
    </property>
   </action>
-  <action name="actionGoFwd">
+  <action name="actionFwd">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/breeze-icons/go-next-24.svg</normaloff>:/breeze-icons/go-next-24.svg</iconset>
@@ -155,6 +156,27 @@
    </property>
    <property name="text">
     <string>Set Time</string>
+   </property>
+  </action>
+  <action name="actionMinus10">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/chronometer-minus-ten-24.svg</normaloff>:/breeze-icons/chronometer-minus-ten-24.svg</iconset>
+   </property>
+   <property name="text">
+    <string>10 seconds backwards</string>
+   </property>
+   <property name="toolTip">
+    <string>10 seconds backwards</string>
+   </property>
+  </action>
+  <action name="actionPlus10">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/chronometer-plus-ten-24.svg</normaloff>:/breeze-icons/chronometer-plus-ten-24.svg</iconset>
+   </property>
+   <property name="text">
+    <string>10 seconds forwards</string>
    </property>
   </action>
  </widget>

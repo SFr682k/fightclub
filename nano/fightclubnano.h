@@ -20,6 +20,7 @@
 #define FIGHTCLUBNANO_H
 
 #include "clocklogic.h"
+#include "listadapter.h"
 
 #include <QMainWindow>
 
@@ -43,6 +44,7 @@ private:
     Ui::FightclubNano *ui;
 
     ClockLogic *clklgk;
+    ListAdapter *lstadapt;
 
     bool roomclock;
 
@@ -53,6 +55,7 @@ private:
 private slots:
     void toggleStartStopBttn();
     void updateLCDDisplay();
+    void setRoomclock(bool);
 };
 
 #endif // FIGHTCLUBNANO_H

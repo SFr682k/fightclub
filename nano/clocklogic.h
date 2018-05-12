@@ -31,6 +31,7 @@ class ClockLogic : public QObject
 public:
     explicit ClockLogic(QObject *parent = nullptr);
     bool isRunning();
+    bool isRoomclock();
 
 private:
     QString timeToString(int);
