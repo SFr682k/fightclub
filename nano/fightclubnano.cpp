@@ -37,9 +37,22 @@ FightclubNano::FightclubNano(QWidget *parent) :
     roomclock = true;
 
 
+    clklgk = new ClockLogic();
+
     refreshtimer = new QTimer();
 
+
+    connect(ui->actionStartPause, SIGNAL(triggered(bool)), clklgk, SLOT(startOrPause()));
+    connect(ui->actionStartPause, SIGNAL(triggered(bool)), this, SLOT(toggleStartStopBttn()));
+
+    connect(ui->actionReset, SIGNAL(triggered(bool)), clklgk, SLOT(resetTime()));
+
+    connect(clklgk, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
+    connect(refreshtimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
+
+    connect(clklgk, SIGNAL(elapsedTimeUpdate(QString)), ui->lcdtimedisplay, SLOT(display(QString)));
     connect(refreshtimer, SIGNAL(timeout()), this, SLOT(updateLCDDisplay()));
+
 
     refreshtimer->start(30);
 
@@ -64,13 +77,36 @@ void FightclubNano::openAboutDialog() {
 
 
 
+void FightclubNano::toggleStartStopBttn() {
+
+    if(clklgk->isRunning()) {
+        /*
+        if(clklgk->isRoomclock() && ui->phasefwd->isEnabled()) lstadapt->nextPhase();
+        else if((lstadapt->getCurrentStage() == -1) && (lstadapt->getCurrentPhase() == -1))
+            lstadapt->nextPhase();
+        */
+
+        if(roomclock) {
+            roomclock = false;
+            ui->clockwidget->setRoomclock(false);
+            clklgk->setRoomclock(false);
+            ui->clockwidget->setMaximumTime(60000);
+        }
+
+        ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-pause-24.svg"));
+    } else ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-start-24.svg"));
+
+}
+
+
+
+
 void FightclubNano::updateLCDDisplay() {
     if(!roomclock) return;
 
     QTime now = QTime::currentTime();
-    QString displayNow = now.toString("HH:mm");
-    if((now.second() % 2) != 0) displayNow[2] = ' ';
+    QString displayNow = now.toString(" HH:mm ");
+    if((now.second() % 2) != 0) displayNow[3] = ' ';
 
     ui->lcdtimedisplay->display(displayNow);
-    ui->lcdtimedisplay->setDigitCount(displayNow.length());
 }

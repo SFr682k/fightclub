@@ -45,12 +45,15 @@
      </widget>
     </item>
     <item>
-     <widget class="QGraphicsView" name="clockwidget">
+     <widget class="ThemeClockWidget" name="clockwidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>5</verstretch>
        </sizepolicy>
+      </property>
+      <property name="renderHints">
+       <set>QPainter::Antialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
       </property>
      </widget>
     </item>
@@ -102,10 +105,10 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionBwd"/>
-   <addaction name="actionGoFwd"/>
-   <addaction name="separator"/>
    <addaction name="actionStartPause"/>
    <addaction name="actionReset"/>
+   <addaction name="actionGoFwd"/>
+   <addaction name="separator"/>
    <addaction name="actionSetTime"/>
    <addaction name="separator"/>
   </widget>
@@ -156,6 +159,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ThemeClockWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>themeclockwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

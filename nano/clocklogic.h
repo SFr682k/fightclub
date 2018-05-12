@@ -16,43 +16,43 @@
 ****************************************************************************/
 
 
-#ifndef FIGHTCLUBNANO_H
-#define FIGHTCLUBNANO_H
+#ifndef CLOCKLOGIC_H
+#define CLOCKLOGIC_H
 
-#include "clocklogic.h"
+#include <QObject>
 
-#include <QMainWindow>
-
+#include <QTime>
 #include <QTimer>
 
-namespace Ui {
-class FightclubNano;
-}
-
-class FightclubNano : public QMainWindow
+class ClockLogic : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FightclubNano(QWidget *parent = 0);
-    ~FightclubNano();
-
-    void openAboutDialog();
+    explicit ClockLogic(QObject *parent = nullptr);
+    bool isRunning();
 
 private:
-    Ui::FightclubNano *ui;
+    QString timeToString(int);
 
-    ClockLogic *clklgk;
+    QTime *time;
+    QTimer *refreshTimer;
+    int maximumTime, overtime, savedTime;
 
-    bool roomclock;
+    bool running, roomclock;
 
-    QTimer *refreshtimer;
-    bool aboutDialogOpen;
+signals:
+    void elapsedTimeUpdate(int);
+    void elapsedTimeUpdate(QString);
+    void overtimed(int);
 
+public slots:
+    void startOrPause();
+    void resetTime();
+    void setRoomclock(bool);
 
 private slots:
-    void toggleStartStopBttn();
-    void updateLCDDisplay();
+    void pulse();
 };
 
-#endif // FIGHTCLUBNANO_H
+#endif // CLOCKLOGIC_H

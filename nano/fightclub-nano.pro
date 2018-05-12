@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     fightclubnano.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    clocklogic.cpp
 
 HEADERS += \
     fightclubnano.h \
-    aboutdialog.h
+    aboutdialog.h \
+    clocklogic.h
 
 FORMS += \
     fightclubnano.ui \
@@ -38,3 +40,6 @@ FORMS += \
 
 RESOURCES += \
     resources.qrc
+
+
+include("themeclockwidget.pri")
