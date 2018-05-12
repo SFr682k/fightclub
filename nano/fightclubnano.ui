@@ -36,6 +36,9 @@
       <property name="text">
        <string>&lt;ApplicationName&gt; &lt;Version&gt;</string>
       </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>

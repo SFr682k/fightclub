@@ -22,8 +22,6 @@
 #include <QTextStream>
 
 
-#include <QDebug>
-
 
 ListAdapter::ListAdapter(QObject *parent) : QObject(parent) {
     phaselistmodel = new PhaseListModel();
@@ -105,7 +103,7 @@ void ListAdapter::nextPhase() {
             Phase prevphase = phaselistmodel->getPhasesList().value(currentPhase - 1);
 
             if(!prevphase.getCarry()) {
-                if(prevphase.getOCarry()) emit getElapsedOvertime();
+                if(prevphase.getOCarry()) emit carryElapsedOvertime();
                 else                      emit resetTime();
             }
         } else emit resetTime();
@@ -158,7 +156,7 @@ void ListAdapter::handleOvertime(int overtimed) {
 
     Phase phase = phaselistmodel->getPhasesList().value(currentPhase);
 
-    if(!phase.getAutoadvance() || (overtimed < 0)) return;
+    if(!phase.getAutoadvance() || !(overtimed > 0)) return;
 
     nextPhase();
 

@@ -34,6 +34,7 @@ FightclubNano::FightclubNano(QWidget *parent) :
     if(ui->phaselabel->text().startsWith("<ApplicationName>"))
             ui->phaselabel->setText(QApplication::applicationName().append(", Version ").append(QApplication::applicationVersion()));
 
+
     roomclock = true;
 
 
@@ -52,6 +53,10 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
     connect(ui->actionReset, SIGNAL(triggered(bool)), clklgk, SLOT(resetTime()));
 
+    connect(ui->actionMinus10, SIGNAL(triggered(bool)), clklgk, SLOT(minusTen()));
+    connect(ui->actionPlus10, SIGNAL(triggered(bool)), clklgk, SLOT(plusTen()));
+
+
     connect(clklgk, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
     connect(refreshtimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
 
@@ -60,13 +65,18 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
 
 
+
     connect(lstadapt, SIGNAL(enablePrevPhaseButton(bool)), ui->actionBwd, SLOT(setEnabled(bool)));
     connect(lstadapt, SIGNAL(enableNextPhaseButton(bool)), ui->actionFwd, SLOT(setEnabled(bool)));
 
-
+    connect(lstadapt, SIGNAL(carryElapsedOvertime()), clklgk, SLOT(carryOvertime()));
     connect(lstadapt, SIGNAL(resetTime()), clklgk, SLOT(resetTime()));
 
+    connect(lstadapt, SIGNAL(maximumTimeChanged(int)), clklgk, SLOT(setMaximumTime(int)));
     connect(lstadapt, SIGNAL(maximumTimeChanged(int)), ui->clockwidget, SLOT(setMaximumTime(int)));
+
+    connect(lstadapt, SIGNAL(overtimeChanged(int)), clklgk, SLOT(setMaximumOvertime(int)));
+    connect(clklgk, SIGNAL(overtimed(int)), lstadapt, SLOT(handleOvertime(int)));
 
     connect(lstadapt, SIGNAL(phaseLabelChanged(QString)), ui->phaselabel, SLOT(setText(QString)));
 
@@ -126,4 +136,12 @@ void FightclubNano::updateLCDDisplay() {
 
 
 
-void FightclubNano::setRoomclock(bool rclk) { roomclock = rclk; }
+
+
+void FightclubNano::setRoomclock(bool rclk) {
+    roomclock = rclk;
+    ui->actionReset->setDisabled(roomclock);
+    ui->actionMinus10->setDisabled(roomclock);
+    ui->actionSetTime->setDisabled(roomclock);
+    ui->actionPlus10->setDisabled(roomclock);
+}

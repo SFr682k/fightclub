@@ -18,6 +18,7 @@
 
 #include "clocklogic.h"
 
+
 ClockLogic::ClockLogic(QObject *parent) : QObject(parent) {
     time = new QTime(0,0,0);
 
@@ -56,7 +57,21 @@ void ClockLogic::resetTime() {
         emit elapsedTimeUpdate(timeToString(time->elapsed()));
     }
 
-    emit overtimed(- maximumTime - overtime);
+    emit overtimed(-(maximumTime + overtime));
+}
+
+
+void ClockLogic::setMaximumTime(int ms) {
+    if(ms >= 0)       maximumTime = ms;
+}
+
+void ClockLogic::setMaximumOvertime(int ms) {
+    if(ms >= 0) overtime = ms;
+}
+
+void ClockLogic::carryOvertime() {
+    if(time->elapsed() > maximumTime) *time = time->addMSecs(maximumTime);
+    else                              time->restart();
 }
 
 
@@ -66,8 +81,7 @@ void ClockLogic::pulse() {
         emit elapsedTimeUpdate(time->elapsed());
         emit elapsedTimeUpdate(timeToString(time->elapsed()));
 
-        if(time->elapsed() >= (maximumTime + overtime -60000))
-            emit overtimed(time->elapsed() - (maximumTime + overtime));
+        emit overtimed(time->elapsed() - (maximumTime + overtime));
     }
 }
 
@@ -82,6 +96,13 @@ void ClockLogic::setRoomclock(bool rclock) {
     roomclock = rclock;
 }
 
+
+void ClockLogic::plusTen() { *time = time->addMSecs(-10000); }
+
+void ClockLogic::minusTen() {
+    if(time->elapsed() > 10000) *time = time->addMSecs(10000);
+    else                        time->restart();
+}
 
 
 QString ClockLogic::timeToString(int ms) {

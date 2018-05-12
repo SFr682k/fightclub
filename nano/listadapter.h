@@ -45,10 +45,9 @@ signals:
     void currentPhaseChanged(int);
     void enablePrevPhaseButton(bool);
     void enableNextPhaseButton(bool);
-    //void currentStageIsRCS(bool);
 
 
-    void getElapsedOvertime();
+    void carryElapsedOvertime();
     void resetTime();
     void elapsedTimeChanged(int);
     void maximumTimeChanged(int);

@@ -50,7 +50,13 @@ signals:
 public slots:
     void startOrPause();
     void resetTime();
+    void carryOvertime();
+    void setMaximumTime(int);
+    void setMaximumOvertime(int);
     void setRoomclock(bool);
+
+    void plusTen();
+    void minusTen();
 
 private slots:
     void pulse();
