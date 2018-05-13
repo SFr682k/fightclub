@@ -37,9 +37,12 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
     roomclock = true;
 
+    fontScale = 1.0;
+
 
     clklgk = new ClockLogic();
     lstadapt = new ListAdapter();
+    settimedlg = new SetTimeDialog(this);
 
 
     refreshtimer = new QTimer();
@@ -55,6 +58,8 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
     connect(ui->actionMinus10, SIGNAL(triggered(bool)), clklgk, SLOT(minusTen()));
     connect(ui->actionPlus10, SIGNAL(triggered(bool)), clklgk, SLOT(plusTen()));
+
+    connect(ui->actionSetTime, SIGNAL(triggered(bool)), this, SLOT(openSetTimeDialog()));
 
 
     connect(clklgk, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
@@ -85,6 +90,10 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), this, SLOT(setRoomclock(bool)));
 
 
+    connect(settimedlg, SIGNAL(elapsedTimeSet(int)), clklgk, SLOT(setElapsedTime(int)));
+    connect(settimedlg, SIGNAL(remainingTimeSet(int)), clklgk, SLOT(setRemainingTime(int)));
+
+
 
     lstadapt->setUpPhaseSwitchingButtons();
     refreshtimer->start(30);
@@ -111,7 +120,6 @@ void FightclubNano::openAboutDialog() {
 
 
 
-
 void FightclubNano::toggleStartStopBttn() {
     if(clklgk->isRunning()) {
         if(clklgk->isRoomclock() && ui->actionFwd->isEnabled()) lstadapt->nextPhase();
@@ -119,6 +127,16 @@ void FightclubNano::toggleStartStopBttn() {
 
         ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-pause-24.svg"));
     } else ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-start-24.svg"));
+
+    ui->actionStartPause->setText(clklgk->isRunning()? "Pause" : "Start");
+    ui->actionStartPause->setToolTip(clklgk->isRunning()? "Pause" : "Start");
+}
+
+void FightclubNano::openSetTimeDialog() {
+    settimedlg->resetValues();
+    settimedlg->setMaximumRTime(clklgk->getMaxTime());
+    settimedlg->setElapsedTime(clklgk->getElapsedTime());
+    settimedlg->exec();
 }
 
 
@@ -135,13 +153,61 @@ void FightclubNano::updateLCDDisplay() {
 }
 
 
-
-
-
 void FightclubNano::setRoomclock(bool rclk) {
     roomclock = rclk;
     ui->actionReset->setDisabled(roomclock);
     ui->actionMinus10->setDisabled(roomclock);
     ui->actionSetTime->setDisabled(roomclock);
     ui->actionPlus10->setDisabled(roomclock);
+}
+
+
+
+
+
+
+
+void FightclubNano::resizeEvent(QResizeEvent *event) {
+    QFont phaselabelfont = ui->phaselabel->font();
+    phaselabelfont.setPointSize((2 + height()*0.03)*fontScale);
+    ui->phaselabel->setFont(phaselabelfont);
+
+    ui->controlToolbar->setIconSize(QSize(height()*0.041, height()*0.041));
+
+    QWidget::resizeEvent(event);
+}
+
+
+void FightclubNano::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_F1:
+            openAboutDialog();
+            break;
+
+        /*
+        case Qt::Key_S:
+            if((QApplication::keyboardModifiers() & Qt::ControlModifier)
+                    && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
+                openSettingsDialog();
+            break;
+            */
+
+        case Qt::Key_F:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                setWindowState(Qt::WindowFullScreen);
+            break;
+
+        case Qt::Key_Escape:
+            if(windowState() == Qt::WindowFullScreen)
+                setWindowState(Qt::WindowMaximized);
+            break;
+
+        case Qt::Key_Q:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                this->close();
+            break;
+
+        default:
+            QWidget::keyPressEvent(event);
+    }
 }

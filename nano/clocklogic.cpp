@@ -55,9 +55,8 @@ void ClockLogic::resetTime() {
     if(!roomclock) {
         emit elapsedTimeUpdate(time->elapsed());
         emit elapsedTimeUpdate(timeToString(time->elapsed()));
+        emit overtimed(-(maximumTime + overtime));
     }
-
-    emit overtimed(-(maximumTime + overtime));
 }
 
 
@@ -76,11 +75,41 @@ void ClockLogic::carryOvertime() {
 
 
 
+void ClockLogic::setElapsedTime(int elapsedms) {
+    time->start();
+    *time = time->addMSecs(-elapsedms);
+    savedTime = elapsedms;
+
+    if(!roomclock) {
+        emit elapsedTimeUpdate(elapsedms);
+        emit elapsedTimeUpdate(this->timeToString(elapsedms));
+        emit overtimed(time->elapsed() - (maximumTime + overtime));
+    }
+}
+
+void ClockLogic::setRemainingTime(int remainingms) {
+    if(remainingms > maximumTime) {
+        time->restart();
+        savedTime = 0;
+    } else {
+        time->start();
+        *time = time->addMSecs(-(maximumTime - remainingms));
+        savedTime = maximumTime - remainingms;
+    }
+
+    if(!roomclock) {
+        emit elapsedTimeUpdate(time->elapsed());
+        emit elapsedTimeUpdate(timeToString(time->elapsed()));
+        emit overtimed(time->elapsed() - (maximumTime + overtime));
+    }
+}
+
+
+
 void ClockLogic::pulse() {
     if(running && !roomclock) {
         emit elapsedTimeUpdate(time->elapsed());
         emit elapsedTimeUpdate(timeToString(time->elapsed()));
-
         emit overtimed(time->elapsed() - (maximumTime + overtime));
     }
 }
@@ -97,11 +126,32 @@ void ClockLogic::setRoomclock(bool rclock) {
 }
 
 
-void ClockLogic::plusTen() { *time = time->addMSecs(-10000); }
+void ClockLogic::plusTen() {
+    if(running) *time = time->addMSecs(-10000);
+    else        savedTime += 10000;
+
+    if(!roomclock) {
+        emit elapsedTimeUpdate(running? time->elapsed() : savedTime);
+        emit elapsedTimeUpdate(timeToString(running? time->elapsed() : savedTime));
+        emit overtimed((running? time->elapsed() : savedTime) - (maximumTime + overtime));
+    }
+}
 
 void ClockLogic::minusTen() {
-    if(time->elapsed() > 10000) *time = time->addMSecs(10000);
-    else                        time->restart();
+    if(running) {
+        if(time->elapsed() > 10000) *time = time->addMSecs(10000);
+        else                        time->restart();
+    } else {
+        if(savedTime > 10000) savedTime -= 10000;
+        else                  savedTime  = 0;
+    }
+
+
+    if(!roomclock) {
+        emit elapsedTimeUpdate(running? time->elapsed() : savedTime);
+        emit elapsedTimeUpdate(timeToString(running? time->elapsed() : savedTime));
+        emit overtimed((running? time->elapsed() : savedTime) - (maximumTime + overtime));
+    }
 }
 
 
@@ -117,5 +167,12 @@ QString ClockLogic::timeToString(int ms) {
 }
 
 
-bool ClockLogic::isRunning()   { return running; }
-bool ClockLogic::isRoomclock() { return roomclock; }
+bool ClockLogic::isRunning()      { return running; }
+bool ClockLogic::isRoomclock()    { return roomclock; }
+
+int  ClockLogic::getElapsedTime() {
+    if(running) return time->elapsed();
+    else        return savedTime;
+}
+
+int  ClockLogic::getMaxTime()     { return maximumTime; }

@@ -140,7 +140,10 @@
      <normaloff>:/breeze-icons/chronometer-start-24.svg</normaloff>:/breeze-icons/chronometer-start-24.svg</iconset>
    </property>
    <property name="text">
-    <string>Start/Pause</string>
+    <string>Start</string>
+   </property>
+   <property name="toolTip">
+    <string>Start</string>
    </property>
   </action>
   <action name="actionReset">

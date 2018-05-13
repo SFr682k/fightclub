@@ -21,9 +21,11 @@
 
 #include "clocklogic.h"
 #include "listadapter.h"
+#include "settimedialog.h"
 
 #include <QMainWindow>
 
+#include <QKeyEvent>
 #include <QTimer>
 
 namespace Ui {
@@ -45,15 +47,22 @@ private:
 
     ClockLogic *clklgk;
     ListAdapter *lstadapt;
+    SetTimeDialog *settimedlg;
 
     bool roomclock;
 
     QTimer *refreshtimer;
     bool aboutDialogOpen;
 
+    double fontScale;
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void toggleStartStopBttn();
+    void openSetTimeDialog();
     void updateLCDDisplay();
     void setRoomclock(bool);
 };

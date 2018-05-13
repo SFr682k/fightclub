@@ -29,18 +29,21 @@ SOURCES += \
     aboutdialog.cpp \
     clocklogic.cpp \
     listadapter.cpp \
-    phaselistmodel.cpp
+    phaselistmodel.cpp \
+    settimedialog.cpp
 
 HEADERS += \
     fightclubnano.h \
     aboutdialog.h \
     clocklogic.h \
     listadapter.h \
-    phaselistmodel.h
+    phaselistmodel.h \
+    settimedialog.h
 
 FORMS += \
     fightclubnano.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    settimedialog.ui
 
 RESOURCES += \
     resources.qrc

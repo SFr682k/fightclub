@@ -32,6 +32,8 @@ public:
     explicit ClockLogic(QObject *parent = nullptr);
     bool isRunning();
     bool isRoomclock();
+    int getElapsedTime();
+    int getMaxTime();
 
 private:
     QString timeToString(int);
@@ -54,6 +56,9 @@ public slots:
     void setMaximumTime(int);
     void setMaximumOvertime(int);
     void setRoomclock(bool);
+
+    void setElapsedTime(int);
+    void setRemainingTime(int);
 
     void plusTen();
     void minusTen();
