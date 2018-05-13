@@ -172,7 +172,7 @@ void ListAdapter::handleOvertime(int overtimed) {
 
 // ALGORITHM FOR LOADING EXTERNAL FILES -----------------------------------------------------------
 
-int ListAdapter::loadPhasesListFromFile(QString path) {
+int ListAdapter::loadNanoPhasesListFromFile(QString path) {
     QList<Phase> tmplist;
     QFile file(path);
 
@@ -186,13 +186,11 @@ int ListAdapter::loadPhasesListFromFile(QString path) {
 
         bool aadvnc = false, tcarry = false, ocarry = false, rclock = false;
 
-
-
-        if(splitline.size() > 4) {
-            aadvnc = splitline.value(4).contains('a', Qt::CaseInsensitive);
-            tcarry = splitline.value(4).contains('c', Qt::CaseInsensitive);
-            ocarry = splitline.value(4).contains('o', Qt::CaseInsensitive);
-            rclock = splitline.value(4).contains('r', Qt::CaseInsensitive);
+        if(splitline.size() > 3) {
+            aadvnc = splitline.value(3).contains('a', Qt::CaseInsensitive);
+            tcarry = splitline.value(3).contains('c', Qt::CaseInsensitive);
+            ocarry = splitline.value(3).contains('o', Qt::CaseInsensitive);
+            rclock = splitline.value(3).contains('r', Qt::CaseInsensitive);
         }
 
         if(splitline.size() >= 3) tmplist.append(Phase(

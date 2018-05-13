@@ -106,7 +106,7 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
     aboutDialogOpen = false, settingsDialogOpen = false;
 
-    lstadapt->loadPhasesListFromFile("foo.fcphases");
+    lstadapt->loadNanoPhasesListFromFile("iypt.fcnano");
 }
 
 
