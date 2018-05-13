@@ -30,7 +30,8 @@ SOURCES += \
     clocklogic.cpp \
     listadapter.cpp \
     phaselistmodel.cpp \
-    settimedialog.cpp
+    settimedialog.cpp \
+    settingsdialog.cpp
 
 HEADERS += \
     fightclubnano.h \
@@ -38,12 +39,14 @@ HEADERS += \
     clocklogic.h \
     listadapter.h \
     phaselistmodel.h \
-    settimedialog.h
+    settimedialog.h \
+    settingsdialog.h
 
 FORMS += \
     fightclubnano.ui \
     aboutdialog.ui \
-    settimedialog.ui
+    settimedialog.ui \
+    settingsdialog.ui
 
 RESOURCES += \
     resources.qrc

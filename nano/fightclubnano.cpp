@@ -37,12 +37,14 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
     roomclock = true;
 
-    fontScale = 1.0;
+    defaultFont = font();
+    fontScale = 1.0, buttonScale = 1.0;
 
 
     clklgk = new ClockLogic();
     lstadapt = new ListAdapter();
     settimedlg = new SetTimeDialog(this);
+    settingsdlg = new SettingsDialog(this);
 
 
     refreshtimer = new QTimer();
@@ -94,11 +96,15 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(settimedlg, SIGNAL(remainingTimeSet(int)), clklgk, SLOT(setRemainingTime(int)));
 
 
+    connect(settingsdlg, SIGNAL(fontChanged(QString)), this, SLOT(setApplicationFont(QString)));
+    connect(settingsdlg, SIGNAL(fontScaleChanged(double)), this, SLOT(setFontScale(double)));
+    connect(settingsdlg, SIGNAL(buttonScaleChanged(double)), this, SLOT(setButtonScale(double)));
+
 
     lstadapt->setUpPhaseSwitchingButtons();
     refreshtimer->start(30);
 
-    aboutDialogOpen = false;
+    aboutDialogOpen = false, settingsDialogOpen = false;
 
     lstadapt->loadPhasesListFromFile("foo.fcphases");
 }
@@ -115,6 +121,14 @@ void FightclubNano::openAboutDialog() {
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
+    }
+}
+
+void FightclubNano::openSettingsDialog() {
+    if(!settingsDialogOpen) {
+        settingsDialogOpen = true;
+        settingsdlg->exec();
+        settingsDialogOpen = false;
     }
 }
 
@@ -167,12 +181,28 @@ void FightclubNano::setRoomclock(bool rclk) {
 
 
 
+void FightclubNano::setApplicationFont(QString font)
+    { this->setFont((font == nullptr)? defaultFont : QFont(font)); }
+
+void FightclubNano::setFontScale(double newScale) {
+    if(newScale > 0.5) fontScale = newScale;
+    resizeEvent(new QResizeEvent(QSize(width(),height()),QSize(width(),height())));
+}
+
+void FightclubNano::setButtonScale(double newScale) {
+    if(newScale > 0.5) buttonScale = newScale;
+    resizeEvent(new QResizeEvent(QSize(width(),height()),QSize(width(),height())));
+}
+
+
+
+
 void FightclubNano::resizeEvent(QResizeEvent *event) {
     QFont phaselabelfont = ui->phaselabel->font();
     phaselabelfont.setPointSize((2 + height()*0.03)*fontScale);
     ui->phaselabel->setFont(phaselabelfont);
 
-    ui->controlToolbar->setIconSize(QSize(height()*0.041, height()*0.041));
+    ui->controlToolbar->setIconSize(QSize(height()*0.041*buttonScale, height()*0.041*buttonScale));
 
     QWidget::resizeEvent(event);
 }
@@ -184,13 +214,11 @@ void FightclubNano::keyPressEvent(QKeyEvent *event) {
             openAboutDialog();
             break;
 
-        /*
         case Qt::Key_S:
             if((QApplication::keyboardModifiers() & Qt::ControlModifier)
                     && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
                 openSettingsDialog();
             break;
-            */
 
         case Qt::Key_F:
             if(QApplication::keyboardModifiers() & Qt::ControlModifier)

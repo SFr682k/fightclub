@@ -22,6 +22,7 @@
 #include "clocklogic.h"
 #include "listadapter.h"
 #include "settimedialog.h"
+#include "settingsdialog.h"
 
 #include <QMainWindow>
 
@@ -41,6 +42,7 @@ public:
     ~FightclubNano();
 
     void openAboutDialog();
+    void openSettingsDialog();
 
 private:
     Ui::FightclubNano *ui;
@@ -48,13 +50,15 @@ private:
     ClockLogic *clklgk;
     ListAdapter *lstadapt;
     SetTimeDialog *settimedlg;
+    SettingsDialog *settingsdlg;
 
     bool roomclock;
 
     QTimer *refreshtimer;
-    bool aboutDialogOpen;
+    bool aboutDialogOpen, settingsDialogOpen;
 
-    double fontScale;
+    QFont defaultFont;
+    double fontScale, buttonScale;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -65,6 +69,10 @@ private slots:
     void openSetTimeDialog();
     void updateLCDDisplay();
     void setRoomclock(bool);
+
+    void setApplicationFont(QString);
+    void setFontScale(double);
+    void setButtonScale(double);
 };
 
 #endif // FIGHTCLUBNANO_H
