@@ -172,6 +172,45 @@ void ListAdapter::handleOvertime(int overtimed) {
 
 // ALGORITHM FOR LOADING EXTERNAL FILES -----------------------------------------------------------
 
+int ListAdapter::loadPhasesListFromFile(QString path) {
+    QList<Phase> tmplist;
+    QFile file(path);
+
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) return 1;
+
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QTime tmptime = QTime(0,0,0);
+        QString line = in.readLine();
+        QStringList splitline = line.split('\t');
+
+        bool aadvnc = false, tcarry = false, ocarry = false, rclock = false;
+
+        if(splitline.size() > 4) {
+            aadvnc = splitline.value(4).contains('a', Qt::CaseInsensitive);
+            tcarry = splitline.value(4).contains('c', Qt::CaseInsensitive);
+            ocarry = splitline.value(4).contains('o', Qt::CaseInsensitive);
+            rclock = splitline.value(4).contains('r', Qt::CaseInsensitive);
+        }
+
+        if(splitline.size() >= 3) tmplist.append(Phase(
+                               tmptime.addMSecs(splitline.value(0).toInt()*1000),
+                               tmptime.addMSecs(splitline.value(1).toInt()*1000),
+                               splitline.value(2),
+                               aadvnc, tcarry, ocarry, rclock));
+        else {}// We're reading a comment or some other kind of line. Don't do anything.
+    }
+
+    phaselistmodel = new PhaseListModel(tmplist);
+    emit phaseListModelChanged(phaselistmodel);
+    file.close();
+
+    setUpPhaseSwitchingButtons();
+    initialize();
+
+    return 0;
+}
+
 int ListAdapter::loadNanoPhasesListFromFile(QString path) {
     QList<Phase> tmplist;
     QFile file(path);

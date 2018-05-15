@@ -16,33 +16,25 @@
 ****************************************************************************/
 
 
-#include "fightclubnano.h"
-#include <QApplication>
-#include <QCommandLineParser>
-
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-
-    a.setApplicationName("Fightclub Nano");
-    a.setApplicationVersion("0.1alpha");
-
-    QCommandLineParser cmdparser;
-
-    cmdparser.setApplicationDescription("A clock window with an integrated control interface");
-
-    cmdparser.addHelpOption();
-    cmdparser.addVersionOption();
+#ifndef FILEPROPERTYPARSER_H
+#define FILEPROPERTYPARSER_H
 
 
-    cmdparser.process(a);
+#include <QString>
 
+class FilePropertyParser {
+private:
+    QString fileType;
+    int protocolVersion;
+    QString title;
+    QString description;
 
-    FightclubNano w;
-    w.show();
+public:
+    FilePropertyParser(QString);
+    QString getFileType();
+    int getProtocolVersion();
+    QString getTitle();
+    QString getDescription();
+};
 
-    w.openAboutDialog();
-    w.openSettingsDialog();
-
-    return a.exec();
-}
+#endif // FILEPROPERTYPARSER_H

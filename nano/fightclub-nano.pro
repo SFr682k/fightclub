@@ -31,7 +31,8 @@ SOURCES += \
     listadapter.cpp \
     phaselistmodel.cpp \
     settimedialog.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    filepropertyparser.cpp
 
 HEADERS += \
     fightclubnano.h \
@@ -40,7 +41,8 @@ HEADERS += \
     listadapter.h \
     phaselistmodel.h \
     settimedialog.h \
-    settingsdialog.h
+    settingsdialog.h \
+    filepropertyparser.h
 
 FORMS += \
     fightclubnano.ui \

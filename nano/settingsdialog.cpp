@@ -19,6 +19,8 @@
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 
+#include "filepropertyparser.h"
+
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
@@ -43,8 +45,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     ui->phasesListDescr->setText(" ");
     ui->unloadPhasesList->setEnabled(false);
-
-    ui->loadPhasesList->setEnabled(false);
 
 
     connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
@@ -107,7 +107,42 @@ void SettingsDialog::buttonScaleChanged(int scale) { emit buttonScaleChanged(sca
 
 
 void SettingsDialog::loadPhasesList() {
+    QFileDialog *selectPhasesFileDialog
+                = new QFileDialog(this, "Select a supported phases file", previousPath,
+                                  "Supported Fightclub phases files (*.fcnano *.fcphases)");
 
+    if(selectPhasesFileDialog->exec()) {
+        QString file = selectPhasesFileDialog->selectedFiles().value(0);
+
+        loadPhasesList(file);
+        previousPath = selectPhasesFileDialog->directory().absolutePath();
+    }
+}
+
+
+void SettingsDialog::loadPhasesList(QString file) {
+    FilePropertyParser *fpp = new FilePropertyParser(file);
+
+    if(!((fpp->getFileType() == nullptr)
+         || fpp->getFileType().contains("nano", Qt::CaseInsensitive)
+         || fpp->getFileType().contains("phases", Qt::CaseInsensitive))) {
+
+        QMessageBox::critical(this, "Unsupported file format",
+                              "Fightclub Nano doesn't support " + fpp->getFileType() + " files.");
+        return;
+    }
+
+
+    if(fpp->getFileType().contains("nano", Qt::CaseInsensitive))
+        emit loadListOfNanoPhases(file);
+    else if(fpp->getFileType().contains("phases", Qt::CaseInsensitive))
+        emit loadListOfPhases(file);
+
+
+    ui->phasesListTitle->setText(fpp->getTitle());
+    ui->phasesListDescr->setText(fpp->getDescription());
+
+    ui->unloadPhasesList->setEnabled(true);
 }
 
 

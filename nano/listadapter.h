@@ -31,7 +31,6 @@ class ListAdapter : public QObject
     Q_OBJECT
 public:
     explicit ListAdapter(QObject *parent = nullptr);
-    int loadNanoPhasesListFromFile(QString);
     void setUpPhaseSwitchingButtons();
     int getCurrentPhase();
 
@@ -71,6 +70,8 @@ public slots:
 
     void handleOvertime(int);
 
+    int loadPhasesListFromFile(QString);
+    int loadNanoPhasesListFromFile(QString);
     void unloadPhasesList();
 
     void initialize();

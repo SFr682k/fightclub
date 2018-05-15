@@ -35,6 +35,12 @@ FightclubNano::FightclubNano(QWidget *parent) :
             ui->phaselabel->setText(QApplication::applicationName().append(", Version ").append(QApplication::applicationVersion()));
 
 
+    ui->actionMinus10->setEnabled(false);
+    ui->actionPlus10->setEnabled(false);
+    ui->actionSetTime->setEnabled(false);
+    ui->actionReset->setEnabled(false);
+
+
     roomclock = true;
 
     defaultFont = font();
@@ -96,6 +102,9 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(settimedlg, SIGNAL(remainingTimeSet(int)), clklgk, SLOT(setRemainingTime(int)));
 
 
+    connect(settingsdlg, SIGNAL(loadListOfPhases(QString)), lstadapt, SLOT(loadPhasesListFromFile(QString)));
+    connect(settingsdlg, SIGNAL(loadListOfNanoPhases(QString)), lstadapt, SLOT(loadNanoPhasesListFromFile(QString)));
+
     connect(settingsdlg, SIGNAL(fontChanged(QString)), this, SLOT(setApplicationFont(QString)));
     connect(settingsdlg, SIGNAL(fontScaleChanged(double)), this, SLOT(setFontScale(double)));
     connect(settingsdlg, SIGNAL(buttonScaleChanged(double)), this, SLOT(setButtonScale(double)));
@@ -105,8 +114,6 @@ FightclubNano::FightclubNano(QWidget *parent) :
     refreshtimer->start(30);
 
     aboutDialogOpen = false, settingsDialogOpen = false;
-
-    lstadapt->loadNanoPhasesListFromFile("iypt.fcnano");
 }
 
 

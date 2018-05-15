@@ -42,6 +42,8 @@ private:
     QWidget *fcNano;
     Ui::SettingsDialog *ui;
 
+    QString previousPath;
+
     bool locked;
     QString lockedpwd;
 
@@ -56,7 +58,8 @@ signals:
     void fontScaleChanged(double);
     void buttonScaleChanged(double);
 
-    void loadListOfPhases();
+    void loadListOfPhases(QString);
+    void loadListOfNanoPhases(QString);
     void unloadListOfDepartments();
 
 private slots:
@@ -68,6 +71,7 @@ private slots:
     void buttonScaleChanged(int);
 
     void loadPhasesList();
+    void loadPhasesList(QString);
     void unloadPhasesList();
 
     void toggleLockedState();
