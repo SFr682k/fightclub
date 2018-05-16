@@ -169,18 +169,19 @@ void ThemeClockWidget::resizeEvent(QResizeEvent *event) {
 void ThemeClockWidget::actPie() {
     setScene(nscene);
     
-    bg->setSpanAngle(-round(((double)time*360*16)/(double)maxtime));
+    if(time < maxtime) bg->setSpanAngle(-round(((double)time*360*16)/(double)maxtime));
+    else               bg->setSpanAngle(360*16);
 
     if(time < maxtime*3/4) bg->setBrush(QBrush(QColor(50,200,30)));
     else                   bg->setBrush(QBrush(QColor(255,190,30)));    
 
 
     if(time > maxtime && time < 2*maxtime) mg->setSpanAngle(-round((((double)time-maxtime)*360*16)/(double)maxtime));
-    else if (time > 2*maxtime)             mg->setSpanAngle(360*16);
+    else if(time >= 2*maxtime)             mg->setSpanAngle(360*16);
     else                                   mg->setSpanAngle(0);
     
-    if(time>2*maxtime) fg->setSpanAngle(-round((((double)time-2*(double)maxtime)*360*16)/(double)maxtime));
-    else               fg->setSpanAngle(0);
+    if(time > 2*maxtime) fg->setSpanAngle(-round((((double)time-2*(double)maxtime)*360*16)/(double)maxtime));
+    else                 fg->setSpanAngle(0);
 }
 
 
