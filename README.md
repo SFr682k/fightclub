@@ -5,6 +5,7 @@
  - Department 0.5
  - Teleprinter 0.9
  - Dashboard 0.2
+ - Nano 0.1
 
 
 ### About Fightclub
@@ -14,15 +15,15 @@ Currently, heavy development is in progress, so design, workflow and requirement
 
 Fightclub currently consists of the following components:
 
- - *Fightclub Department*, an application for timing a physics fight.
- - *Fightclub Teleprinter*, a remote clock window for use on remote machines inside the local network.
+ - *Fightclub Department*, an application for timing a physics fight
+ - *Fightclub Teleprinter*, a remote clock window for use on remote machines inside the local network
  - *Fightclub Dashboard*, displaying the state of multiple clients
+ - *Fightclub Nano*, a clock window with an own timing engine, but not as powerful as *Fightclub Department*
 
 
-Following components are considerd as “useful” and may be added soon:
+Following component is considerd as “useful” and may be added soon:
 
  - *Fightclub Disperser*, a tool for duplicating broadcast signals emitted by Fightclub Department
- - *Fightclub Nano*, a clock window with an own timing engine, but not as powerful as *Fightclub Department*
 
  
 ### Installation

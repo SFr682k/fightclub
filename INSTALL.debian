@@ -98,6 +98,17 @@ cd ..
 
 sleep 2
 echo ""
+echo "Installing Fightclub Nano ..."
+sleep 2
+cd nano
+qmake fightclub-nano.pro
+make
+sudo cp fightclub-nano /usr/local/bin
+cd ..
+
+
+sleep 2
+echo ""
 echo "Remove temporary files ..."
 sleep 2
 rm -rf /tmp/fightclub-installation
