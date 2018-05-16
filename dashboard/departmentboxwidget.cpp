@@ -47,6 +47,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
 
     titlelabel = new QLabel(clockTitle);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    titlelabel->setTextFormat(Qt::PlainText);
     titlelabel->setFont(getBoxTitleFont(parent->height()));
     titlelabel->setMouseTracking(true);
     root->addWidget(titlelabel,0,0,1,2);
@@ -69,6 +70,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     phaselabel = new QLabel("Waiting for a broadcast");
     phaselabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     phaselabel->setAlignment(Qt::AlignTop);
+    phaselabel->setTextFormat(Qt::PlainText);
     phaselabel->setFont(getPhaselabelFont(parent->height()));
     phaselabel->setMouseTracking(true);
     root->addWidget(phaselabel,2,0);
@@ -77,6 +79,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     perflabel = new QLabel(" ");
     perflabel->setAlignment(Qt::AlignTop);
     perflabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+    perflabel->setTextFormat(Qt::PlainText);
     perflabel->setFont(getPerflabelFont(parent->height()));
     perflabel->setMouseTracking(true);
     root->addWidget(perflabel,3,0);

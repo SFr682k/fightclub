@@ -47,6 +47,9 @@
         <property name="text">
          <string>&lt;empty&gt;</string>
         </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
+        </property>
        </widget>
       </item>
       <item>
