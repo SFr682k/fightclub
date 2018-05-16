@@ -60,12 +60,23 @@ private:
     QFont defaultFont;
     double fontScale, buttonScale;
 
+    bool keyboardCtrl;
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void init();
+
+    void fwdEvent();
+    void bwdEvent();
+    void startstopEvent();
+    void resetTimeEvent();
+    void minusTenEvent();
+    void plusTenEvent();
+    void setTimeEvent();
+
 
     void toggleStartStopBttn();
     void openSetTimeDialog();

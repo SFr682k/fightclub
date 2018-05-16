@@ -46,6 +46,7 @@ FightclubNano::FightclubNano(QWidget *parent) :
     defaultFont = font();
     fontScale = 1.0, buttonScale = 1.0;
 
+    keyboardCtrl = true;
 
     clklgk = new ClockLogic();
     lstadapt = new ListAdapter();
@@ -56,18 +57,14 @@ FightclubNano::FightclubNano(QWidget *parent) :
     refreshtimer = new QTimer();
 
 
-    connect(ui->actionBwd, SIGNAL(triggered(bool)), lstadapt, SLOT(bwd()));
-    connect(ui->actionFwd, SIGNAL(triggered(bool)), lstadapt, SLOT(fwd()));
+    connect(ui->actionBwd, SIGNAL(triggered(bool)), this, SLOT(bwdEvent()));
+    connect(ui->actionFwd, SIGNAL(triggered(bool)), this, SLOT(fwdEvent()));
+    connect(ui->actionStartPause, SIGNAL(triggered(bool)), this, SLOT(startstopEvent()));
+    connect(ui->actionReset, SIGNAL(triggered(bool)), this, SLOT(resetTimeEvent()));
+    connect(ui->actionMinus10, SIGNAL(triggered(bool)), this, SLOT(minusTenEvent()));
+    connect(ui->actionPlus10, SIGNAL(triggered(bool)), this, SLOT(plusTenEvent()));
+    connect(ui->actionSetTime, SIGNAL(triggered(bool)), this, SLOT(setTimeEvent()));
 
-    connect(ui->actionStartPause, SIGNAL(triggered(bool)), clklgk, SLOT(startOrPause()));
-    connect(ui->actionStartPause, SIGNAL(triggered(bool)), this, SLOT(toggleStartStopBttn()));
-
-    connect(ui->actionReset, SIGNAL(triggered(bool)), clklgk, SLOT(resetTime()));
-
-    connect(ui->actionMinus10, SIGNAL(triggered(bool)), clklgk, SLOT(minusTen()));
-    connect(ui->actionPlus10, SIGNAL(triggered(bool)), clklgk, SLOT(plusTen()));
-
-    connect(ui->actionSetTime, SIGNAL(triggered(bool)), this, SLOT(openSetTimeDialog()));
 
 
     connect(clklgk, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
@@ -123,6 +120,24 @@ FightclubNano::FightclubNano(QWidget *parent) :
 FightclubNano::~FightclubNano() {
     delete ui;
 }
+
+
+
+void FightclubNano::bwdEvent()       { lstadapt->bwd(); }
+void FightclubNano::fwdEvent()       { lstadapt->fwd(); }
+
+void FightclubNano::startstopEvent() {
+    clklgk->startOrPause();
+    this->toggleStartStopBttn();
+}
+
+void FightclubNano::resetTimeEvent() { clklgk->resetTime(); }
+void FightclubNano::minusTenEvent()  { clklgk->minusTen(); }
+void FightclubNano::plusTenEvent()   { clklgk->plusTen(); }
+void FightclubNano::setTimeEvent()   { this->openSetTimeDialog(); }
+
+
+
 
 
 void FightclubNano::openAboutDialog() {
@@ -232,19 +247,45 @@ void FightclubNano::resizeEvent(QResizeEvent *event) {
 
 void FightclubNano::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
-        case Qt::Key_F1:
-            openAboutDialog();
+        case Qt::Key_Space:
+            if(keyboardCtrl) startstopEvent();
             break;
 
-        case Qt::Key_S:
-            if((QApplication::keyboardModifiers() & Qt::ControlModifier)
-                    && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
-                openSettingsDialog();
+
+        case Qt::Key_B:
+            if(keyboardCtrl) bwdEvent();
             break;
 
         case Qt::Key_F:
             if(QApplication::keyboardModifiers() & Qt::ControlModifier)
                 setWindowState(Qt::WindowFullScreen);
+            else if(keyboardCtrl) fwdEvent();
+            break;
+
+
+        case Qt::Key_R:
+            if(keyboardCtrl) resetTimeEvent();
+            break;
+
+
+        case Qt::Key_S:
+            if((QApplication::keyboardModifiers() & Qt::ControlModifier)
+                    && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
+                openSettingsDialog();
+            else if(keyboardCtrl) setTimeEvent();
+            break;
+
+        case Qt::Key_Minus:
+            if(keyboardCtrl) minusTenEvent();
+            break;
+
+        case Qt::Key_Plus:
+            if(keyboardCtrl) plusTenEvent();
+            break;
+
+
+        case Qt::Key_F1:
+            openAboutDialog();
             break;
 
         case Qt::Key_Escape:
