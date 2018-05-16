@@ -265,6 +265,7 @@ void ListAdapter::unloadPhasesList() {
 
 
 void ListAdapter::initialize() {
+    emit forceInit();
     currentPhase = -1;
 
     phaselistmodel->setHighlightedRow(currentPhase);
@@ -275,7 +276,6 @@ void ListAdapter::initialize() {
     emit phaseLabelChanged("Click the “Start” button to initiate the first phase");
     emit roomClockChanged(true);
     setUpPhaseSwitchingButtons();
-    emit forceInit();
 }
 
 

@@ -65,6 +65,8 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
+    void init();
+
     void toggleStartStopBttn();
     void openSetTimeDialog();
     void updateLCDDisplay();

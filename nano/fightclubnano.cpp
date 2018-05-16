@@ -97,6 +97,8 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), clklgk, SLOT(setRoomclock(bool)));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), this, SLOT(setRoomclock(bool)));
 
+    connect(lstadapt, SIGNAL(forceInit()), this, SLOT(init()));
+
 
     connect(settimedlg, SIGNAL(elapsedTimeSet(int)), clklgk, SLOT(setElapsedTime(int)));
     connect(settimedlg, SIGNAL(remainingTimeSet(int)), clklgk, SLOT(setRemainingTime(int)));
@@ -139,6 +141,18 @@ void FightclubNano::openSettingsDialog() {
         settingsDialogOpen = false;
     }
 }
+
+
+
+void FightclubNano::init() {
+    if(clklgk->isRunning()){
+        clklgk->startOrPause();
+        toggleStartStopBttn();
+    }
+
+    clklgk->resetTime();
+}
+
 
 
 
