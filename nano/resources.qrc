@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>gpl-v3-logo.png</file>
+    </qresource>
+    <qresource>
+        <file>breeze-icons/chronometer-24.svg</file>
+        <file>breeze-icons/chronometer-start-24.svg</file>
+        <file>breeze-icons/chronometer-pause-24.svg</file>
+        <file>breeze-icons/chronometer-restart-24.svg</file>
+        <file>breeze-icons/chronometer-plus-ten-24.svg</file>
+        <file>breeze-icons/chronometer-minus-ten-24.svg</file>
+        <file>breeze-icons/dialog-ok-apply-16.svg</file>
+        <file>breeze-icons/document-open-24.svg</file>
+        <file>breeze-icons/edit-clear-24.svg</file>
+        <file>breeze-icons/go-first-24.svg</file>
+        <file>breeze-icons/go-last-24.svg</file>
+        <file>breeze-icons/go-next-24.svg</file>
+        <file>breeze-icons/go-previous-24.svg</file>
+        <file>breeze-icons/object-locked-16.svg</file>
+        <file>breeze-icons/object-unlocked-16.svg</file>
+    </qresource>
+</RCC>
