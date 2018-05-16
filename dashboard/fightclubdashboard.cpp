@@ -157,7 +157,7 @@ void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {
         container->addWidget(newPage);
     }
 
-    DepartmentBoxWidget *depBox = new DepartmentBoxWidget(signalHelper, this);
+    DepartmentBoxWidget *depBox = new DepartmentBoxWidget(signalHelper, fontScale, this);
     depBox->setMouseTracking(true);
     currentGrid->addWidget(depBox, numberOfDepartments % 5, 0);
 

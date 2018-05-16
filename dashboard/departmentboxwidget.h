@@ -32,7 +32,7 @@ class DepartmentBoxWidget : public QGroupBox
     Q_OBJECT
 
 public:
-    DepartmentBoxWidget(SignalHelper*, QWidget *parent = 0);
+    DepartmentBoxWidget(SignalHelper*, double scale = 1.0, QWidget *parent = 0);
 
 private:
     QString clockTitle;
