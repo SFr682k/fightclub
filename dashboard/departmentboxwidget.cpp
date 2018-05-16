@@ -22,7 +22,7 @@
 #include <QTime>
 
 
-DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent) :
+DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, double scale, QWidget *parent) :
     QGroupBox(parent)
 {
     clockTitle = sigHelp->getTitle();
@@ -31,7 +31,7 @@ DepartmentBoxWidget::DepartmentBoxWidget(SignalHelper *sigHelp, QWidget *parent)
     maximumTime = 1;
     roomclock = true;
 
-    fontScale = 1.0;
+    fontScale = scale;
 
 
     QGridLayout *root = new QGridLayout();
