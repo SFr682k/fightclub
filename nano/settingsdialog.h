@@ -60,7 +60,7 @@ signals:
 
     void loadListOfPhases(QString);
     void loadListOfNanoPhases(QString);
-    void unloadListOfDepartments();
+    void unloadListOfPhases();
 
 private slots:
     void useCustomFont(bool);

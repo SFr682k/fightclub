@@ -27,7 +27,6 @@
 #include <QStandardPaths>
 
 
-
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SettingsDialog)
@@ -37,6 +36,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     fcNano = parent;
     locked = false;
 
+    previousPath = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).value(0);
 
     ui->customFontCBox->setChecked(false);
     ui->chooseFontBox->setEnabled(false);
@@ -123,6 +123,10 @@ void SettingsDialog::loadPhasesList() {
 void SettingsDialog::loadPhasesList(QString file) {
     FilePropertyParser *fpp = new FilePropertyParser(file);
 
+    std::string stdstrpath = file.toStdString();
+    unsigned lastdot = stdstrpath.find_last_of(".");
+    QString fileext = QString::fromStdString(stdstrpath.substr(lastdot + 1, stdstrpath.length()));
+
     if(!((fpp->getFileType() == nullptr)
          || fpp->getFileType().contains("nano", Qt::CaseInsensitive)
          || fpp->getFileType().contains("phases", Qt::CaseInsensitive))) {
@@ -133,10 +137,28 @@ void SettingsDialog::loadPhasesList(QString file) {
     }
 
 
-    if(fpp->getFileType().contains("nano", Qt::CaseInsensitive))
+    if(fpp->getFileType().contains("nano", Qt::CaseInsensitive) && !(fileext.contains("fcphases", Qt::CaseInsensitive)))
         emit loadListOfNanoPhases(file);
-    else if(fpp->getFileType().contains("phases", Qt::CaseInsensitive))
+    else if(fpp->getFileType().contains("phases", Qt::CaseInsensitive) && !(fileext.contains("fcnano", Qt::CaseInsensitive)))
         emit loadListOfPhases(file);
+    else {
+        int clickedBttn =  QMessageBox::critical(this, "Well, that’s strange …",
+                                                 "You’ve loaded a " + fpp->getFileType() + " file, but the file extension is “" + fileext + "”.",
+                                                 "Trust the file header", "Trust the file extension", "Don’t load this file", 2);
+        if(clickedBttn == 2) return;
+
+        if(clickedBttn == 1) {
+            if(fileext.contains("fcnano", Qt::CaseInsensitive))
+                emit loadListOfNanoPhases(file);
+            else if(fileext.contains("fcphases", Qt::CaseInsensitive))
+                emit loadListOfPhases(file);
+        } else if(clickedBttn == 0) {
+            if(fpp->getFileType().contains("nano", Qt::CaseInsensitive))
+                emit loadListOfNanoPhases(file);
+            else if(fpp->getFileType().contains("phases", Qt::CaseInsensitive))
+                emit loadListOfPhases(file);
+        }
+    }
 
 
     ui->phasesListTitle->setText(fpp->getTitle());
@@ -147,7 +169,7 @@ void SettingsDialog::loadPhasesList(QString file) {
 
 
 void SettingsDialog::unloadPhasesList() {
-    emit unloadListOfDepartments();
+    emit unloadListOfPhases();
     ui->unloadPhasesList->setEnabled(false);
     ui->phasesListTitle->setText("No list of phases loaded");
     ui->phasesListDescr->setText(" ");

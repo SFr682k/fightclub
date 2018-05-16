@@ -104,6 +104,7 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
     connect(settingsdlg, SIGNAL(loadListOfPhases(QString)), lstadapt, SLOT(loadPhasesListFromFile(QString)));
     connect(settingsdlg, SIGNAL(loadListOfNanoPhases(QString)), lstadapt, SLOT(loadNanoPhasesListFromFile(QString)));
+    connect(settingsdlg, SIGNAL(unloadListOfPhases()), lstadapt, SLOT(unloadPhasesList()));
 
     connect(settingsdlg, SIGNAL(fontChanged(QString)), this, SLOT(setApplicationFont(QString)));
     connect(settingsdlg, SIGNAL(fontScaleChanged(double)), this, SLOT(setFontScale(double)));
