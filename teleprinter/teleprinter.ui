@@ -52,6 +52,9 @@
         <property name="text">
          <string>&lt;ApplicationName&gt;, &lt;Version&gt;</string>
         </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
+        </property>
         <property name="alignment">
          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
         </property>
@@ -85,6 +88,9 @@
         </property>
         <property name="text">
          <string>&lt;empty&gt;</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
         </property>
         <property name="alignment">
          <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
@@ -120,6 +126,9 @@
       </property>
       <property name="text">
        <string>Waiting for a broadcast</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
