@@ -27,8 +27,8 @@ Following component is considerd as “useful” and may be added soon:
 
  
 ### Installation
- - **Linux:** Users of Linux systems should compile Fightclub binaries from source. An [Installation script for Debian-based distributions](INSTALL.debian) is provided. Users of other distributions may refer to it, however, some minor modifications may be required.
- - **Windows:** For Windows, pre-compiled binaries are available in the [Releases section](https://github.com/SFr682k/fightclub/releases). Please note that the provided Windows binaries are not generated after a new release and therefore might be outdated.
+ - **Linux:** Users of Linux systems should compile Fightclub binaries from source. Installation scripts for [Debian (incl. derivates like Ubuntu)](INSTALL.debian) and [Arch Linux](INSTALL.arch) are provided. Users of other distributions may refer to them, however, some minor modifications may be required.
+ - **Windows:** For Windows, pre-compiled binaries are available in the [Releases section](https://github.com/SFr682k/fightclub/releases). Please note that the provided Windows binaries are not generated after every new release and therefore might be outdated.
 
 
 ### Notes on data files
