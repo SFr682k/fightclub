@@ -86,8 +86,10 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     ui->startstopbttn->setEnabled(false);
     ui->resettimebttn->setEnabled(false);
-    ui->settimebttn->setEnabled(false);
     ui->savetimebttn->setEnabled(false);
+    ui->settimebttn->setEnabled(false);
+    ui->timePlus10bttn->setEnabled(false);
+    ui->timeMinus10bttn->setEnabled(false);
 
 
 
@@ -177,13 +179,20 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(ui->resettimebttn, SIGNAL(clicked()), phpbar, SLOT(resetTimer()));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->resettimebttn, SLOT(setDisabled(bool)));
 
+    connect(ui->savetimebttn, SIGNAL(clicked(bool)), phpbar, SLOT(saveCurrentTime()));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->savetimebttn, SLOT(setDisabled(bool)));
+
     connect(ui->settimebttn, SIGNAL(clicked()), this, SLOT(openSetTimeDialog()));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->settimebttn, SLOT(setDisabled(bool)));
     connect(settimedlg, SIGNAL(elapsedTimeSet(int)), phpbar, SLOT(setElapsedTime(int)));
     connect(settimedlg, SIGNAL(remainingTimeSet(int)), phpbar, SLOT(setRemainingTime(int)));
 
-    connect(ui->savetimebttn, SIGNAL(clicked(bool)), phpbar, SLOT(saveCurrentTime()));
-    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->savetimebttn, SLOT(setDisabled(bool)));
+    connect(ui->timeMinus10bttn, SIGNAL(clicked(bool)), phpbar, SLOT(timeMinus10()));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->timeMinus10bttn, SLOT(setDisabled(bool)));
+
+    connect(ui->timePlus10bttn, SIGNAL(clicked(bool)), phpbar, SLOT(timePlus10()));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->timePlus10bttn, SLOT(setDisabled(bool)));
+
 
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), ui->phaselabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), bcastsrv, SLOT(updatePhaseName(QString)));
