@@ -533,6 +533,9 @@
                <property name="text">
                 <string>&lt;ApplicationName&gt; &lt;Version&gt;</string>
                </property>
+               <property name="textFormat">
+                <enum>Qt::PlainText</enum>
+               </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
@@ -558,6 +561,9 @@
                </property>
                <property name="text">
                 <string>Click the “Start” button to initiate the first phase</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::PlainText</enum>
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
