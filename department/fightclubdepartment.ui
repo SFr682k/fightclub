@@ -844,6 +844,9 @@
              <property name="verticalSpacing">
               <number>3</number>
              </property>
+             <item row="1" column="0">
+              <widget class="QComboBox" name="problemcombobox"/>
+             </item>
              <item row="0" column="0">
               <widget class="QLabel" name="problemlabel">
                <property name="text">
@@ -851,46 +854,17 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QComboBox" name="problemcombobox"/>
-             </item>
              <item row="1" column="1">
-              <widget class="QPushButton" name="problemaccepted">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
+              <widget class="QPushButton" name="toggleEditProblemBttn">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Accept</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
                  <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="problemrejected">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Reject</string>
-               </property>
-               <property name="icon">
-                <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/dialog-cancel-16.svg</normaloff>:/breeze-icons/dialog-cancel-16.svg</iconset>
                </property>
               </widget>
              </item>
@@ -901,18 +875,15 @@
              <property name="verticalSpacing">
               <number>3</number>
              </property>
-             <item row="0" column="1">
+             <item row="0" column="2">
               <widget class="QLabel" name="opplabel">
                <property name="text">
                 <string>Opponent:</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
+             <item row="1" column="4">
               <widget class="QComboBox" name="revcombobox"/>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="oppcombobox"/>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="replabel">
@@ -921,7 +892,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
+             <item row="0" column="4">
               <widget class="QLabel" name="revlabel">
                <property name="text">
                 <string>Reviewer:</string>
@@ -931,23 +902,48 @@
              <item row="1" column="0">
               <widget class="QComboBox" name="repcombobox"/>
              </item>
-             <item row="1" column="3">
-              <widget class="QPushButton" name="submitperfomances">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
+             <item row="1" column="2">
+              <widget class="QComboBox" name="oppcombobox"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="toggleEditRepBttn">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="text">
-                <string>Submit</string>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QPushButton" name="toggleEditOppBttn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/breeze-icons/document-send-16.svg</normaloff>:/breeze-icons/document-send-16.svg</iconset>
+                 <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="QPushButton" name="toggleEditRevBttn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="icon">
+                <iconset resource="resources.qrc">
+                 <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
                </property>
               </widget>
              </item>

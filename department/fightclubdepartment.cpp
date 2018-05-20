@@ -62,16 +62,18 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     ui->listofphases->setEnabled(false);
     ui->problemcombobox->setEnabled(false);
     ui->problemcombobox->view()->setTextElideMode(Qt::ElideRight);
-    ui->problemaccepted->setEnabled(false);
-    ui->problemrejected->setEnabled(false);
+    ui->toggleEditProblemBttn->setEnabled(false);
 
     ui->repcombobox->setEnabled(false);
+    ui->toggleEditRepBttn->setEnabled(false);
     ui->repcombobox->view()->setTextElideMode(Qt::ElideRight);
     ui->oppcombobox->setEnabled(false);
+    ui->toggleEditOppBttn->setEnabled(false);
     ui->oppcombobox->view()->setTextElideMode(Qt::ElideRight);
     ui->revcombobox->setEnabled(false);
+    ui->toggleEditRevBttn->setEnabled(false);
     ui->revcombobox->view()->setTextElideMode(Qt::ElideRight);
-    ui->submitperfomances->setEnabled(false);
+
 
     ui->unloadStagesFile->setEnabled(false);
     ui->unloadPhasesFile->setEnabled(false);
