@@ -420,13 +420,13 @@ void FightclubDepartment::setPhaseProgress(double progress) {
     }
 
     if(progress < 0.75)      ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #32c81e;}");
-    else if(progress <= 1.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #ffbe1e;}");
-    else if(progress <= 2.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #c80000, stop: " + lowerbborder + " #c80000, stop: " + upperbborder + " #ffbe1e, stop: 1 #ffbe1e);}");
-    else if(progress <= 3.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #641e64, stop: " + lowerbborder + " #641e64, stop: " + upperbborder + " #c80000, stop: 1 #c80000);}");
-    else if(progress > 3.0)  ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #641e64;}");
+    else if(progress <  1.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #ffbe1e;}");
+    else if(progress <  2.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #c80000, stop: " + lowerbborder + " #c80000, stop: " + upperbborder + " #ffbe1e, stop: 1 #ffbe1e);}");
+    else if(progress <  3.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #641e64, stop: " + lowerbborder + " #641e64, stop: " + upperbborder + " #c80000, stop: 1 #c80000);}");
+    else if(progress >= 3.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #641e64;}");
 
-    if(progress <= 1.0) ui->progressbar->setValue(((int) (progress*1000)) % 1000);
-    else                ui->progressbar->setValue(1000);
+    if(progress < 1.0) ui->progressbar->setValue(((int) (progress*1000)) % 1000);
+    else               ui->progressbar->setValue(1000);
 }
 
 
