@@ -26,8 +26,6 @@
 #include <QTime>
 
 
-#include <QDebug>
-
 ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     QGraphicsView(parent)
 {
@@ -148,6 +146,7 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     rscene->addItem(secondRing);
 
     roomclockMode = 0;
+    showSHand     = 1;
 }
 
 
@@ -168,18 +167,19 @@ void ThemeClockWidget::resizeEvent(QResizeEvent *event) {
 void ThemeClockWidget::actPie() {
     setScene(nscene);
     
-    bg->setSpanAngle(-round(((double)time*360*16)/(double)maxtime));
+    if(time < maxtime) bg->setSpanAngle(-round(((double)time*360*16)/(double)maxtime));
+    else               bg->setSpanAngle(360*16);
 
     if(time < maxtime*3/4) bg->setBrush(QBrush(QColor(50,200,30)));
     else                   bg->setBrush(QBrush(QColor(255,190,30)));    
 
 
     if(time > maxtime && time < 2*maxtime) mg->setSpanAngle(-round((((double)time-maxtime)*360*16)/(double)maxtime));
-    else if (time > 2*maxtime)             mg->setSpanAngle(360*16);
+    else if(time >= 2*maxtime)             mg->setSpanAngle(360*16);
     else                                   mg->setSpanAngle(0);
     
-    if(time>2*maxtime) fg->setSpanAngle(-round((((double)time-2*(double)maxtime)*360*16)/(double)maxtime));
-    else               fg->setSpanAngle(0);
+    if(time > 2*maxtime) fg->setSpanAngle(-round((((double)time-2*(double)maxtime)*360*16)/(double)maxtime));
+    else                 fg->setSpanAngle(0);
 }
 
 
@@ -193,7 +193,7 @@ void ThemeClockWidget::actRoomclock() {
     double secondHandPos;
 
 
-    switch (roomclockMode) {        
+    switch (roomclockMode*showSHand) {
         default: // Swiss
             if(now.second() < 58) secondHandPos = 180.0 + 6.0*((int) ((now.second()*1000 + now.msec())*60/58)/1000
                                                                + 0.5-0.5*cos((((now.second()*1000 + now.msec())*60/58)%1000)/1000.0*3.14159));
@@ -258,4 +258,7 @@ void ThemeClockWidget::showSecondHand(bool show) {
     secondHand->setVisible(show);
     secondHandBase->setVisible(show);
     secondRing->setVisible(show);
+    showSHand = show? 1 : -1;
+    actRoomclock();
 }
+
