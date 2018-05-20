@@ -194,6 +194,11 @@ QString PhasePBar::timeToFlashingString(int ms) {
 
 bool PhasePBar::isRunning()        { return running; }
 bool PhasePBar::isRoomclock()      { return roomclock; }
-int  PhasePBar::getElapsedTime()   { return time->elapsed(); }
+
+int  PhasePBar::getElapsedTime()   {
+    if(running) return time->elapsed();
+    else        return savedTime;
+}
+
 int  PhasePBar::getMaxTime()       { return maximumTime; }
 int  PhasePBar::getLastSavedTime() { return lastSavedTime; }

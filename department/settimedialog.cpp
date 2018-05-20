@@ -58,7 +58,7 @@ void SetTimeDialog::resetValues() {
 
 
 void SetTimeDialog::setElapsedTime(int elapsedms)
-    { ui->etimeselbox->setTime(QTime(0,0,0).addMSecs(elapsedms)); }
+    { ui->etimeselbox->setTime(QTime(0,0,0).addMSecs(elapsedms - (elapsedms % 1000))); }
 
 void SetTimeDialog::setMaximumRTime(int maxrtms)
     { ui->rtimeselbox->setMaximumTime(QTime(0,0,0).addMSecs(maxrtms)); }
