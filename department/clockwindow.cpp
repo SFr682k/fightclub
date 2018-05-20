@@ -41,10 +41,10 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
     QTimer *acttimer = new QTimer();
     connect(acttimer, SIGNAL(timeout()), ui->clockwidget, SLOT(act()));
-    acttimer->start(30);
+    acttimer->start(16);
 
     refreshtimer = new QTimer();
-    refreshtimer->start(30);
+    refreshtimer->start(33);
 
     connect(refreshtimer, SIGNAL(timeout()), this, SLOT(updateTime()));
 

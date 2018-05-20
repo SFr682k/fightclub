@@ -224,18 +224,21 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(lstadapt, SIGNAL(currentProblemChanged(int)), this, SLOT(propagateProblemsList(int)));
     connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), bcastsrv, SLOT(updateProblem(QString)));
     connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clockwindow, SLOT(problemChanged(QString)));
-
+    connect(ui->toggleEditProblemBttn, SIGNAL(clicked(bool)), this, SLOT(editProblemBttnToggled()));
 
     connect(lstadapt, SIGNAL(currentPerformersChanged(QString,QString,QString)), this, SLOT(performersChanged(QString,QString,QString)));
 
     connect(ui->repcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
     connect(ui->repcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reporterChanged(QString)));
+    connect(ui->toggleEditRepBttn, SIGNAL(clicked(bool)), this, SLOT(editRepBttnToggled()));
 
     connect(ui->oppcombobox, SIGNAL(activated(int)), this, SLOT(updateOpponentModel(int)));
     connect(ui->oppcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(opponentChanged(QString)));
+    connect(ui->toggleEditOppBttn, SIGNAL(clicked(bool)), this, SLOT(editOppBttnToggled()));
 
     connect(ui->revcombobox, SIGNAL(activated(int)), this, SLOT(updateReviewerModel(int)));
     connect(ui->revcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reviewerChanged(QString)));
+    connect(ui->toggleEditRevBttn, SIGNAL(clicked(bool)), this, SLOT(editRevBttnToggled()));
 
     connect(lstadapt, SIGNAL(performersChanged(QString)), ui->performerslabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(performersChanged(QString)), bcastsrv, SLOT(updatePerformers(QString)));
@@ -444,9 +447,19 @@ void FightclubDepartment::setPhaseProgress(double progress) {
 void FightclubDepartment::propagateProblemsList(int problem) {
     QAbstractTableModel* model = probadapt->getProblemList(problem);
 
-    ui->problemcombobox->setEnabled(model->rowCount() > 1);
     ui->problemcombobox->setModel(model);
+
+    ui->problemcombobox->setEnabled(model->rowCount() > 1);
+    ui->toggleEditProblemBttn->setEnabled(model->rowCount() > 1);
+    ui->toggleEditProblemBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
+
     if(problem < 0) ui->problemcombobox->setCurrentIndex(-1);
+}
+
+void FightclubDepartment::editProblemBttnToggled() {
+    ui->problemcombobox->setEnabled(!ui->problemcombobox->isEnabled());
+    ui->toggleEditProblemBttn->setIcon(QIcon(QString(":/breeze-icons/")
+        .append(ui->problemcombobox->isEnabled()? "dialog-ok-apply" : "document-edit").append("-16.svg")));
 }
 
 
@@ -458,8 +471,16 @@ void FightclubDepartment::performersChanged(QString rep, QString opp, QString re
     repcomboboxinit = rep; oppcomboboxinit = opp; revcomboboxinit = rev;
 
     ui->repcombobox->setEnabled(ui->repcombobox->model()->rowCount() > 1);
+    ui->toggleEditRepBttn->setEnabled(ui->revcombobox->model()->rowCount() > 1);
+    ui->toggleEditRepBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
+
     ui->oppcombobox->setEnabled(ui->oppcombobox->model()->rowCount() > 1);
+    ui->toggleEditOppBttn->setEnabled(ui->oppcombobox->model()->rowCount() > 1);
+    ui->toggleEditOppBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
+
     ui->revcombobox->setEnabled(ui->revcombobox->model()->rowCount() > 1);
+    ui->toggleEditRevBttn->setEnabled(ui->repcombobox->model()->rowCount() > 1);
+    ui->toggleEditRevBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
 }
 
 
@@ -471,6 +492,13 @@ void FightclubDepartment::updateReporterModel(int index) {
     repcomboboxinit = nullptr;
 }
 
+void FightclubDepartment::editRepBttnToggled() {
+    ui->repcombobox->setEnabled(!ui->repcombobox->isEnabled());
+    ui->toggleEditRepBttn->setIcon(QIcon(QString(":/breeze-icons/")
+        .append(ui->repcombobox->isEnabled()? "dialog-ok-apply" : "document-edit").append("-16.svg")));
+}
+
+
 void FightclubDepartment::updateOpponentModel(int index) {
     if((oppcomboboxinit == nullptr) || (index == 0)) return;
 
@@ -479,12 +507,25 @@ void FightclubDepartment::updateOpponentModel(int index) {
     oppcomboboxinit = nullptr;
 }
 
+void FightclubDepartment::editOppBttnToggled() {
+    ui->oppcombobox->setEnabled(!ui->oppcombobox->isEnabled());
+    ui->toggleEditOppBttn->setIcon(QIcon(QString(":/breeze-icons/")
+        .append(ui->oppcombobox->isEnabled()? "dialog-ok-apply" : "document-edit").append("-16.svg")));
+}
+
+
 void FightclubDepartment::updateReviewerModel(int index) {
     if((revcomboboxinit == nullptr) || (index == 0)) return;
 
     ui->revcombobox->setModel(teamadapt->getPerformersList(revcomboboxinit, false));
     ui->revcombobox->setCurrentIndex(index -1);
     revcomboboxinit = nullptr;
+}
+
+void FightclubDepartment::editRevBttnToggled() {
+    ui->revcombobox->setEnabled(!ui->revcombobox->isEnabled());
+    ui->toggleEditRevBttn->setIcon(QIcon(QString(":/breeze-icons/").append(ui->revcombobox->isEnabled()?
+                                                     "dialog-ok-apply" : "document-edit").append("-16.svg")));
 }
 
 

@@ -89,11 +89,15 @@ private slots:
     void setCurrPhaseProps(bool,bool,bool);
 
     void propagateProblemsList(int);
+    void editProblemBttnToggled();
 
     void performersChanged(QString, QString, QString);
     void updateReporterModel(int);
+    void editRepBttnToggled();
     void updateOpponentModel(int);
+    void editOppBttnToggled();
     void updateReviewerModel(int);
+    void editRevBttnToggled();
 
     void setBroadcastIP();
     void setBroadcastPort();
