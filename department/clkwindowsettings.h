@@ -33,6 +33,11 @@ public:
     explicit ClkWindowSettings(QWidget *parent = 0);
     ~ClkWindowSettings();
 
+    QString getFontFamily();
+    double  getFontScale();
+    int     getRClkBehavior();
+    bool    getShowRClkSecondHand();
+
 private:
     Ui::ClkWindowSettings *ui;
 

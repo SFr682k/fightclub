@@ -323,6 +323,11 @@ void FightclubDepartment::openClockWindow() {
     clkwindow->problemChanged(ui->problemcombobox->currentText());
     clkwindow->performersChanged(ui->performerslabel->text());
 
+    clkwindow->setWindowFont(clkwindowsettings->getFontFamily());
+    clkwindow->setFontScale(clkwindowsettings->getFontScale());
+    clkwindow->showRclockSecondHand(clkwindowsettings->getShowRClkSecondHand());
+    clkwindow->setRclockBehavior(clkwindowsettings->getRClkBehavior());
+
     connect(ui->actionClose_Clock_Windows, SIGNAL(triggered(bool)), clkwindow, SLOT(close()));
     connect(this, SIGNAL(closeAllClockWindows()), clkwindow, SLOT(close()));
 

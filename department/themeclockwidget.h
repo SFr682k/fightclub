@@ -48,6 +48,7 @@ private:
     QGraphicsPolygonItem *secondHand;
     QGraphicsPolygonItem *secondHandBase;
     QGraphicsEllipseItem *secondRing;
+    QGraphicsPolygonItem *altSecondHand;
 
     QGraphicsEllipseItem *fg, *mg, *bg, *ring, *focus, *focus2;
     int time, maxtime;

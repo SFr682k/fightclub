@@ -93,6 +93,21 @@ void ClkWindowSettings::setSmoothRClock(bool set) { if(set) emit rclockBehaviorC
 void ClkWindowSettings::setSharpRClock(bool set)  { if(set) emit rclockBehaviorChanged(2); }
 
 
+QString ClkWindowSettings::getFontFamily()
+    { return (ui->customFontCBox->isChecked()?  ui->chooseFontBox->currentText() : nullptr); }
+double  ClkWindowSettings::getFontScale()
+    { return (ui->customScaleCBox->isChecked()? ui->chooseScaleBox->value()/100.0 : 1.0); }
+
+int  ClkWindowSettings::getRClkBehavior() {
+    if(ui->swissRClock->isChecked())       return 0;
+    else if(ui->smoothRClock->isChecked()) return 1;
+    else if(ui->sharpRClock->isChecked())  return 2;
+
+    return 0;
+}
+
+bool ClkWindowSettings::getShowRClkSecondHand() { return ui->showSecHand->isChecked(); }
+
 
 
 

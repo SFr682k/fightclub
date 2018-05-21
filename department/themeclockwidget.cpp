@@ -121,6 +121,14 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     secondRing->setPen(ringPen);
     secondRing->setPos(150,150);
     
+    QPolygonF altSecondHandPolygon;
+    altSecondHandPolygon << QPointF(-1.5, 144) << QPointF(1.5, 144) << QPointF(4, -40) << QPointF(-4, -40);
+
+    altSecondHand = new QGraphicsPolygonItem(altSecondHandPolygon);
+    altSecondHand->setBrush(QBrush(QColor(180,0,0)));
+    altSecondHand->setPen(QPen(QColor(0,0,0,0)));
+    altSecondHand->setPos(150,150);
+
     focus2 = new QGraphicsEllipseItem(0,0,300,300);
     focus2->setPen(QPen(QColor(0,0,0,0)));
     rscene->addItem(focus2);
@@ -144,6 +152,9 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     rscene->addItem(secondHand);
     rscene->addItem(secondHandBase);
     rscene->addItem(secondRing);
+
+    rscene->addItem(altSecondHand);
+    altSecondHand->setVisible(false);
 
     roomclockMode = 0;
     showSHand     = 1;
@@ -233,6 +244,7 @@ void ThemeClockWidget::actRoomclock() {
     secondHand->setRotation(secondHandPos);
     secondHandBase->setRotation(secondHandPos);
     secondRing->setRotation(secondHandPos);
+    altSecondHand->setRotation(secondHandPos);
 }
 
 
@@ -252,12 +264,23 @@ int  ThemeClockWidget::getMaximumTime() { return maxtime; }
 bool ThemeClockWidget::isRoomclock()    { return roomclock; }
 
 
-void ThemeClockWidget::setRoomclockMode(int mode) { roomclockMode = mode; }
+void ThemeClockWidget::setRoomclockMode(int mode) {
+    roomclockMode = mode;
+
+    secondHand->setVisible((showSHand > 0) && (roomclockMode != 2));
+    secondHandBase->setVisible((showSHand > 0) && (roomclockMode != 2));
+    secondRing->setVisible((showSHand > 0) && (roomclockMode != 2));
+
+    altSecondHand->setVisible((showSHand > 0) && (roomclockMode == 2));
+
+    actRoomclock();
+}
 
 void ThemeClockWidget::showSecondHand(bool show) {
-    secondHand->setVisible(show);
-    secondHandBase->setVisible(show);
-    secondRing->setVisible(show);
+    secondHand->setVisible(show && (roomclockMode != 2));
+    secondHandBase->setVisible(show && (roomclockMode != 2));
+    secondRing->setVisible(show && (roomclockMode != 2));
+    altSecondHand->setVisible(show && (roomclockMode == 2));
     showSHand = show? 1 : -1;
     actRoomclock();
 }
