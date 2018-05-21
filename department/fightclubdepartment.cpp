@@ -100,9 +100,19 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     bcastsrv = new BroadcastServer(this, QHostAddress("127.0.0.1"), 45454, 12345);
     ui->bcastActivated->setChecked(false);
-    ui->bcastips->setEnabled(false);
-    ui->bcastsettings->setEnabled(false);
-    ui->localhost->setChecked(true);
+    ui->listOfBroadcasts->setEnabled(false);
+    ui->bcastConfigBox->setEnabled(false);
+
+    ui->selectIPCombobox->addItem("Local machine", QVariant(IP_LOCAL));
+    ui->selectIPCombobox->addItem("Local network", QVariant(IP_BCAST));
+    ui->selectIPCombobox->addItem("Custom machine", QVariant(IP_CUSTOM));
+    updateBcastIPBoxes();
+
+    // disable not implemented stuff
+    ui->lockBcastTabBttn->setEnabled(false);
+    ui->addBroadcast->setEnabled(false);
+    ui->deleteBroadcast->setEnabled(false);
+
     ui->bcastportsel->setValue(45454);
     ui->bcastidsel->setValue(12345);
 
@@ -233,18 +243,11 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     // BROADCAST TAB --------------------------------------------------------------------
 
     connect(ui->bcastActivated, SIGNAL(clicked(bool)), bcastsrv, SLOT(enableBroadcast(bool)));
-    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastips, SLOT(setEnabled(bool)));
-    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastsettings, SLOT(setEnabled(bool)));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->listOfBroadcasts, SLOT(setEnabled(bool)));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastConfigBox, SLOT(setEnabled(bool)));
 
-    connect(ui->bcastipapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastIP()));
-    connect(ui->bcastportapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastPort()));
-    connect(ui->bcastidapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastID()));
-
-    connect(ui->customippt1, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
-    connect(ui->customippt2, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
-    connect(ui->customippt3, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
-    connect(ui->customippt4, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
-
+    connect(ui->selectIPCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateBcastIPBoxes()));
+    connect(ui->applyBcastSettings, SIGNAL(clicked(bool)), this, SLOT(applyBcastSettings()));
 
 
 
@@ -543,23 +546,36 @@ void FightclubDepartment::editRevBttnToggled() {
 
 // BROADCAST TAB ------------------------------------------------------------------------
 
-void FightclubDepartment::setBroadcastIP() {
-    QString bcastIP;
-    if(ui->localhost->isChecked())      bcastIP = "127.0.0.1";
-    else if(ui->everybody->isChecked()) bcastIP = "255.255.255.255";
-    else if(ui->customip->isChecked()) {
-        bcastIP = QString::number(ui->customippt1->value()) + "."
-                  + QString::number(ui->customippt2->value()) + "."
-                  + QString::number(ui->customippt3->value()) + "."
-                  + QString::number(ui->customippt4->value());
+void FightclubDepartment::updateBcastIPBoxes() {
+    ui->customippt1->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+    ui->customippt2->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+    ui->customippt3->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+    ui->customippt4->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+
+    int tmp1, tmp2, tmp3, tmp4;
+
+    switch(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt()) {
+        case IP_LOCAL:  tmp1 = 127, tmp2 =   0, tmp3 =   0, tmp4 =   1; break;
+        case IP_BCAST:  tmp1 = 255, tmp2 = 255, tmp3 = 255, tmp4 = 255; break;
+        case IP_CUSTOM: tmp1 = 192, tmp2 = 168, tmp3 =   0, tmp4 =   1; break;
     }
-    bcastsrv->setBroadcastAddress(bcastIP);
+
+    ui->customippt1->setValue(tmp1);
+    ui->customippt2->setValue(tmp2);
+    ui->customippt3->setValue(tmp3);
+    ui->customippt4->setValue(tmp4);
 }
 
-void FightclubDepartment::setBroadcastPort() { bcastsrv->setBroadcastPort(ui->bcastportsel->value()); }
-void FightclubDepartment::setBroadcastID()   { bcastsrv->setSignature(ui->bcastidsel->value()); }
+void FightclubDepartment::applyBcastSettings() {
+    QString bcastIP = QString::number(ui->customippt1->value()) + "."
+                    + QString::number(ui->customippt2->value()) + "."
+                    + QString::number(ui->customippt3->value()) + "."
+                    + QString::number(ui->customippt4->value());
 
-void FightclubDepartment::checkCustomIPRbttn() { ui->customip->setChecked(true); }
+    bcastsrv->setBroadcastAddress(bcastIP);
+    bcastsrv->setBroadcastPort(ui->bcastportsel->value());
+    bcastsrv->setSignature(ui->bcastidsel->value());
+}
 
 
 

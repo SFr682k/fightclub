@@ -61,6 +61,8 @@ private:
 
     bool exitEnabled, toggleFscreenEnabled;
 
+    enum {IP_LOCAL, IP_BCAST, IP_CUSTOM};
+
     bool continueAndInit();
 
 protected:
@@ -97,10 +99,8 @@ private slots:
     void updateReviewerModel(int);
     void editRevBttnToggled();
 
-    void setBroadcastIP();
-    void setBroadcastPort();
-    void setBroadcastID();
-    void checkCustomIPRbttn();
+    void updateBcastIPBoxes();
+    void applyBcastSettings();
 
     void openStagesFile();
     void unloadStagesFile();
