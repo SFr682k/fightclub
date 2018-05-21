@@ -109,7 +109,9 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     lstadapt = new ListAdapter();
     phpbar = new PhasePBar();
     probadapt = new ProblemAdapter();
+
     settimedlg = new SetTimeDialog(this);
+    connect(phpbar, SIGNAL(lastAutosavedTimeUpdate(int)), settimedlg, SLOT(updateAutosavedTime(int)));
 
     teamadapt = new TeamAdapter();
     lstadapt->setTeamAdapter(teamadapt);

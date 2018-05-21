@@ -38,18 +38,21 @@ public:
     void setSavedTime(int);
     ~SetTimeDialog();
 
+private:
+    Ui::SetTimeDialog *ui;
+
 signals:
     void elapsedTimeSet(int);
     void remainingTimeSet(int);
+
+public slots:
+    void updateAutosavedTime(int);
 
 private slots:
     void setTime();
     void checkETimeRbttn();
     void checkRTimeRbttn();
     void checkSTimeRbttn();
-
-private:
-    Ui::SetTimeDialog *ui;
 };
 
 #endif // SETTIMEDIALOG_H

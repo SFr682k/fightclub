@@ -49,6 +49,8 @@ void SetTimeDialog::setTime() {
         emit remainingTimeSet(ui->rtimeselbox->time().msecsSinceStartOfDay());
     else if(ui->stimerbox->isChecked())
         emit elapsedTimeSet(ui->stimeselbox->time().msecsSinceStartOfDay());
+    else if(ui->atimerbox->isChecked())
+        emit elapsedTimeSet(ui->atimeselbox->time().msecsSinceStartOfDay());
 }
 
 void SetTimeDialog::resetValues() {
@@ -69,4 +71,11 @@ void SetTimeDialog::setSavedTime(int stimems) {
 
     if(stimems < 0) ui->stimeselbox->setTime(QTime(0,0,0));
     else            ui->stimeselbox->setTime(QTime(0,0,0).addMSecs(stimems));
+}
+
+void SetTimeDialog::updateAutosavedTime(int autosavems) {
+    ui->atimerbox->setEnabled(autosavems >= 0);
+
+    if(autosavems < 0) ui->atimeselbox->setTime(QTime(0,0,0));
+    else               ui->atimeselbox->setTime(QTime(0,0,0).addMSecs(autosavems));
 }

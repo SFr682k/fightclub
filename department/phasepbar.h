@@ -42,7 +42,7 @@ private:
     QTimer *refreshTimer;
     bool running;
     bool roomclock;
-    int savedTime, lastSavedTime;
+    int savedTime, lastSavedTime, lastAutosavedTime;
     int maximumTime;
     int overtime;
     QString timeToString(int);
@@ -51,6 +51,7 @@ private:
 signals:
     void elapsedTimeUpdate(int);
     void elapsedTimeUpdate(QString);
+    void lastAutosavedTimeUpdate(int);
     void maximumTimeUpdate(QString);
     void phaseProgressUpdate(double);
     void timeRestarted(int);
