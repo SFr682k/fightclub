@@ -19,6 +19,7 @@
 #include "fightclubdepartment.h"
 #include "ui_fightclubdepartment.h"
 
+#include "clockwindow.h"
 #include "filepropertyparser.h"
 
 #include <QFileDialog>
@@ -119,23 +120,10 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(ui->actionAbout, SIGNAL(triggered()), aboutdlg, SLOT(exec()));
 
 
-    clockwindow = new ClockWindow();
-    ui->actionClose_Clock_Window->setEnabled(false);
-    ui->actionClockwindowFullscreen->setEnabled(false);
-    ui->actionClkWindowSettings->setEnabled(false);
-    connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
     connect(ui->actionOpen_Clock_Window, SIGNAL(triggered(bool)), this, SLOT(openClockWindow()));
-    connect(ui->actionClockwindowFullscreen, SIGNAL(toggled(bool)), clockwindow, SLOT(setFullscreen(bool)));
-    connect(clockwindow, SIGNAL(fullscreenChanged(bool)), ui->actionClockwindowFullscreen, SLOT(setChecked(bool)));
-    connect(ui->actionClose_Clock_Window, SIGNAL(triggered(bool)), clockwindow, SLOT(close()));
-
 
     clkwindowsettings = new ClkWindowSettings(this);
     connect(ui->actionClkWindowSettings, SIGNAL(triggered(bool)), clkwindowsettings, SLOT(exec()));
-    connect(clkwindowsettings, SIGNAL(fontChanged(QString)), clockwindow, SLOT(setWindowFont(QString)));
-    connect(clkwindowsettings, SIGNAL(fontScaleChanged(double)), clockwindow, SLOT(setFontScale(double)));
-    connect(clkwindowsettings, SIGNAL(showRclockSecondHand(bool)), clockwindow, SLOT(showRclockSecondHand(bool)));
-    connect(clkwindowsettings, SIGNAL(rclockBehaviorChanged(int)), clockwindow, SLOT(setRclockBehavior(int)));
 
 
     connect(lstadapt, SIGNAL(forceInit()), this, SLOT(initialize()));
@@ -198,18 +186,15 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), ui->phaselabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), bcastsrv, SLOT(updatePhaseName(QString)));
-    connect(lstadapt, SIGNAL(phaseNameChanged(QString)), clockwindow, SLOT(phaseNameChanged(QString)));
 
     connect(phpbar, SIGNAL(elapsedTimeUpdate(QString)), ui->elapsedtime, SLOT(display(QString)));
     connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), bcastsrv, SLOT(updateElapsedTime(int)));
-    connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), clockwindow, SLOT(updateElapsedTime(int)));
     connect(lstadapt, SIGNAL(elapsedTimeChanged(int)), phpbar, SLOT(setElapsedTime(int)));
 
     connect(phpbar, SIGNAL(phaseProgressUpdate(double)), this, SLOT(setPhaseProgress(double)));
 
     connect(lstadapt, SIGNAL(maximumTimeChanged(int)), phpbar, SLOT(setMaximumTime(int)));
     connect(lstadapt, SIGNAL(maximumTimeChanged(int)), bcastsrv, SLOT(updateMaximumTime(int)));
-    connect(lstadapt, SIGNAL(maximumTimeChanged(int)), clockwindow, SLOT(updateMaximumTime(int)));
     connect(phpbar, SIGNAL(maximumTimeUpdate(QString)), ui->maxtime, SLOT(display(QString)));
 
     connect(phpbar, SIGNAL(overtimed(int)), lstadapt, SLOT(handleOvertime(int)));
@@ -219,11 +204,9 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), phpbar, SLOT(setRoomclock(bool)));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), bcastsrv, SLOT(updateRClockState(bool)));
-    connect(lstadapt, SIGNAL(roomClockChanged(bool)), clockwindow, SLOT(toggleRoomclock(bool)));
 
     connect(lstadapt, SIGNAL(currentProblemChanged(int)), this, SLOT(propagateProblemsList(int)));
     connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), bcastsrv, SLOT(updateProblem(QString)));
-    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clockwindow, SLOT(problemChanged(QString)));
     connect(ui->toggleEditProblemBttn, SIGNAL(clicked(bool)), this, SLOT(editProblemBttnToggled()));
 
     connect(lstadapt, SIGNAL(currentPerformersChanged(QString,QString,QString)), this, SLOT(performersChanged(QString,QString,QString)));
@@ -242,7 +225,6 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     connect(lstadapt, SIGNAL(performersChanged(QString)), ui->performerslabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(performersChanged(QString)), bcastsrv, SLOT(updatePerformers(QString)));
-    connect(lstadapt, SIGNAL(performersChanged(QString)), clockwindow, SLOT(performersChanged(QString)));
 
 
 
@@ -280,7 +262,6 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 FightclubDepartment::~FightclubDepartment() {
     delete ui;
     delete aboutdlg;
-    delete clockwindow;
     delete settimedlg;
 }
 
@@ -319,19 +300,33 @@ bool FightclubDepartment::continueAndInit() {
 
 
 void FightclubDepartment::openClockWindow() {
-    clockwindow->show();
-    ui->actionOpen_Clock_Window->setEnabled(false);
-    ui->actionClockwindowFullscreen->setEnabled(true);
-    ui->actionClkWindowSettings->setEnabled(true);
-    ui->actionClose_Clock_Window->setEnabled(true);
-}
+    ClockWindow *clkwindow = new ClockWindow();
 
-void FightclubDepartment::clockWindowClosed() {
-    ui->actionOpen_Clock_Window->setEnabled(true);
-    ui->actionClockwindowFullscreen->setChecked(false);
-    ui->actionClockwindowFullscreen->setEnabled(false);
-    ui->actionClkWindowSettings->setEnabled(false);
-    ui->actionClose_Clock_Window->setEnabled(false);
+    connect(lstadapt, SIGNAL(phaseNameChanged(QString)), clkwindow, SLOT(phaseNameChanged(QString)));
+    connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), clkwindow, SLOT(updateElapsedTime(int)));
+    connect(lstadapt, SIGNAL(maximumTimeChanged(int)), clkwindow, SLOT(updateMaximumTime(int)));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), clkwindow, SLOT(toggleRoomclock(bool)));
+    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clkwindow, SLOT(problemChanged(QString)));
+    connect(lstadapt, SIGNAL(performersChanged(QString)), clkwindow, SLOT(performersChanged(QString)));
+
+    connect(clkwindowsettings, SIGNAL(fontChanged(QString)), clkwindow, SLOT(setWindowFont(QString)));
+    connect(clkwindowsettings, SIGNAL(fontScaleChanged(double)), clkwindow, SLOT(setFontScale(double)));
+    connect(clkwindowsettings, SIGNAL(showRclockSecondHand(bool)), clkwindow, SLOT(showRclockSecondHand(bool)));
+    connect(clkwindowsettings, SIGNAL(rclockBehaviorChanged(int)), clkwindow, SLOT(setRclockBehavior(int)));
+
+    clkwindow->updateElapsedTime(phpbar->getElapsedTime());
+    clkwindow->updateMaximumTime(phpbar->getMaxTime());
+    clkwindow->toggleRoomclock(phpbar->isRoomclock());
+
+    // TODO: Find a better solution for obtaining the current phase name?
+    clkwindow->phaseNameChanged(ui->phaselabel->text());
+    clkwindow->problemChanged(ui->problemcombobox->currentText());
+    clkwindow->performersChanged(ui->performerslabel->text());
+
+    connect(ui->actionClose_Clock_Windows, SIGNAL(triggered(bool)), clkwindow, SLOT(close()));
+    connect(this, SIGNAL(closeAllClockWindows()), clkwindow, SLOT(close()));
+
+    clkwindow->show();
 }
 
 
@@ -745,7 +740,7 @@ void FightclubDepartment::closeEvent(QCloseEvent *event) {
             "Confirmation requested",
             "Do you really want to close Fightclub Department?",
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
-        clockwindow->kill();
+        emit closeAllClockWindows();
         event->accept();
     } else event->ignore();
 }

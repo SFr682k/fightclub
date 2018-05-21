@@ -26,7 +26,6 @@
 #include "aboutdialog.h"
 #include "broadcastserver.h"
 #include "clkwindowsettings.h"
-#include "clockwindow.h"
 #include "listadapter.h"
 #include "phasepbar.h"
 #include "problemadapter.h"
@@ -50,7 +49,6 @@ private:
     AboutDialog *aboutdlg;
     BroadcastServer *bcastsrv;
     ClkWindowSettings *clkwindowsettings;
-    ClockWindow *clockwindow;
     ListAdapter *lstadapt;
     PhasePBar *phpbar;
     ProblemAdapter *probadapt;
@@ -72,10 +70,10 @@ protected:
 
 signals:
     void switchStages(bool);
+    void closeAllClockWindows();
 
 private slots:
     void openClockWindow();
-    void clockWindowClosed();
 
     void switchBetweenStages(bool);
     void toggleStartStopBttn();
