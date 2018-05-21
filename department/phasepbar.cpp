@@ -78,29 +78,27 @@ void PhasePBar::saveCurrentTime() {
 
 
 void PhasePBar::timePlus10() {
-    if(running) *time = time->addMSecs(-10000);
-    else        savedTime += 10000;
+    *time = time->addMSecs(-10000);
+    savedTime += 10000;
 
     if(!roomclock) {
         emit elapsedTimeUpdate(running? time->elapsed() : savedTime);
-        emit elapsedTimeUpdate(timeToString(running? time->elapsed() : savedTime));
+        pulse();
         emit overtimed((running? time->elapsed() : savedTime) - (maximumTime + overtime));
         emit phaseProgressUpdate((running? time->elapsed() : savedTime)*1.0/maximumTime);
     }
 }
 
 void PhasePBar::timeMinus10() {
-    if(running) {
-        if(time->elapsed() > 10000) *time = time->addMSecs(10000);
-        else                        time->restart();
-    } else {
-        if(savedTime > 10000) savedTime -= 10000;
-        else                  savedTime  = 0;
-    }
+    if(time->elapsed() > 10000) *time = time->addMSecs(10000);
+    else                        time->restart();
+
+    if(savedTime > 10000) savedTime -= 10000;
+    else                  savedTime  = 0;
 
     if(!roomclock) {
         emit elapsedTimeUpdate(running? time->elapsed() : savedTime);
-        emit elapsedTimeUpdate(timeToString(running? time->elapsed() : savedTime));
+        pulse();
         emit overtimed((running? time->elapsed() : savedTime) - (maximumTime + overtime));
         emit phaseProgressUpdate((running? time->elapsed() : savedTime)*1.0/maximumTime);
     }
