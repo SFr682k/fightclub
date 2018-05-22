@@ -25,19 +25,34 @@
 #include <QObject>
 #include <QtNetwork/QUdpSocket>
 
+#include "broadcastlistmodel.h"
+
+
 class BroadcastServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit BroadcastServer(QObject *parent = 0, QHostAddress addr = QHostAddress::Broadcast, unsigned int port = 45454, unsigned int signature = 12345);
+    explicit BroadcastServer(QObject *parent = 0);
     ~BroadcastServer();
+    void emitModel();
+
+    Broadcast getBroadcast(int);
+
+private:
+    BroadcastListModel *broadcastlistmodel;
+    QUdpSocket *udpSocket;
+    QHostAddress broadcastAddress;
+    QString phasename, problem, performers;
+    int elapsedTime, maximumTime;
+    bool roomclock;
+    unsigned int port, signature;
 
 signals:
     void socketStatus();
     void bcastRequest();
+    void bcastTableModelChanged(QAbstractTableModel*);
 
 public slots:
-    void enableBroadcast(bool);
     void updatePhaseName(QString);
     void updateProblem(QString);
     void updatePerformers(QString);
@@ -48,17 +63,11 @@ public slots:
     void setBroadcastPort(unsigned int);
     void setSignature(unsigned int);
 
+    void addBcast(QString, int, int);
+
 private slots:
     void broadcast();
 
-private:
-    bool broadcastEnabled;
-    QUdpSocket *udpSocket;
-    QHostAddress broadcastAddress;
-    QString phasename, problem, performers;
-    int elapsedTime, maximumTime;
-    bool roomclock;
-    unsigned int port, signature;
 };
 
 #endif // BROADCASTSERVER_H

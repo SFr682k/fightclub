@@ -73,31 +73,35 @@ QVariant StageListModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
         Stage stage = listofstages.at(index.row());
 
-        if(index.column() == 0) {
-            if(stage.getRoomclockstage() == nullptr) {
-                QString stageoview;
-                stageoview = stage.getLabel();
-                if(teamadapter != nullptr) {
-                    if(stage.getReporterID() != nullptr) {
-                        stageoview.append(QString("  —  "));
-                        stageoview.append(teamadapter->getTeamFromID(stage.getReporterID()));
+        switch(index.column()) {
+            case 0:
+                if(stage.getRoomclockstage() == nullptr) {
+                    QString stageoview;
+                    stageoview = stage.getLabel();
+                    if(teamadapter != nullptr) {
+                        if(stage.getReporterID() != nullptr) {
+                            stageoview.append(QString("  —  "));
+                            stageoview.append(teamadapter->getTeamFromID(stage.getReporterID()));
+                        }
+                        if(stage.getOpponentID() != nullptr) {
+                            stageoview.append(QString("  <>  "));
+                            stageoview.append(teamadapter->getTeamFromID(stage.getOpponentID()));
+                        }
+                        if(stage.getReviewerID() != nullptr) {
+                            stageoview.append(QString("  <>  "));
+                            stageoview.append(teamadapter->getTeamFromID(stage.getReviewerID()));
+                        }
                     }
-                    if(stage.getOpponentID() != nullptr) {
-                        stageoview.append(QString("  <>  "));
-                        stageoview.append(teamadapter->getTeamFromID(stage.getOpponentID()));
-                    }
-                    if(stage.getReviewerID() != nullptr) {
-                        stageoview.append(QString("  <>  "));
-                        stageoview.append(teamadapter->getTeamFromID(stage.getReviewerID()));
-                    }
-                }
-                return stageoview;
-            } else return stage.getRoomclockstage();}
-        else if(index.column() == 1) return stage.getRoomclockstage();
-        else if(index.column() == 2) return stage.getProblem();
-        else if(index.column() == 3) return stage.getReporterID();
-        else if(index.column() == 4) return stage.getOpponentID();
-        else if(index.column() == 5) return stage.getReviewerID();
+                    return stageoview;
+                } else return stage.getRoomclockstage();
+
+            case 1:  return stage.getRoomclockstage();
+            case 2:  return stage.getProblem();
+            case 3:  return stage.getReporterID();
+            case 4:  return stage.getOpponentID();
+            case 5:  return stage.getReviewerID();
+            default: return QVariant();
+        }
     }
 
     if (role == Qt::BackgroundRole) {

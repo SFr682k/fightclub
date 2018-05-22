@@ -21,6 +21,7 @@
 
 #include <QMainWindow>
 #include <QAbstractTableModel>
+#include <QItemSelection>
 #include <QKeyEvent>
 
 #include "aboutdialog.h"
@@ -61,7 +62,8 @@ private:
 
     bool exitEnabled, toggleFscreenEnabled;
 
-    enum {IP_LOCAL, IP_BCAST, IP_CUSTOM};
+    QAbstractTableModel *bcasttablemodel;
+    enum {IP_BCAST, IP_LOCAL, IP_CUSTOM};
 
     bool continueAndInit();
 
@@ -99,8 +101,12 @@ private slots:
     void updateReviewerModel(int);
     void editRevBttnToggled();
 
+    void propagateBroadcastList(QAbstractTableModel*);
+    void bcastSelectionChanged(QItemSelection, QItemSelection);
     void updateBcastIPBoxes();
     void applyBcastSettings();
+    void addBcast();
+    void deleteBcast();
 
     void openStagesFile();
     void unloadStagesFile();

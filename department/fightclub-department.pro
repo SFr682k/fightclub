@@ -51,7 +51,8 @@ SOURCES += \
     teamadapter.cpp \
     teamitemlistmodel.cpp \
     fightclubdepartment.cpp \
-    clkwindowsettings.cpp
+    clkwindowsettings.cpp \
+    broadcastlistmodel.cpp
 
 HEADERS += \
     aboutdialog.h \
@@ -68,7 +69,8 @@ HEADERS += \
     teamadapter.h \
     teamitemlistmodel.h \
     fightclubdepartment.h \
-    clkwindowsettings.h
+    clkwindowsettings.h \
+    broadcastlistmodel.h
 
 FORMS += \
     aboutdialog.ui \

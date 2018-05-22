@@ -24,20 +24,17 @@
 #include <QUdpSocket>
 
 
-BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned int prt, unsigned int sig) :
+BroadcastServer::BroadcastServer(QObject *parent) :
     QObject(parent)
 {
-    udpSocket = nullptr;
-    broadcastEnabled = false;
+    udpSocket = new QUdpSocket(this);
 
-    if(prt > 0) port = prt%65536;
-    else        port = 45454;
+    broadcastlistmodel = new BroadcastListModel();
+
 
     elapsedTime = 0, maximumTime = 0;
     phasename = " ", problem = " ", performers = " ";
 
-    signature = sig;
-    broadcastAddress = addr;
 
     connect(this, SIGNAL(bcastRequest()), this, SLOT(broadcast()));
 }
@@ -48,10 +45,9 @@ BroadcastServer::~BroadcastServer(){
 }
 
 
-void BroadcastServer::enableBroadcast(bool enable) {
-    broadcastEnabled = enable;
-    if(broadcastEnabled) bcastRequest();
-}
+void BroadcastServer::emitModel() { emit bcastTableModelChanged(broadcastlistmodel); }
+
+
 
 
 void BroadcastServer::updatePhaseName(QString name) {
@@ -111,9 +107,7 @@ void BroadcastServer::setSignature(unsigned int sig) {
 
 
 void BroadcastServer::broadcast() {
-    if(!broadcastEnabled) return;
-
-    if(udpSocket == nullptr) udpSocket = new QUdpSocket(this);
+    if(broadcastlistmodel->rowCount() < 1) return;
 
     QByteArray datagram;
     QDataStream dgstream(&datagram, QIODevice::ReadWrite);
@@ -125,4 +119,22 @@ void BroadcastServer::broadcast() {
     dgstream << problem;
     dgstream << performers;
     udpSocket->writeDatagram(datagram.data(), datagram.size(), broadcastAddress, port);
+}
+
+
+
+void BroadcastServer::addBcast(QString ip, int port, int id) {
+    setBroadcastPort(port);
+    setBroadcastAddress(ip);
+    setSignature(id);
+
+    broadcastlistmodel->addBroadcast(ip, port, id);
+    emit bcastTableModelChanged(broadcastlistmodel);
+}
+
+
+Broadcast BroadcastServer::getBroadcast(int row) {
+    QList<Broadcast> lOB = broadcastlistmodel->getListOfBcasts();
+    if(row < lOB.length()) return lOB.at(row);
+    else                   return Broadcast();
 }

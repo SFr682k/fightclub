@@ -23,6 +23,7 @@
 #include "filepropertyparser.h"
 
 #include <QFileDialog>
+#include <QItemSelectionModel>
 #include <QMessageBox>
 #include <QModelIndex>
 #include <QStandardPaths>
@@ -98,20 +99,22 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     aboutdlg = new AboutDialog(this);
 
-    bcastsrv = new BroadcastServer(this, QHostAddress("127.0.0.1"), 45454, 12345);
+    bcastsrv = new BroadcastServer(this);
     ui->bcastActivated->setChecked(false);
     ui->listOfBroadcasts->setEnabled(false);
     ui->bcastConfigBox->setEnabled(false);
 
-    ui->selectIPCombobox->addItem("Local machine", QVariant(IP_LOCAL));
     ui->selectIPCombobox->addItem("Local network", QVariant(IP_BCAST));
+    ui->selectIPCombobox->addItem("Local machine", QVariant(IP_LOCAL));
     ui->selectIPCombobox->addItem("Custom machine", QVariant(IP_CUSTOM));
     updateBcastIPBoxes();
 
+    ui->deleteBroadcast->setEnabled(false);
+    ui->applyBcastSettings->setEnabled(false);
+
     // disable not implemented stuff
     ui->lockBcastTabBttn->setEnabled(false);
-    ui->addBroadcast->setEnabled(false);
-    ui->deleteBroadcast->setEnabled(false);
+
 
     ui->bcastportsel->setValue(45454);
     ui->bcastidsel->setValue(12345);
@@ -242,11 +245,15 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     // BROADCAST TAB --------------------------------------------------------------------
 
-    connect(ui->bcastActivated, SIGNAL(clicked(bool)), bcastsrv, SLOT(enableBroadcast(bool)));
     connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->listOfBroadcasts, SLOT(setEnabled(bool)));
     connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastConfigBox, SLOT(setEnabled(bool)));
 
     connect(ui->selectIPCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateBcastIPBoxes()));
+
+    connect(bcastsrv, SIGNAL(bcastTableModelChanged(QAbstractTableModel*)), this, SLOT(propagateBroadcastList(QAbstractTableModel*)));
+
+    connect(ui->addBroadcast, SIGNAL(clicked(bool)), this, SLOT(addBcast()));
+    connect(ui->deleteBroadcast, SIGNAL(clicked(bool)), this, SLOT(deleteBcast()));
     connect(ui->applyBcastSettings, SIGNAL(clicked(bool)), this, SLOT(applyBcastSettings()));
 
 
@@ -261,6 +268,12 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(ui->unloadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(unloadProblemsFile()));
     connect(ui->loadTeamsFile, SIGNAL(clicked(bool)), this, SLOT(openTeamsFile()));
     connect(ui->unloadTeamsFile, SIGNAL(clicked(bool)), this, SLOT(unloadTeamsFile()));
+
+
+
+    bcastsrv->emitModel();
+    connect(ui->listOfBroadcasts->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(bcastSelectionChanged(QItemSelection,QItemSelection)));
 }
 
 
@@ -546,6 +559,46 @@ void FightclubDepartment::editRevBttnToggled() {
 
 // BROADCAST TAB ------------------------------------------------------------------------
 
+void FightclubDepartment::propagateBroadcastList(QAbstractTableModel* model) {
+    ui->listOfBroadcasts->setModel(model);
+}
+
+void FightclubDepartment::bcastSelectionChanged(QItemSelection selected, QItemSelection deselected) {
+    int sel = -1; int desel = -1;
+    if(selected.indexes().length()   > 0) sel   = selected.indexes().at(0).row();
+    if(deselected.indexes().length() > 0) desel = deselected.indexes().at(0).row();
+
+    if(sel < 0) {
+        // no item selected
+        ui->selectIPCombobox->setCurrentIndex(0);
+        ui->bcastportsel->setValue(45454);
+        ui->bcastidsel->setValue(12345);
+    } else {
+        // item selected
+        Broadcast bcast = bcastsrv->getBroadcast(sel);
+
+        QString ip = bcast.getAddress().toString();
+        if(ip == "255.255.255.255") ui->selectIPCombobox->setCurrentIndex(0);
+        else if(ip == "127.0.0.1")  ui->selectIPCombobox->setCurrentIndex(1);
+        else {
+            ui->selectIPCombobox->setCurrentIndex(2);
+
+            QStringList elementsOfIP = ip.split(".");
+            ui->customippt1->setValue(elementsOfIP.at(0).toInt());
+            ui->customippt2->setValue(elementsOfIP.at(1).toInt());
+            ui->customippt3->setValue(elementsOfIP.at(2).toInt());
+            ui->customippt4->setValue(elementsOfIP.at(3).toInt());
+        }
+
+        ui->bcastportsel->setValue(bcast.getPort());
+        ui->bcastidsel->setValue(bcast.getId());
+    }
+
+    ui->deleteBroadcast->setEnabled(!(sel < 0));
+    ui->applyBcastSettings->setEnabled(!(sel < 0));
+}
+
+
 void FightclubDepartment::updateBcastIPBoxes() {
     ui->customippt1->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
     ui->customippt2->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
@@ -555,8 +608,8 @@ void FightclubDepartment::updateBcastIPBoxes() {
     int tmp1, tmp2, tmp3, tmp4;
 
     switch(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt()) {
-        case IP_LOCAL:  tmp1 = 127, tmp2 =   0, tmp3 =   0, tmp4 =   1; break;
         case IP_BCAST:  tmp1 = 255, tmp2 = 255, tmp3 = 255, tmp4 = 255; break;
+        case IP_LOCAL:  tmp1 = 127, tmp2 =   0, tmp3 =   0, tmp4 =   1; break;
         case IP_CUSTOM: tmp1 = 192, tmp2 = 168, tmp3 =   0, tmp4 =   1; break;
     }
 
@@ -575,6 +628,23 @@ void FightclubDepartment::applyBcastSettings() {
     bcastsrv->setBroadcastAddress(bcastIP);
     bcastsrv->setBroadcastPort(ui->bcastportsel->value());
     bcastsrv->setSignature(ui->bcastidsel->value());
+}
+
+void FightclubDepartment::addBcast() {
+    QString bcastIP = QString::number(ui->customippt1->value()) + "."
+                    + QString::number(ui->customippt2->value()) + "."
+                    + QString::number(ui->customippt3->value()) + "."
+                    + QString::number(ui->customippt4->value());
+
+    bcastsrv->addBcast(bcastIP, ui->bcastportsel->value(), ui->bcastidsel->value());
+
+    ui->selectIPCombobox->setCurrentIndex(0);
+    ui->bcastportsel->setValue(45454);
+    ui->bcastidsel->setValue(12345);
+}
+
+void FightclubDepartment::deleteBcast() {
+
 }
 
 

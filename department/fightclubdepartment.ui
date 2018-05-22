@@ -1000,7 +1000,29 @@
          </widget>
         </item>
         <item row="1" column="0" colspan="2">
-         <widget class="QTableView" name="listOfBroadcasts"/>
+         <widget class="QTableView" name="listOfBroadcasts">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>150</number>
+          </attribute>
+          <attribute name="horizontalHeaderHighlightSections">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="horizontalHeaderMinimumSectionSize">
+           <number>150</number>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
         </item>
         <item row="2" column="0" colspan="2">
          <widget class="QGroupBox" name="bcastConfigBox">
@@ -1228,6 +1250,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
              </property>
              <property name="icon">
               <iconset resource="resources.qrc">
