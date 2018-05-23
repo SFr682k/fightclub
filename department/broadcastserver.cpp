@@ -11,7 +11,7 @@
 ** GNU General Public License Usage
 ** This file may be used under the terms of the GNU
 ** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
+** Foundation and appearing in the file LICENSE.md included in the
 ** packaging of this file.  Please review the following information to
 ** ensure the GNU General Public License version 3.0 requirements will be
 ** met: http://www.gnu.org/copyleft/gpl.html.
@@ -20,17 +20,22 @@
 ****************************************************************************/
 
 #include "broadcastserver.h"
+
 #include <QDataStream>
+#include <QMessageBox>
 #include <QUdpSocket>
 
 
-BroadcastServer::BroadcastServer(QObject *parent) :
+BroadcastServer::BroadcastServer(QWidget *parentWidget, QObject *parent) :
     QObject(parent)
 {
+    this->parent = parentWidget;
+
     udpSocket = new QUdpSocket(this);
 
     broadcastlistmodel = new BroadcastListModel();
-
+    bcastproxymodel = new QSortFilterProxyModel();
+    bcastproxymodel->setSourceModel(broadcastlistmodel);
 
     elapsedTime = 0, maximumTime = 0;
     phasename = " ", problem = " ", performers = " ";
@@ -42,10 +47,12 @@ BroadcastServer::BroadcastServer(QObject *parent) :
 
 BroadcastServer::~BroadcastServer(){
     delete udpSocket;
+    delete broadcastlistmodel;
+    delete bcastproxymodel;
 }
 
 
-void BroadcastServer::emitModel() { emit bcastTableModelChanged(broadcastlistmodel); }
+void BroadcastServer::emitModel() { emit bcastTableModelChanged(bcastproxymodel); }
 
 
 
@@ -107,7 +114,7 @@ void BroadcastServer::setSignature(unsigned int sig) {
 
 
 void BroadcastServer::broadcast() {
-    if(broadcastlistmodel->rowCount() < 1) return;
+    if(bcastproxymodel->rowCount() < 1) return;
 
     QByteArray datagram;
     QDataStream dgstream(&datagram, QIODevice::ReadWrite);
@@ -118,18 +125,25 @@ void BroadcastServer::broadcast() {
     dgstream << phasename;
     dgstream << problem;
     dgstream << performers;
+
     udpSocket->writeDatagram(datagram.data(), datagram.size(), broadcastAddress, port);
 }
 
 
 
 void BroadcastServer::addBcast(QString ip, int port, int id) {
-    setBroadcastPort(port);
-    setBroadcastAddress(ip);
-    setSignature(id);
+    if(broadcastlistmodel->addBroadcast(ip, port, id)) {
+        setBroadcastPort(port);
+        setBroadcastAddress(ip);
+        setSignature(id);
 
-    broadcastlistmodel->addBroadcast(ip, port, id);
-    emit bcastTableModelChanged(broadcastlistmodel);
+        emit bcastTableModelChanged(bcastproxymodel);
+    } else {
+        QMessageBox::critical(parent, "Broadcast already present",
+                              QString("Can’t add a broadcast to %1, port %2, ID %3:\n")
+                                  .append("A broadcast to this IP, Port and ID is already present")
+                                  .arg(ip).arg(QString::number(port)).arg(QString::number(id)));
+    }
 }
 
 

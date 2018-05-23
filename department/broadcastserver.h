@@ -11,7 +11,7 @@
 ** GNU General Public License Usage
 ** This file may be used under the terms of the GNU
 ** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
+** Foundation and appearing in the file LICENSE.md included in the
 ** packaging of this file.  Please review the following information to
 ** ensure the GNU General Public License version 3.0 requirements will be
 ** met: http://www.gnu.org/copyleft/gpl.html.
@@ -23,7 +23,8 @@
 #define BROADCASTSERVER_H
 
 #include <QObject>
-#include <QtNetwork/QUdpSocket>
+#include <QSortFilterProxyModel>
+#include <QUdpSocket>
 
 #include "broadcastlistmodel.h"
 
@@ -32,14 +33,18 @@ class BroadcastServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit BroadcastServer(QObject *parent = 0);
+    explicit BroadcastServer(QWidget *parentWidget = 0, QObject *parent = 0);
     ~BroadcastServer();
     void emitModel();
 
     Broadcast getBroadcast(int);
 
 private:
+    QWidget *parent;
+
     BroadcastListModel *broadcastlistmodel;
+    QSortFilterProxyModel *bcastproxymodel;
+
     QUdpSocket *udpSocket;
     QHostAddress broadcastAddress;
     QString phasename, problem, performers;
@@ -50,7 +55,7 @@ private:
 signals:
     void socketStatus();
     void bcastRequest();
-    void bcastTableModelChanged(QAbstractTableModel*);
+    void bcastTableModelChanged(QSortFilterProxyModel*);
 
 public slots:
     void updatePhaseName(QString);

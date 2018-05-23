@@ -110,6 +110,15 @@ bool BroadcastListModel::insertRows(int position, int rows, const QModelIndex &i
 
 
 bool BroadcastListModel::addBroadcast(QString ip, int prt, int i) {
+    QListIterator<Broadcast> iterator(listOfBcasts);
+
+    while(iterator.hasNext()) {
+        Broadcast bcast = iterator.next();
+
+        if((bcast.getAddress().toString() == ip) && (bcast.getPort() == prt) && (bcast.getId() == i))
+            return false;
+    }
+
     beginInsertRows(QModelIndex(), listOfBcasts.length(), listOfBcasts.length());
     listOfBcasts.append(Broadcast(ip, prt, i));
     endInsertRows();

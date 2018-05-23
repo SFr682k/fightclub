@@ -23,6 +23,7 @@
 #include <QAbstractTableModel>
 #include <QItemSelection>
 #include <QKeyEvent>
+#include <QSortFilterProxyModel>
 
 #include "aboutdialog.h"
 #include "broadcastserver.h"
@@ -101,7 +102,7 @@ private slots:
     void updateReviewerModel(int);
     void editRevBttnToggled();
 
-    void propagateBroadcastList(QAbstractTableModel*);
+    void propagateBroadcastList(QSortFilterProxyModel*);
     void bcastSelectionChanged(QItemSelection, QItemSelection);
     void updateBcastIPBoxes();
     void applyBcastSettings();

@@ -34,7 +34,7 @@ PhasePBar::PhasePBar(QObject *parent) : QObject(parent) {
     maximumTime = 1;
     overtime = 0;
 
-    refreshTimer->start(10);
+    refreshTimer->start(16);
 }
 
 

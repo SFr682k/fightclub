@@ -250,7 +250,8 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     connect(ui->selectIPCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateBcastIPBoxes()));
 
-    connect(bcastsrv, SIGNAL(bcastTableModelChanged(QAbstractTableModel*)), this, SLOT(propagateBroadcastList(QAbstractTableModel*)));
+    connect(bcastsrv, SIGNAL(bcastTableModelChanged(QSortFilterProxyModel*)),
+            this, SLOT(propagateBroadcastList(QSortFilterProxyModel*)));
 
     connect(ui->addBroadcast, SIGNAL(clicked(bool)), this, SLOT(addBcast()));
     connect(ui->deleteBroadcast, SIGNAL(clicked(bool)), this, SLOT(deleteBcast()));
@@ -559,8 +560,11 @@ void FightclubDepartment::editRevBttnToggled() {
 
 // BROADCAST TAB ------------------------------------------------------------------------
 
-void FightclubDepartment::propagateBroadcastList(QAbstractTableModel* model) {
+void FightclubDepartment::propagateBroadcastList(QSortFilterProxyModel* model) {
     ui->listOfBroadcasts->setModel(model);
+    ui->listOfBroadcasts->sortByColumn(2,Qt::AscendingOrder);
+    ui->listOfBroadcasts->sortByColumn(1,Qt::AscendingOrder);
+    ui->listOfBroadcasts->sortByColumn(0,Qt::AscendingOrder);
 }
 
 void FightclubDepartment::bcastSelectionChanged(QItemSelection selected, QItemSelection deselected) {
