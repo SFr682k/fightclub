@@ -50,6 +50,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     bool addBroadcast(QString ip = "127.0.0.1", int prt = 45454, int i = 12345);
+    bool editBroadcast(int, QString, int, int);
+    void deleteBroadcast(int);
 
     QList<Broadcast> getListOfBcasts();
 
@@ -57,10 +59,6 @@ private:
     QList<Broadcast> listOfBcasts;
     int highlightedRow;
     QColor highlightColor;
-
-signals:
-
-public slots:
 };
 
 #endif // BROADCASTLISTMODEL_H

@@ -37,7 +37,7 @@ public:
     ~BroadcastServer();
     void emitModel();
 
-    Broadcast getBroadcast(int);
+    Broadcast getBroadcast(QModelIndex);
 
 private:
     QWidget *parent;
@@ -46,11 +46,9 @@ private:
     QSortFilterProxyModel *bcastproxymodel;
 
     QUdpSocket *udpSocket;
-    QHostAddress broadcastAddress;
     QString phasename, problem, performers;
     int elapsedTime, maximumTime;
     bool roomclock;
-    unsigned int port, signature;
 
 signals:
     void socketStatus();
@@ -64,11 +62,10 @@ public slots:
     void updateElapsedTime(int);
     void updateMaximumTime(int);
     void updateRClockState(bool roomclock);
-    void setBroadcastAddress(QString);
-    void setBroadcastPort(unsigned int);
-    void setSignature(unsigned int);
 
-    void addBcast(QString, int, int);
+    void addBroadcast(QString, int, int);
+    void editBroadcast(QModelIndex, QString, int, int);
+    void deleteBroadcast(QModelIndex);
 
 private slots:
     void broadcast();

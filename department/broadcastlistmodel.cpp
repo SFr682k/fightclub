@@ -19,6 +19,7 @@
 #include "broadcastlistmodel.h"
 
 
+
 Broadcast::Broadcast(QString ipAdd, int prt, int i) {
     ipAddress = QHostAddress(ipAdd);
     port = prt;
@@ -33,9 +34,12 @@ int          Broadcast::getId()      { return id; }
 
 
 
+
+
+
 BroadcastListModel::BroadcastListModel(QObject *parent) : QAbstractTableModel(parent) {
-    QList<Broadcast> foo;
-    listOfBcasts = foo;
+    QList<Broadcast> loB;
+    listOfBcasts = loB;
 }
 
 
@@ -91,20 +95,6 @@ QVariant BroadcastListModel::headerData(int section, Qt::Orientation orientation
     return QVariant();
 }
 
-/*
-bool BroadcastListModel::insertRows(int position, int rows, const QModelIndex &index) {
-    Q_UNUSED(index);
-    beginInsertRows(QModelIndex(), position, position+rows-1);
-
-    for (int row=0; row < rows; row++) {
-        Stage stage(QTime(0,0,1), QTime(0,0,0), " ");
-        listOfStages.insert(position, stage);
-    }
-
-    endInsertRows();
-    return true;
-}
-*/
 
 
 
@@ -126,6 +116,45 @@ bool BroadcastListModel::addBroadcast(QString ip, int prt, int i) {
 }
 
 
-QList<Broadcast> BroadcastListModel::getListOfBcasts() { return listOfBcasts; }
+bool BroadcastListModel::editBroadcast(int row, QString newip, int newprt, int newid) {
+    if(!(row < listOfBcasts.size())) {
+        return false;
+    }
 
+
+    Broadcast bcast = listOfBcasts.at(row);
+    if((bcast.getAddress().toString() == newip)
+            && (bcast.getPort() == newprt) && (bcast.getId() == newid))
+        return true; // no changes
+    else {
+        QListIterator<Broadcast> iterator(listOfBcasts);
+
+        while(iterator.hasNext()) {
+            Broadcast bcast = iterator.next();
+
+            if((bcast.getAddress().toString() == newip) && (bcast.getPort() == newprt) && (bcast.getId() == newid))
+                return false; // the ip/port/id combination is already occupied
+        }
+    }
+
+
+    listOfBcasts.replace(row, Broadcast(newip, newprt, newid));
+    emit dataChanged(this->index(row,0), this->index(row,2));
+    return true;
+}
+
+
+void BroadcastListModel::deleteBroadcast(int row) {
+    if(!(row < listOfBcasts.size())) return;
+
+    beginRemoveRows(QModelIndex(), row, row);
+    listOfBcasts.takeAt(row);
+    endRemoveRows();
+}
+
+
+
+
+
+QList<Broadcast> BroadcastListModel::getListOfBcasts() { return listOfBcasts; }
 

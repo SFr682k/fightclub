@@ -29,8 +29,6 @@
 #include <QStandardPaths>
 
 
-#include <QDebug>
-
 
 FightclubDepartment::FightclubDepartment(QWidget *parent) :
     QMainWindow(parent),
@@ -568,9 +566,10 @@ void FightclubDepartment::propagateBroadcastList(QSortFilterProxyModel* model) {
 }
 
 void FightclubDepartment::bcastSelectionChanged(QItemSelection selected, QItemSelection deselected) {
-    int sel = -1; int desel = -1;
-    if(selected.indexes().length()   > 0) sel   = selected.indexes().at(0).row();
-    if(deselected.indexes().length() > 0) desel = deselected.indexes().at(0).row();
+    Q_UNUSED(deselected);
+
+    int sel = -1;
+    if(selected.indexes().length() > 0) sel = selected.indexes().at(0).row();
 
     if(sel < 0) {
         // no item selected
@@ -579,7 +578,7 @@ void FightclubDepartment::bcastSelectionChanged(QItemSelection selected, QItemSe
         ui->bcastidsel->setValue(12345);
     } else {
         // item selected
-        Broadcast bcast = bcastsrv->getBroadcast(sel);
+        Broadcast bcast = bcastsrv->getBroadcast(selected.indexes().at(0));
 
         QString ip = bcast.getAddress().toString();
         if(ip == "255.255.255.255") ui->selectIPCombobox->setCurrentIndex(0);
@@ -623,16 +622,6 @@ void FightclubDepartment::updateBcastIPBoxes() {
     ui->customippt4->setValue(tmp4);
 }
 
-void FightclubDepartment::applyBcastSettings() {
-    QString bcastIP = QString::number(ui->customippt1->value()) + "."
-                    + QString::number(ui->customippt2->value()) + "."
-                    + QString::number(ui->customippt3->value()) + "."
-                    + QString::number(ui->customippt4->value());
-
-    bcastsrv->setBroadcastAddress(bcastIP);
-    bcastsrv->setBroadcastPort(ui->bcastportsel->value());
-    bcastsrv->setSignature(ui->bcastidsel->value());
-}
 
 void FightclubDepartment::addBcast() {
     QString bcastIP = QString::number(ui->customippt1->value()) + "."
@@ -640,7 +629,7 @@ void FightclubDepartment::addBcast() {
                     + QString::number(ui->customippt3->value()) + "."
                     + QString::number(ui->customippt4->value());
 
-    bcastsrv->addBcast(bcastIP, ui->bcastportsel->value(), ui->bcastidsel->value());
+    bcastsrv->addBroadcast(bcastIP, ui->bcastportsel->value(), ui->bcastidsel->value());
 
     ui->selectIPCombobox->setCurrentIndex(0);
     ui->bcastportsel->setValue(45454);
@@ -648,7 +637,19 @@ void FightclubDepartment::addBcast() {
 }
 
 void FightclubDepartment::deleteBcast() {
+    QModelIndex selectedRow = ui->listOfBroadcasts->selectionModel()->selectedIndexes().value(0);
+    ui->listOfBroadcasts->clearSelection();
+    bcastsrv->deleteBroadcast(selectedRow);
+}
 
+void FightclubDepartment::applyBcastSettings() {
+    QString bcastIP = QString::number(ui->customippt1->value()) + "."
+                    + QString::number(ui->customippt2->value()) + "."
+                    + QString::number(ui->customippt3->value()) + "."
+                    + QString::number(ui->customippt4->value());
+
+    bcastsrv->editBroadcast(ui->listOfBroadcasts->selectionModel()->selectedIndexes().value(0), bcastIP,
+                            ui->bcastportsel->value(), ui->bcastidsel->value());
 }
 
 

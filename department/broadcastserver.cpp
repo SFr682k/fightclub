@@ -26,12 +26,13 @@
 #include <QUdpSocket>
 
 
+
 BroadcastServer::BroadcastServer(QWidget *parentWidget, QObject *parent) :
     QObject(parent)
 {
     this->parent = parentWidget;
 
-    udpSocket = new QUdpSocket(this);
+    udpSocket = nullptr;
 
     broadcastlistmodel = new BroadcastListModel();
     bcastproxymodel = new QSortFilterProxyModel();
@@ -95,60 +96,67 @@ void BroadcastServer::updateRClockState(bool roomclock) {
 }
 
 
-void BroadcastServer::setBroadcastAddress(QString ipstr) {
-    broadcastAddress = QHostAddress(ipstr);
-    emit bcastRequest();
-}
 
-
-void BroadcastServer::setBroadcastPort(unsigned int prt) {
-    if (prt > 0) port = prt%65536;
-    emit bcastRequest();
-}
-
-
-void BroadcastServer::setSignature(unsigned int sig) {
-    signature = sig;
-    emit bcastRequest();
-}
 
 
 void BroadcastServer::broadcast() {
     if(bcastproxymodel->rowCount() < 1) return;
 
-    QByteArray datagram;
-    QDataStream dgstream(&datagram, QIODevice::ReadWrite);
-    dgstream << (quint32)signature;
-    dgstream << (quint32)maximumTime;
-    dgstream << (quint32)elapsedTime;
-    dgstream << (quint32)(roomclock? 1 : 0);
-    dgstream << phasename;
-    dgstream << problem;
-    dgstream << performers;
+    if(udpSocket == nullptr) udpSocket = new QUdpSocket(this);
 
-    udpSocket->writeDatagram(datagram.data(), datagram.size(), broadcastAddress, port);
-}
+    QList<Broadcast> listOfBcasts = broadcastlistmodel->getListOfBcasts();
+    QListIterator<Broadcast> iterator(listOfBcasts);
 
+    while(iterator.hasNext()) {
+        Broadcast bcast = iterator.next();
 
+        QByteArray datagram;
+        QDataStream dgstream(&datagram, QIODevice::ReadWrite);
+        dgstream << (quint32)bcast.getId();
+        dgstream << (quint32)maximumTime;
+        dgstream << (quint32)elapsedTime;
+        dgstream << (quint32)(roomclock? 1 : 0);
+        dgstream << phasename;
+        dgstream << problem;
+        dgstream << performers;
 
-void BroadcastServer::addBcast(QString ip, int port, int id) {
-    if(broadcastlistmodel->addBroadcast(ip, port, id)) {
-        setBroadcastPort(port);
-        setBroadcastAddress(ip);
-        setSignature(id);
-
-        emit bcastTableModelChanged(bcastproxymodel);
-    } else {
-        QMessageBox::critical(parent, "Broadcast already present",
-                              QString("Can’t add a broadcast to %1, port %2, ID %3:\n")
-                                  .append("A broadcast to this IP, Port and ID is already present")
-                                  .arg(ip).arg(QString::number(port)).arg(QString::number(id)));
+        udpSocket->writeDatagram(datagram.data(), datagram.size(),
+                                 bcast.getAddress(), bcast.getPort());
     }
 }
 
 
-Broadcast BroadcastServer::getBroadcast(int row) {
+
+void BroadcastServer::addBroadcast(QString ip, int port, int id) {
+    if(broadcastlistmodel->addBroadcast(ip, port, id)) {
+        emit bcastTableModelChanged(bcastproxymodel);
+        emit bcastRequest();
+    } else QMessageBox::critical(parent, "Broadcast already present",
+                                 QString("Can’t add a broadcast to %1, port %2, ID %3:\n")
+                                     .append("A broadcast to this IP, Port and ID is already present")
+                                     .arg(ip).arg(QString::number(port)).arg(QString::number(id)));
+}
+
+void BroadcastServer::deleteBroadcast(QModelIndex idx) {
+    broadcastlistmodel->deleteBroadcast(bcastproxymodel->mapToSource(idx).row());
+    emit bcastTableModelChanged(bcastproxymodel);
+}
+
+void BroadcastServer::editBroadcast(QModelIndex srtidx, QString newip, int newport, int newid) {
+    if(broadcastlistmodel->editBroadcast(bcastproxymodel->mapToSource(srtidx).row(), newip, newport, newid)) {
+        emit bcastTableModelChanged(bcastproxymodel);
+        emit bcastRequest();
+    } else QMessageBox::critical(parent, "Broadcast conflict",
+                                 QString("Can’t edit the current broadcast:\n")
+                                     .append("A broadcast to %1, port %2, ID %3 is already present")
+                                     .arg(newip).arg(QString::number(newport)).arg(QString::number(newid)));
+}
+
+
+
+Broadcast BroadcastServer::getBroadcast(QModelIndex srtidx) {
     QList<Broadcast> lOB = broadcastlistmodel->getListOfBcasts();
-    if(row < lOB.length()) return lOB.at(row);
-    else                   return Broadcast();
+    if(srtidx.row() < lOB.length()) {
+        return lOB.at(bcastproxymodel->mapToSource(srtidx).row());
+    } else return Broadcast();
 }
