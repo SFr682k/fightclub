@@ -2,7 +2,7 @@
 
 **Current stable, distributed versions:**
 
- - Department 0.5
+ - Department 0.6
  - Teleprinter 0.10
  - Dashboard 0.3
  - Nano 0.1
@@ -10,7 +10,7 @@
 
 ### About Fightclub
 Fightclub aims to become an enhanced clock system for the [International Young Physicist's Tournament (IYPT)](http://iypt.org).
-Currently, heavy development is in progress, so design, workflow and requirements may change between two versions and result in incompatibilities.
+Currently, development is in progress, so design, workflow and requirements may change between two versions and result in incompatibilities.
 
 
 Fightclub currently consists of the following components:
@@ -21,9 +21,6 @@ Fightclub currently consists of the following components:
  - *Fightclub Nano*, a clock window with an own timing engine, but not as powerful as *Fightclub Department*
 
 
-Following component is considerd as “useful” and may be added soon:
-
- - *Fightclub Disperser*, a tool for duplicating broadcast signals emitted by Fightclub Department
 
  
 ### Installation
