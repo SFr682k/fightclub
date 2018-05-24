@@ -181,15 +181,15 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QFontComboBox" name="chooseFontBox"/>
+       </item>
        <item row="1" column="0">
         <widget class="QCheckBox" name="customScaleCBox">
          <property name="text">
           <string>Scale font size</string>
          </property>
         </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QFontComboBox" name="chooseFontBox"/>
        </item>
        <item row="1" column="1">
         <widget class="QSpinBox" name="chooseScaleBox">
@@ -233,6 +233,36 @@
        <property name="verticalSpacing">
         <number>3</number>
        </property>
+       <item row="0" column="0" colspan="3">
+        <widget class="QCheckBox" name="showSecHand">
+         <property name="text">
+          <string>Show second hand</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>6</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QLabel" name="sechandmvmtCaption">
+         <property name="text">
+          <string>Second hand movement:</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="0">
         <widget class="QRadioButton" name="swissRClock">
          <property name="text">
@@ -266,36 +296,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="1" column="0" colspan="3">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>6</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0" colspan="3">
-        <widget class="QCheckBox" name="showSecHand">
-         <property name="text">
-          <string>Show second hand</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="3">
-        <widget class="QLabel" name="sechandmvmtCaption">
-         <property name="text">
-          <string>Second hand movement:</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
