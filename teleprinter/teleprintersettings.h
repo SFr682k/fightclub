@@ -39,6 +39,10 @@ public:
 
     int getBroadcastPort();
     int getBroadcastID();
+    QString getFontFamily();
+    double  getFontScale();
+    int     getRClkBehavior();
+    bool    getShowRClkSecondHand();
 
     void enterNoConfigMode();
 

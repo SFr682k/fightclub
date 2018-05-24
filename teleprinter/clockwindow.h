@@ -16,8 +16,8 @@
 ****************************************************************************/
 
 
-#ifndef TELEPRINTER_H
-#define TELEPRINTER_H
+#ifndef CLOCKWINDOW_H
+#define CLOCKWINDOW_H
 
 #include <QMainWindow>
 
@@ -27,30 +27,17 @@
 #include <QTime>
 #include <QTimer>
 
-#include "broadcastclient.h"
-#include "teleprintersettings.h"
 
 namespace Ui {
-class FightclubTeleprinter;
+class ClockWindow;
 }
 
-class FightclubTeleprinter : public QMainWindow
-{
+class ClockWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit FightclubTeleprinter(QWidget *parent = 0);
-    ~FightclubTeleprinter();
-    void setPort(uint);
-    void setID(uint);
-    void openAboutDialog();
-    void openSettingsDialog();
-    uint getBcastPort();
-    uint getBcastID();
-
-    void enterFullscreenMode();
-    void enterNoConfigMode();
-
+    explicit ClockWindow(QWidget *parent = 0);
+    ~ClockWindow();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -58,38 +45,38 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
-    Ui::FightclubTeleprinter *ui;
-    BroadcastClient *bcastcli;
-    TeleprinterSettings *settingsdial;
-
-    bool aboutDialogOpen, settingsDialogOpen;
-
-    QFont defaultFont;
-    double fontScale;
+    Ui::ClockWindow *ui;
 
     QTimer *refreshtimer;
     QString timeToString(int);
     bool roomclock;
 
-    uint bcastPort, bcastID;
+
+    QFont defaultFont;
+    double fontScale;
 
     QTimer *hideCursorTimer;
 
 
-signals:
-    void newPort(uint);
-    void newID(uint);
-
 private slots:
-    void toggleRoomclock(bool);
-    void updateElapsedTime(int);
     void updateTime();
+
+    void cursorMoved();
+    void hideCursor();
+
+public slots:
+    void phaseNameChanged(QString);
+    void updateElapsedTime(int);
+    void updateMaximumTime(int);
+    void problemChanged(QString);
+    void performersChanged(QString);
+    void toggleRoomclock(bool);
 
     void setWindowFont(QString);
     void setFontScale(double);
 
-    void cursorMoved();
-    void hideCursor();
+    void showRclockSecondHand(bool);
+    void setRclockBehavior(int);
 };
 
-#endif // TELEPRINTER_H
+#endif // CLOCKWINDOW_H

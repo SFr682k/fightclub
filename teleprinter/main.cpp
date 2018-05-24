@@ -16,7 +16,7 @@
 ****************************************************************************/
 
 
-#include "teleprinter.h"
+#include "fightclubteleprinter.h"
 #include <QApplication>
 #include <QCommandLineParser>
 
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Teleprinter");
-    a.setApplicationVersion("0.10");
+    a.setApplicationVersion("0.11alpha");
 
     QCommandLineParser cmdparser;
     cmdparser.setApplicationDescription("Clock window for Fightclub Department, designed for use on remote machines.");
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
     cmdparser.addOption(bmodeappoption);
 
-    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Start in fullscreen mode");
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Create a clock window displayed in fullscreen mode");
     cmdparser.addOption(fscreenoption);
 
     QCommandLineOption noconfoption("noconfig", "Disable configuration");
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     FightclubTeleprinter w;
     w.show();
 
-
+    /*
     if(fscrmode) w.enterFullscreenMode();
     if(noconfig) w.enterNoConfigMode();
 
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     if(!batchmode)                 w.openAboutDialog();
     if((!(port > 0) || !(id > 0))
        && !batchmode && !noconfig) w.openSettingsDialog();
-
+    */
 
     return a.exec();
 }

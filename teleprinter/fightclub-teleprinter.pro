@@ -39,19 +39,22 @@ SOURCES += \
     main.cpp \
     broadcastclient.cpp \
     aboutdialog.cpp \
-    teleprinter.cpp \
-    teleprintersettings.cpp
+    teleprintersettings.cpp \
+    clockwindow.cpp \
+    fightclubteleprinter.cpp
 
 HEADERS += \
     broadcastclient.h \
     aboutdialog.h \
-    teleprinter.h \
-    teleprintersettings.h
+    teleprintersettings.h \
+    clockwindow.h \
+    fightclubteleprinter.h
 
 FORMS += \
     aboutdialog.ui \
-    teleprinter.ui \
-    teleprintersettings.ui
+    teleprintersettings.ui \
+    clockwindow.ui \
+    fightclubteleprinter.ui
 
 OTHER_FILES += \
     gpl_v3_logo.png

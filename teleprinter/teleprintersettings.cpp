@@ -179,6 +179,29 @@ void TeleprinterSettings::setSharpRClock(bool set)  { if(set) emit rclockBehavio
 
 
 
+// METHODS FOR GETTING STUFF ------------------------------------------------------------
+
+QString TeleprinterSettings::getFontFamily()
+    { return (ui->customFontCBox->isChecked()?  ui->chooseFontBox->currentText() : nullptr); }
+double  TeleprinterSettings::getFontScale()
+    { return (ui->customScaleCBox->isChecked()? ui->chooseScaleBox->value()/100.0 : 1.0); }
+
+int  TeleprinterSettings::getRClkBehavior() {
+    if(ui->swissRClock->isChecked())       return 0;
+    else if(ui->smoothRClock->isChecked()) return 1;
+    else if(ui->sharpRClock->isChecked())  return 2;
+
+    return 0;
+}
+
+bool TeleprinterSettings::getShowRClkSecondHand() { return ui->showSecHand->isChecked(); }
+
+
+
+
+
+
+
 // INTERNAL STUFF -----------------------------------------------------------------------
 
 void TeleprinterSettings::toggleLockedState() {
