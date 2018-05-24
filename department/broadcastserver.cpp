@@ -11,7 +11,7 @@
 ** GNU General Public License Usage
 ** This file may be used under the terms of the GNU
 ** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
+** Foundation and appearing in the file LICENSE.md included in the
 ** packaging of this file.  Please review the following information to
 ** ensure the GNU General Public License version 3.0 requirements will be
 ** met: http://www.gnu.org/copyleft/gpl.html.
@@ -20,24 +20,27 @@
 ****************************************************************************/
 
 #include "broadcastserver.h"
+
 #include <QDataStream>
+#include <QMessageBox>
 #include <QUdpSocket>
 
 
-BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned int prt, unsigned int sig) :
+
+BroadcastServer::BroadcastServer(QWidget *parentWidget, QObject *parent) :
     QObject(parent)
 {
-    udpSocket = nullptr;
-    broadcastEnabled = false;
+    this->parent = parentWidget;
 
-    if(prt > 0) port = prt%65536;
-    else        port = 45454;
+    udpSocket = nullptr;
+
+    broadcastlistmodel = new BroadcastListModel();
+    bcastproxymodel = new QSortFilterProxyModel();
+    bcastproxymodel->setSourceModel(broadcastlistmodel);
 
     elapsedTime = 0, maximumTime = 0;
     phasename = " ", problem = " ", performers = " ";
 
-    signature = sig;
-    broadcastAddress = addr;
 
     connect(this, SIGNAL(bcastRequest()), this, SLOT(broadcast()));
 }
@@ -45,13 +48,14 @@ BroadcastServer::BroadcastServer(QObject *parent, QHostAddress addr, unsigned in
 
 BroadcastServer::~BroadcastServer(){
     delete udpSocket;
+    delete broadcastlistmodel;
+    delete bcastproxymodel;
 }
 
 
-void BroadcastServer::enableBroadcast(bool enable) {
-    broadcastEnabled = enable;
-    if(broadcastEnabled) bcastRequest();
-}
+void BroadcastServer::emitModel() { emit bcastTableModelChanged(bcastproxymodel); }
+
+
 
 
 void BroadcastServer::updatePhaseName(QString name) {
@@ -92,37 +96,67 @@ void BroadcastServer::updateRClockState(bool roomclock) {
 }
 
 
-void BroadcastServer::setBroadcastAddress(QString ipstr) {
-    broadcastAddress = QHostAddress(ipstr);
-    emit bcastRequest();
-}
 
-
-void BroadcastServer::setBroadcastPort(unsigned int prt) {
-    if (prt > 0) port = prt%65536;
-    emit bcastRequest();
-}
-
-
-void BroadcastServer::setSignature(unsigned int sig) {
-    signature = sig;
-    emit bcastRequest();
-}
 
 
 void BroadcastServer::broadcast() {
-    if(!broadcastEnabled) return;
+    if(bcastproxymodel->rowCount() < 1) return;
 
     if(udpSocket == nullptr) udpSocket = new QUdpSocket(this);
 
-    QByteArray datagram;
-    QDataStream dgstream(&datagram, QIODevice::ReadWrite);
-    dgstream << (quint32)signature;
-    dgstream << (quint32)maximumTime;
-    dgstream << (quint32)elapsedTime;
-    dgstream << (quint32)(roomclock? 1 : 0);
-    dgstream << phasename;
-    dgstream << problem;
-    dgstream << performers;
-    udpSocket->writeDatagram(datagram.data(), datagram.size(), broadcastAddress, port);
+    QList<Broadcast> listOfBcasts = broadcastlistmodel->getListOfBcasts();
+    QListIterator<Broadcast> iterator(listOfBcasts);
+
+    while(iterator.hasNext()) {
+        Broadcast bcast = iterator.next();
+
+        QByteArray datagram;
+        QDataStream dgstream(&datagram, QIODevice::ReadWrite);
+        dgstream << (quint32)bcast.getId();
+        dgstream << (quint32)maximumTime;
+        dgstream << (quint32)elapsedTime;
+        dgstream << (quint32)(roomclock? 1 : 0);
+        dgstream << phasename;
+        dgstream << problem;
+        dgstream << performers;
+
+        udpSocket->writeDatagram(datagram.data(), datagram.size(),
+                                 bcast.getAddress(), bcast.getPort());
+    }
+}
+
+
+
+void BroadcastServer::addBroadcast(QString ip, int port, int id) {
+    if(broadcastlistmodel->addBroadcast(ip, port, id)) {
+        emit bcastTableModelChanged(bcastproxymodel);
+        emit bcastRequest();
+    } else QMessageBox::critical(parent, "Broadcast already present",
+                                 QString("Can’t add a broadcast to %1, port %2, ID %3:\n")
+                                     .append("A broadcast to this IP, Port and ID is already present")
+                                     .arg(ip).arg(QString::number(port)).arg(QString::number(id)));
+}
+
+void BroadcastServer::deleteBroadcast(QModelIndex idx) {
+    broadcastlistmodel->deleteBroadcast(bcastproxymodel->mapToSource(idx).row());
+    emit bcastTableModelChanged(bcastproxymodel);
+}
+
+void BroadcastServer::editBroadcast(QModelIndex srtidx, QString newip, int newport, int newid) {
+    if(broadcastlistmodel->editBroadcast(bcastproxymodel->mapToSource(srtidx).row(), newip, newport, newid)) {
+        emit bcastTableModelChanged(bcastproxymodel);
+        emit bcastRequest();
+    } else QMessageBox::critical(parent, "Broadcast conflict",
+                                 QString("Can’t edit the current broadcast:\n")
+                                     .append("A broadcast to %1, port %2, ID %3 is already present")
+                                     .arg(newip).arg(QString::number(newport)).arg(QString::number(newid)));
+}
+
+
+
+Broadcast BroadcastServer::getBroadcast(QModelIndex srtidx) {
+    QList<Broadcast> lOB = broadcastlistmodel->getListOfBcasts();
+    if(srtidx.row() < lOB.length()) {
+        return lOB.at(bcastproxymodel->mapToSource(srtidx).row());
+    } else return Broadcast();
 }

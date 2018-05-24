@@ -39,15 +39,6 @@ public:
     int getElapsedTime();
     int getMaximumTime();
 
-public slots:
-    void act();
-    void setMaximumTime(int ms);
-    void setRoomclock(bool roomclock);
-    void setElapsedTime(int ms);
-
-    void setRoomclockMode(int);
-    void showSecondHand(bool);
-
 private:
     QGraphicsScene *nscene;
     QGraphicsScene *rscene;
@@ -57,16 +48,27 @@ private:
     QGraphicsPolygonItem *secondHand;
     QGraphicsPolygonItem *secondHandBase;
     QGraphicsEllipseItem *secondRing;
+    QGraphicsPolygonItem *altSecondHand;
 
     QGraphicsEllipseItem *fg, *mg, *bg, *ring, *focus, *focus2;
     int time, maxtime;
     bool roomclock;
-    int roomclockMode;
+    int roomclockMode, showSHand;
 
     void actRoomclock();
     void actPie();
     bool isRoomclock();
     void resizeEvent(QResizeEvent *event);
+
+
+public slots:
+    void act();
+    void setMaximumTime(int ms);
+    void setRoomclock(bool roomclock);
+    void setElapsedTime(int ms);
+
+    void setRoomclockMode(int);
+    void showSecondHand(bool);
 };
 
 #endif

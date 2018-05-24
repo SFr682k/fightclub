@@ -19,6 +19,7 @@
 #include "phasepbar.h"
 
 
+
 PhasePBar::PhasePBar(QObject *parent) : QObject(parent) {
     time = new QTime;
     refreshTimer = new QTimer;
@@ -29,10 +30,11 @@ PhasePBar::PhasePBar(QObject *parent) : QObject(parent) {
     roomclock = true;
     savedTime = 0;
     lastSavedTime = -1;
+    lastAutosavedTime = -1;
     maximumTime = 1;
     overtime = 0;
 
-    refreshTimer->start(10);
+    refreshTimer->start(16);
 }
 
 
@@ -77,13 +79,41 @@ void PhasePBar::saveCurrentTime() {
 }
 
 
+void PhasePBar::timePlus10() {
+    *time = time->addMSecs(-10000);
+    savedTime += 10000;
+
+    if(!roomclock) {
+        emit elapsedTimeUpdate(running? time->elapsed() : savedTime);
+        pulse();
+        emit overtimed((running? time->elapsed() : savedTime) - (maximumTime + overtime));
+        emit phaseProgressUpdate((running? time->elapsed() : savedTime)*1.0/maximumTime);
+    }
+}
+
+void PhasePBar::timeMinus10() {
+    if(time->elapsed() > 10000) *time = time->addMSecs(10000);
+    else                        time->restart();
+
+    if(savedTime > 10000) savedTime -= 10000;
+    else                  savedTime  = 0;
+
+    if(!roomclock) {
+        emit elapsedTimeUpdate(running? time->elapsed() : savedTime);
+        pulse();
+        emit overtimed((running? time->elapsed() : savedTime) - (maximumTime + overtime));
+        emit phaseProgressUpdate((running? time->elapsed() : savedTime)*1.0/maximumTime);
+    }
+}
+
+
 void PhasePBar::setElapsedTime(int elapsedms) {
     time->start();
     *time = time->addMSecs(-elapsedms);
     savedTime = elapsedms;
 
     emit elapsedTimeUpdate(elapsedms);
-    emit elapsedTimeUpdate(this->timeToString(elapsedms));
+    pulse();
     emit overtimed(time->elapsed() - (maximumTime + overtime));
     if(!roomclock) emit phaseProgressUpdate(savedTime*1.0/maximumTime);
 }
@@ -107,7 +137,7 @@ void PhasePBar::setRemainingTime(int remainingms) {
     }
 
     emit elapsedTimeUpdate(time->elapsed());
-    emit elapsedTimeUpdate(timeToString(time->elapsed()));
+    pulse();
     emit overtimed(time->elapsed() - (maximumTime + overtime));
     emit phaseProgressUpdate(time->elapsed()*1.0/maximumTime);
 
@@ -158,10 +188,19 @@ void PhasePBar::pulse() {
         emit elapsedTimeUpdate(timeToString(time->elapsed()));
         emit phaseProgressUpdate((time->elapsed()*1.0/maximumTime));
 
+        if(time->elapsed() > 15000) {
+            lastAutosavedTime = time->elapsed();
+            emit lastAutosavedTimeUpdate(lastAutosavedTime);
+        }
+
         if(time->elapsed() >= (maximumTime + overtime -60000))
             emit overtimed(time->elapsed() - (maximumTime + overtime));
-    } else if(savedTime != 0 && !roomclock) {
+    } else if(!roomclock) {
         emit elapsedTimeUpdate(timeToFlashingString(time->elapsed()));
+        if((savedTime > 15000) && savedTime != lastAutosavedTime) {
+            lastAutosavedTime = savedTime;
+            emit lastAutosavedTimeUpdate(lastAutosavedTime);
+        }
     }
 }
 
@@ -181,7 +220,7 @@ QString PhasePBar::timeToString(int ms) {
 
 
 QString PhasePBar::timeToFlashingString(int ms) {
-    if((ms - savedTime) % 1000 < 500) {
+    if(((ms - savedTime) % 1000 < 500) && (savedTime > 0)) {
         QTime temp = QTime(0,0,0,0);
         temp = temp.addMSecs(savedTime);
         if(temp.hour() != 0) { return " :  :  "; }
@@ -194,6 +233,11 @@ QString PhasePBar::timeToFlashingString(int ms) {
 
 bool PhasePBar::isRunning()        { return running; }
 bool PhasePBar::isRoomclock()      { return roomclock; }
-int  PhasePBar::getElapsedTime()   { return time->elapsed(); }
+
+int  PhasePBar::getElapsedTime()   {
+    if(running) return time->elapsed();
+    else        return savedTime;
+}
+
 int  PhasePBar::getMaxTime()       { return maximumTime; }
 int  PhasePBar::getLastSavedTime() { return lastSavedTime; }

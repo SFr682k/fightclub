@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/img">
-        <file>gpl-v3-logo.png</file>
+        <file>gpl-v3-logo.svg</file>
     </qresource>
     <qresource>
         <file>breeze-icons/application-exit-16.svg</file>
@@ -9,8 +9,11 @@
         <file>breeze-icons/chronometer-start-24.svg</file>
         <file>breeze-icons/chronometer-pause-24.svg</file>
         <file>breeze-icons/chronometer-restart-24.svg</file>
+        <file>breeze-icons/chronometer-plus-ten-24.svg</file>
+        <file>breeze-icons/chronometer-minus-ten-24.svg</file>
         <file>breeze-icons/dialog-ok-apply-16.svg</file>
         <file>breeze-icons/dialog-cancel-16.svg</file>
+        <file>breeze-icons/document-edit-16.svg</file>
         <file>breeze-icons/document-open-24.svg</file>
         <file>breeze-icons/document-save-24.svg</file>
         <file>breeze-icons/document-send-16.svg</file>
@@ -21,6 +24,8 @@
         <file>breeze-icons/go-next-32.svg</file>
         <file>breeze-icons/go-previous-32.svg</file>
         <file>breeze-icons/help-about-16.svg</file>
+        <file>breeze-icons/list-add-16.svg</file>
+        <file>breeze-icons/list-remove-16.svg</file>
         <file>breeze-icons/object-locked-16.svg</file>
         <file>breeze-icons/object-unlocked-16.svg</file>
         <file>breeze-icons/view-fullscreen-16.svg</file>

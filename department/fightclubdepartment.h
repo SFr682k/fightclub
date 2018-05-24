@@ -21,12 +21,13 @@
 
 #include <QMainWindow>
 #include <QAbstractTableModel>
+#include <QItemSelection>
 #include <QKeyEvent>
+#include <QSortFilterProxyModel>
 
 #include "aboutdialog.h"
 #include "broadcastserver.h"
 #include "clkwindowsettings.h"
-#include "clockwindow.h"
 #include "listadapter.h"
 #include "phasepbar.h"
 #include "problemadapter.h"
@@ -50,7 +51,6 @@ private:
     AboutDialog *aboutdlg;
     BroadcastServer *bcastsrv;
     ClkWindowSettings *clkwindowsettings;
-    ClockWindow *clockwindow;
     ListAdapter *lstadapt;
     PhasePBar *phpbar;
     ProblemAdapter *probadapt;
@@ -61,7 +61,13 @@ private:
 
     QString previousPath;
 
+    bool bcastlocked;
+    QString bcastlockedpwd;
+
     bool exitEnabled, toggleFscreenEnabled;
+
+    QAbstractTableModel *bcasttablemodel;
+    enum {IP_BCAST, IP_LOCAL, IP_CUSTOM};
 
     bool continueAndInit();
 
@@ -72,10 +78,10 @@ protected:
 
 signals:
     void switchStages(bool);
+    void closeAllClockWindows();
 
 private slots:
     void openClockWindow();
-    void clockWindowClosed();
 
     void switchBetweenStages(bool);
     void toggleStartStopBttn();
@@ -89,16 +95,24 @@ private slots:
     void setCurrPhaseProps(bool,bool,bool);
 
     void propagateProblemsList(int);
+    void editProblemBttnToggled();
 
     void performersChanged(QString, QString, QString);
     void updateReporterModel(int);
+    void editRepBttnToggled();
     void updateOpponentModel(int);
+    void editOppBttnToggled();
     void updateReviewerModel(int);
+    void editRevBttnToggled();
 
-    void setBroadcastIP();
-    void setBroadcastPort();
-    void setBroadcastID();
-    void checkCustomIPRbttn();
+    void toggleBroadcastLock();
+
+    void propagateBroadcastList(QSortFilterProxyModel*);
+    void bcastSelectionChanged(QItemSelection, QItemSelection);
+    void updateBcastIPBoxes();
+    void applyBcastSettings();
+    void addBcast();
+    void deleteBcast();
 
     void openStagesFile();
     void unloadStagesFile();

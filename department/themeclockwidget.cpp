@@ -26,8 +26,6 @@
 #include <QTime>
 
 
-#include <QDebug>
-
 ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     QGraphicsView(parent)
 {
@@ -123,6 +121,14 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     secondRing->setPen(ringPen);
     secondRing->setPos(150,150);
     
+    QPolygonF altSecondHandPolygon;
+    altSecondHandPolygon << QPointF(-1.5, 144) << QPointF(1.5, 144) << QPointF(4, -40) << QPointF(-4, -40);
+
+    altSecondHand = new QGraphicsPolygonItem(altSecondHandPolygon);
+    altSecondHand->setBrush(QBrush(QColor(180,0,0)));
+    altSecondHand->setPen(QPen(QColor(0,0,0,0)));
+    altSecondHand->setPos(150,150);
+
     focus2 = new QGraphicsEllipseItem(0,0,300,300);
     focus2->setPen(QPen(QColor(0,0,0,0)));
     rscene->addItem(focus2);
@@ -147,7 +153,11 @@ ThemeClockWidget::ThemeClockWidget(QWidget *parent) :
     rscene->addItem(secondHandBase);
     rscene->addItem(secondRing);
 
+    rscene->addItem(altSecondHand);
+    altSecondHand->setVisible(false);
+
     roomclockMode = 0;
+    showSHand     = 1;
 }
 
 
@@ -168,18 +178,19 @@ void ThemeClockWidget::resizeEvent(QResizeEvent *event) {
 void ThemeClockWidget::actPie() {
     setScene(nscene);
     
-    bg->setSpanAngle(-round(((double)time*360*16)/(double)maxtime));
+    if(time < maxtime) bg->setSpanAngle(-round(((double)time*360*16)/(double)maxtime));
+    else               bg->setSpanAngle(360*16);
 
     if(time < maxtime*3/4) bg->setBrush(QBrush(QColor(50,200,30)));
     else                   bg->setBrush(QBrush(QColor(255,190,30)));    
 
 
     if(time > maxtime && time < 2*maxtime) mg->setSpanAngle(-round((((double)time-maxtime)*360*16)/(double)maxtime));
-    else if (time > 2*maxtime)             mg->setSpanAngle(360*16);
+    else if(time >= 2*maxtime)             mg->setSpanAngle(360*16);
     else                                   mg->setSpanAngle(0);
     
-    if(time>2*maxtime) fg->setSpanAngle(-round((((double)time-2*(double)maxtime)*360*16)/(double)maxtime));
-    else               fg->setSpanAngle(0);
+    if(time > 2*maxtime) fg->setSpanAngle(-round((((double)time-2*(double)maxtime)*360*16)/(double)maxtime));
+    else                 fg->setSpanAngle(0);
 }
 
 
@@ -193,7 +204,7 @@ void ThemeClockWidget::actRoomclock() {
     double secondHandPos;
 
 
-    switch (roomclockMode) {        
+    switch (roomclockMode*showSHand) {
         default: // Swiss
             if(now.second() < 58) secondHandPos = 180.0 + 6.0*((int) ((now.second()*1000 + now.msec())*60/58)/1000
                                                                + 0.5-0.5*cos((((now.second()*1000 + now.msec())*60/58)%1000)/1000.0*3.14159));
@@ -233,6 +244,7 @@ void ThemeClockWidget::actRoomclock() {
     secondHand->setRotation(secondHandPos);
     secondHandBase->setRotation(secondHandPos);
     secondRing->setRotation(secondHandPos);
+    altSecondHand->setRotation(secondHandPos);
 }
 
 
@@ -252,10 +264,24 @@ int  ThemeClockWidget::getMaximumTime() { return maxtime; }
 bool ThemeClockWidget::isRoomclock()    { return roomclock; }
 
 
-void ThemeClockWidget::setRoomclockMode(int mode) { roomclockMode = mode; }
+void ThemeClockWidget::setRoomclockMode(int mode) {
+    roomclockMode = mode;
+
+    secondHand->setVisible((showSHand > 0) && (roomclockMode != 2));
+    secondHandBase->setVisible((showSHand > 0) && (roomclockMode != 2));
+    secondRing->setVisible((showSHand > 0) && (roomclockMode != 2));
+
+    altSecondHand->setVisible((showSHand > 0) && (roomclockMode == 2));
+
+    actRoomclock();
+}
 
 void ThemeClockWidget::showSecondHand(bool show) {
-    secondHand->setVisible(show);
-    secondHandBase->setVisible(show);
-    secondRing->setVisible(show);
+    secondHand->setVisible(show && (roomclockMode != 2));
+    secondHandBase->setVisible(show && (roomclockMode != 2));
+    secondRing->setVisible(show && (roomclockMode != 2));
+    altSecondHand->setVisible(show && (roomclockMode == 2));
+    showSHand = show? 1 : -1;
+    actRoomclock();
 }
+

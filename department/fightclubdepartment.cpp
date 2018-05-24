@@ -19,15 +19,16 @@
 #include "fightclubdepartment.h"
 #include "ui_fightclubdepartment.h"
 
+#include "clockwindow.h"
 #include "filepropertyparser.h"
 
 #include <QFileDialog>
+#include <QInputDialog>
+#include <QItemSelectionModel>
 #include <QMessageBox>
 #include <QModelIndex>
 #include <QStandardPaths>
 
-
-#include <QDebug>
 
 
 FightclubDepartment::FightclubDepartment(QWidget *parent) :
@@ -62,16 +63,18 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     ui->listofphases->setEnabled(false);
     ui->problemcombobox->setEnabled(false);
     ui->problemcombobox->view()->setTextElideMode(Qt::ElideRight);
-    ui->problemaccepted->setEnabled(false);
-    ui->problemrejected->setEnabled(false);
+    ui->toggleEditProblemBttn->setEnabled(false);
 
     ui->repcombobox->setEnabled(false);
+    ui->toggleEditRepBttn->setEnabled(false);
     ui->repcombobox->view()->setTextElideMode(Qt::ElideRight);
     ui->oppcombobox->setEnabled(false);
+    ui->toggleEditOppBttn->setEnabled(false);
     ui->oppcombobox->view()->setTextElideMode(Qt::ElideRight);
     ui->revcombobox->setEnabled(false);
+    ui->toggleEditRevBttn->setEnabled(false);
     ui->revcombobox->view()->setTextElideMode(Qt::ElideRight);
-    ui->submitperfomances->setEnabled(false);
+
 
     ui->unloadStagesFile->setEnabled(false);
     ui->unloadPhasesFile->setEnabled(false);
@@ -86,25 +89,38 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     ui->startstopbttn->setEnabled(false);
     ui->resettimebttn->setEnabled(false);
-    ui->settimebttn->setEnabled(false);
     ui->savetimebttn->setEnabled(false);
+    ui->settimebttn->setEnabled(false);
+    ui->timePlus10bttn->setEnabled(false);
+    ui->timeMinus10bttn->setEnabled(false);
 
 
 
     aboutdlg = new AboutDialog(this);
 
-    bcastsrv = new BroadcastServer(this, QHostAddress("127.0.0.1"), 45454, 12345);
+    bcastsrv = new BroadcastServer(this);
     ui->bcastActivated->setChecked(false);
-    ui->bcastips->setEnabled(false);
-    ui->bcastsettings->setEnabled(false);
-    ui->localhost->setChecked(true);
+    ui->listOfBroadcasts->setEnabled(false);
+    ui->bcastConfigBox->setEnabled(false);
+
+    ui->selectIPCombobox->addItem("Local network", QVariant(IP_BCAST));
+    ui->selectIPCombobox->addItem("Local machine", QVariant(IP_LOCAL));
+    ui->selectIPCombobox->addItem("Custom machine", QVariant(IP_CUSTOM));
+    updateBcastIPBoxes();
+
+    ui->deleteBroadcast->setEnabled(false);
+    ui->applyBcastSettings->setEnabled(false);
+
+
     ui->bcastportsel->setValue(45454);
     ui->bcastidsel->setValue(12345);
 
     lstadapt = new ListAdapter();
     phpbar = new PhasePBar();
     probadapt = new ProblemAdapter();
+
     settimedlg = new SetTimeDialog(this);
+    connect(phpbar, SIGNAL(lastAutosavedTimeUpdate(int)), settimedlg, SLOT(updateAutosavedTime(int)));
 
     teamadapt = new TeamAdapter();
     lstadapt->setTeamAdapter(teamadapt);
@@ -115,23 +131,10 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(ui->actionAbout, SIGNAL(triggered()), aboutdlg, SLOT(exec()));
 
 
-    clockwindow = new ClockWindow();
-    ui->actionClose_Clock_Window->setEnabled(false);
-    ui->actionClockwindowFullscreen->setEnabled(false);
-    ui->actionClkWindowSettings->setEnabled(false);
-    connect(clockwindow, SIGNAL(clockwindowClosed()), this, SLOT(clockWindowClosed()));
     connect(ui->actionOpen_Clock_Window, SIGNAL(triggered(bool)), this, SLOT(openClockWindow()));
-    connect(ui->actionClockwindowFullscreen, SIGNAL(toggled(bool)), clockwindow, SLOT(setFullscreen(bool)));
-    connect(clockwindow, SIGNAL(fullscreenChanged(bool)), ui->actionClockwindowFullscreen, SLOT(setChecked(bool)));
-    connect(ui->actionClose_Clock_Window, SIGNAL(triggered(bool)), clockwindow, SLOT(close()));
-
 
     clkwindowsettings = new ClkWindowSettings(this);
     connect(ui->actionClkWindowSettings, SIGNAL(triggered(bool)), clkwindowsettings, SLOT(exec()));
-    connect(clkwindowsettings, SIGNAL(fontChanged(QString)), clockwindow, SLOT(setWindowFont(QString)));
-    connect(clkwindowsettings, SIGNAL(fontScaleChanged(double)), clockwindow, SLOT(setFontScale(double)));
-    connect(clkwindowsettings, SIGNAL(showRclockSecondHand(bool)), clockwindow, SLOT(showRclockSecondHand(bool)));
-    connect(clkwindowsettings, SIGNAL(rclockBehaviorChanged(int)), clockwindow, SLOT(setRclockBehavior(int)));
 
 
     connect(lstadapt, SIGNAL(forceInit()), this, SLOT(initialize()));
@@ -177,28 +180,32 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(ui->resettimebttn, SIGNAL(clicked()), phpbar, SLOT(resetTimer()));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->resettimebttn, SLOT(setDisabled(bool)));
 
+    connect(ui->savetimebttn, SIGNAL(clicked(bool)), phpbar, SLOT(saveCurrentTime()));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->savetimebttn, SLOT(setDisabled(bool)));
+
     connect(ui->settimebttn, SIGNAL(clicked()), this, SLOT(openSetTimeDialog()));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->settimebttn, SLOT(setDisabled(bool)));
     connect(settimedlg, SIGNAL(elapsedTimeSet(int)), phpbar, SLOT(setElapsedTime(int)));
     connect(settimedlg, SIGNAL(remainingTimeSet(int)), phpbar, SLOT(setRemainingTime(int)));
 
-    connect(ui->savetimebttn, SIGNAL(clicked(bool)), phpbar, SLOT(saveCurrentTime()));
-    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->savetimebttn, SLOT(setDisabled(bool)));
+    connect(ui->timeMinus10bttn, SIGNAL(clicked(bool)), phpbar, SLOT(timeMinus10()));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->timeMinus10bttn, SLOT(setDisabled(bool)));
+
+    connect(ui->timePlus10bttn, SIGNAL(clicked(bool)), phpbar, SLOT(timePlus10()));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), ui->timePlus10bttn, SLOT(setDisabled(bool)));
+
 
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), ui->phaselabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(phaseNameChanged(QString)), bcastsrv, SLOT(updatePhaseName(QString)));
-    connect(lstadapt, SIGNAL(phaseNameChanged(QString)), clockwindow, SLOT(phaseNameChanged(QString)));
 
     connect(phpbar, SIGNAL(elapsedTimeUpdate(QString)), ui->elapsedtime, SLOT(display(QString)));
     connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), bcastsrv, SLOT(updateElapsedTime(int)));
-    connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), clockwindow, SLOT(updateElapsedTime(int)));
     connect(lstadapt, SIGNAL(elapsedTimeChanged(int)), phpbar, SLOT(setElapsedTime(int)));
 
     connect(phpbar, SIGNAL(phaseProgressUpdate(double)), this, SLOT(setPhaseProgress(double)));
 
     connect(lstadapt, SIGNAL(maximumTimeChanged(int)), phpbar, SLOT(setMaximumTime(int)));
     connect(lstadapt, SIGNAL(maximumTimeChanged(int)), bcastsrv, SLOT(updateMaximumTime(int)));
-    connect(lstadapt, SIGNAL(maximumTimeChanged(int)), clockwindow, SLOT(updateMaximumTime(int)));
     connect(phpbar, SIGNAL(maximumTimeUpdate(QString)), ui->maxtime, SLOT(display(QString)));
 
     connect(phpbar, SIGNAL(overtimed(int)), lstadapt, SLOT(handleOvertime(int)));
@@ -208,45 +215,45 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), phpbar, SLOT(setRoomclock(bool)));
     connect(lstadapt, SIGNAL(roomClockChanged(bool)), bcastsrv, SLOT(updateRClockState(bool)));
-    connect(lstadapt, SIGNAL(roomClockChanged(bool)), clockwindow, SLOT(toggleRoomclock(bool)));
 
     connect(lstadapt, SIGNAL(currentProblemChanged(int)), this, SLOT(propagateProblemsList(int)));
     connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), bcastsrv, SLOT(updateProblem(QString)));
-    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clockwindow, SLOT(problemChanged(QString)));
-
+    connect(ui->toggleEditProblemBttn, SIGNAL(clicked(bool)), this, SLOT(editProblemBttnToggled()));
 
     connect(lstadapt, SIGNAL(currentPerformersChanged(QString,QString,QString)), this, SLOT(performersChanged(QString,QString,QString)));
 
     connect(ui->repcombobox, SIGNAL(activated(int)), this, SLOT(updateReporterModel(int)));
     connect(ui->repcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reporterChanged(QString)));
+    connect(ui->toggleEditRepBttn, SIGNAL(clicked(bool)), this, SLOT(editRepBttnToggled()));
 
     connect(ui->oppcombobox, SIGNAL(activated(int)), this, SLOT(updateOpponentModel(int)));
     connect(ui->oppcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(opponentChanged(QString)));
+    connect(ui->toggleEditOppBttn, SIGNAL(clicked(bool)), this, SLOT(editOppBttnToggled()));
 
     connect(ui->revcombobox, SIGNAL(activated(int)), this, SLOT(updateReviewerModel(int)));
     connect(ui->revcombobox, SIGNAL(activated(QString)), lstadapt, SLOT(reviewerChanged(QString)));
+    connect(ui->toggleEditRevBttn, SIGNAL(clicked(bool)), this, SLOT(editRevBttnToggled()));
 
     connect(lstadapt, SIGNAL(performersChanged(QString)), ui->performerslabel, SLOT(setText(QString)));
     connect(lstadapt, SIGNAL(performersChanged(QString)), bcastsrv, SLOT(updatePerformers(QString)));
-    connect(lstadapt, SIGNAL(performersChanged(QString)), clockwindow, SLOT(performersChanged(QString)));
 
 
 
     // BROADCAST TAB --------------------------------------------------------------------
 
-    connect(ui->bcastActivated, SIGNAL(clicked(bool)), bcastsrv, SLOT(enableBroadcast(bool)));
-    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastips, SLOT(setEnabled(bool)));
-    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastsettings, SLOT(setEnabled(bool)));
+    connect(ui->lockBcastTabBttn, SIGNAL(clicked(bool)), this, SLOT(toggleBroadcastLock()));
 
-    connect(ui->bcastipapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastIP()));
-    connect(ui->bcastportapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastPort()));
-    connect(ui->bcastidapply, SIGNAL(clicked(bool)), this, SLOT(setBroadcastID()));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->listOfBroadcasts, SLOT(setEnabled(bool)));
+    connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastConfigBox, SLOT(setEnabled(bool)));
 
-    connect(ui->customippt1, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
-    connect(ui->customippt2, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
-    connect(ui->customippt3, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
-    connect(ui->customippt4, SIGNAL(valueChanged(int)), this, SLOT(checkCustomIPRbttn()));
+    connect(ui->selectIPCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateBcastIPBoxes()));
 
+    connect(bcastsrv, SIGNAL(bcastTableModelChanged(QSortFilterProxyModel*)),
+            this, SLOT(propagateBroadcastList(QSortFilterProxyModel*)));
+
+    connect(ui->addBroadcast, SIGNAL(clicked(bool)), this, SLOT(addBcast()));
+    connect(ui->deleteBroadcast, SIGNAL(clicked(bool)), this, SLOT(deleteBcast()));
+    connect(ui->applyBcastSettings, SIGNAL(clicked(bool)), this, SLOT(applyBcastSettings()));
 
 
 
@@ -260,13 +267,18 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
     connect(ui->unloadProblemsFile, SIGNAL(clicked(bool)), this, SLOT(unloadProblemsFile()));
     connect(ui->loadTeamsFile, SIGNAL(clicked(bool)), this, SLOT(openTeamsFile()));
     connect(ui->unloadTeamsFile, SIGNAL(clicked(bool)), this, SLOT(unloadTeamsFile()));
+
+
+
+    bcastsrv->emitModel();
+    connect(ui->listOfBroadcasts->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(bcastSelectionChanged(QItemSelection,QItemSelection)));
 }
 
 
 FightclubDepartment::~FightclubDepartment() {
     delete ui;
     delete aboutdlg;
-    delete clockwindow;
     delete settimedlg;
 }
 
@@ -305,19 +317,38 @@ bool FightclubDepartment::continueAndInit() {
 
 
 void FightclubDepartment::openClockWindow() {
-    clockwindow->show();
-    ui->actionOpen_Clock_Window->setEnabled(false);
-    ui->actionClockwindowFullscreen->setEnabled(true);
-    ui->actionClkWindowSettings->setEnabled(true);
-    ui->actionClose_Clock_Window->setEnabled(true);
-}
+    ClockWindow *clkwindow = new ClockWindow();
 
-void FightclubDepartment::clockWindowClosed() {
-    ui->actionOpen_Clock_Window->setEnabled(true);
-    ui->actionClockwindowFullscreen->setChecked(false);
-    ui->actionClockwindowFullscreen->setEnabled(false);
-    ui->actionClkWindowSettings->setEnabled(false);
-    ui->actionClose_Clock_Window->setEnabled(false);
+    connect(lstadapt, SIGNAL(phaseNameChanged(QString)), clkwindow, SLOT(phaseNameChanged(QString)));
+    connect(phpbar, SIGNAL(elapsedTimeUpdate(int)), clkwindow, SLOT(updateElapsedTime(int)));
+    connect(lstadapt, SIGNAL(maximumTimeChanged(int)), clkwindow, SLOT(updateMaximumTime(int)));
+    connect(lstadapt, SIGNAL(roomClockChanged(bool)), clkwindow, SLOT(toggleRoomclock(bool)));
+    connect(ui->problemcombobox, SIGNAL(currentIndexChanged(QString)), clkwindow, SLOT(problemChanged(QString)));
+    connect(lstadapt, SIGNAL(performersChanged(QString)), clkwindow, SLOT(performersChanged(QString)));
+
+    connect(clkwindowsettings, SIGNAL(fontChanged(QString)), clkwindow, SLOT(setWindowFont(QString)));
+    connect(clkwindowsettings, SIGNAL(fontScaleChanged(double)), clkwindow, SLOT(setFontScale(double)));
+    connect(clkwindowsettings, SIGNAL(showRclockSecondHand(bool)), clkwindow, SLOT(showRclockSecondHand(bool)));
+    connect(clkwindowsettings, SIGNAL(rclockBehaviorChanged(int)), clkwindow, SLOT(setRclockBehavior(int)));
+
+    clkwindow->updateElapsedTime(phpbar->getElapsedTime());
+    clkwindow->updateMaximumTime(phpbar->getMaxTime());
+    clkwindow->toggleRoomclock(phpbar->isRoomclock());
+
+    // TODO: Find a better solution for obtaining the current phase name?
+    clkwindow->phaseNameChanged(ui->phaselabel->text());
+    clkwindow->problemChanged(ui->problemcombobox->currentText());
+    clkwindow->performersChanged(ui->performerslabel->text());
+
+    clkwindow->setWindowFont(clkwindowsettings->getFontFamily());
+    clkwindow->setFontScale(clkwindowsettings->getFontScale());
+    clkwindow->showRclockSecondHand(clkwindowsettings->getShowRClkSecondHand());
+    clkwindow->setRclockBehavior(clkwindowsettings->getRClkBehavior());
+
+    connect(ui->actionClose_Clock_Windows, SIGNAL(triggered(bool)), clkwindow, SLOT(close()));
+    connect(this, SIGNAL(closeAllClockWindows()), clkwindow, SLOT(close()));
+
+    clkwindow->show();
 }
 
 
@@ -406,36 +437,51 @@ void FightclubDepartment::setCurrPhaseProps(bool aadv, bool carry, bool ocarry) 
 
 
 void FightclubDepartment::setPhaseProgress(double progress) {
-    ui->progressbar->setMaximum(1000);
+    ui->progressbar->setMaximum(2000);
 
-    QString lowerbborder;
-    QString upperbborder;
+    QString lowerbborder, upperbborder;
+    QString leftColor, rightColor;
 
-    if(((int) (progress*1000.0) % 1000) == 0) {
+    if(((int) (progress*2000.0) % 2000) == 0) {
         lowerbborder = "0";
         upperbborder = "0.00001";
     } else {
-        lowerbborder = QString::number(((int) (progress*1000.0) % 1000)/1000.0 - 0.00001);
-        upperbborder = QString::number(((int) (progress*1000.0) % 1000)/1000.0);
+        lowerbborder = QString::number(((int) (progress*2000.0) % 2000)/2000.0 - 0.00001);
+        upperbborder = QString::number(((int) (progress*2000.0) % 2000)/2000.0);
     }
 
-    if(progress < 0.75)      ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #32c81e;}");
-    else if(progress <= 1.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #ffbe1e;}");
-    else if(progress <= 2.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #c80000, stop: " + lowerbborder + " #c80000, stop: " + upperbborder + " #ffbe1e, stop: 1 #ffbe1e);}");
-    else if(progress <= 3.0) ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #641e64, stop: " + lowerbborder + " #641e64, stop: " + upperbborder + " #c80000, stop: 1 #c80000);}");
-    else if(progress > 3.0)  ui->progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #641e64;}");
+    if(progress < 0.75)      leftColor = "#32c81e", rightColor = "#fff";
+    else if(progress <  1.0) leftColor = "#ffbe1e", rightColor = "#fff";
+    else if(progress <  2.0) leftColor = "#c80000", rightColor = "#ffbe1e";
+    else if(progress <  3.0) leftColor = "#641e64", rightColor = "#c80000";
+    else if(progress >= 3.0) leftColor = "#641e64", rightColor = "#641e64";
 
-    if(progress <= 1.0) ui->progressbar->setValue(((int) (progress*1000)) % 1000);
-    else                ui->progressbar->setValue(1000);
+
+    ui->progressbar->setStyleSheet(QString("QProgressBar{ border: 1px solid #000; border-radius: 2px; }")
+                                   .append("QProgressBar::chunk{border-radius: 2px;")
+                                       .append("background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0,")
+                                           .append("stop: 0 " + leftColor + ", stop: " + lowerbborder + " " + leftColor + ",")
+                                           .append("stop: " + upperbborder + " " + rightColor + ", stop: 1 " + rightColor + ");}"));
+    ui->progressbar->setValue(2000);
 }
 
 
 void FightclubDepartment::propagateProblemsList(int problem) {
     QAbstractTableModel* model = probadapt->getProblemList(problem);
 
-    ui->problemcombobox->setEnabled(model->rowCount() > 1);
     ui->problemcombobox->setModel(model);
+
+    ui->problemcombobox->setEnabled(model->rowCount() > 1);
+    ui->toggleEditProblemBttn->setEnabled(model->rowCount() > 1);
+    ui->toggleEditProblemBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
+
     if(problem < 0) ui->problemcombobox->setCurrentIndex(-1);
+}
+
+void FightclubDepartment::editProblemBttnToggled() {
+    ui->problemcombobox->setEnabled(!ui->problemcombobox->isEnabled());
+    ui->toggleEditProblemBttn->setIcon(QIcon(QString(":/breeze-icons/")
+        .append(ui->problemcombobox->isEnabled()? "dialog-ok-apply" : "document-edit").append("-16.svg")));
 }
 
 
@@ -447,8 +493,16 @@ void FightclubDepartment::performersChanged(QString rep, QString opp, QString re
     repcomboboxinit = rep; oppcomboboxinit = opp; revcomboboxinit = rev;
 
     ui->repcombobox->setEnabled(ui->repcombobox->model()->rowCount() > 1);
+    ui->toggleEditRepBttn->setEnabled(ui->revcombobox->model()->rowCount() > 1);
+    ui->toggleEditRepBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
+
     ui->oppcombobox->setEnabled(ui->oppcombobox->model()->rowCount() > 1);
+    ui->toggleEditOppBttn->setEnabled(ui->oppcombobox->model()->rowCount() > 1);
+    ui->toggleEditOppBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
+
     ui->revcombobox->setEnabled(ui->revcombobox->model()->rowCount() > 1);
+    ui->toggleEditRevBttn->setEnabled(ui->repcombobox->model()->rowCount() > 1);
+    ui->toggleEditRevBttn->setIcon(QIcon(":/breeze-icons/dialog-ok-apply-16.svg"));
 }
 
 
@@ -460,6 +514,13 @@ void FightclubDepartment::updateReporterModel(int index) {
     repcomboboxinit = nullptr;
 }
 
+void FightclubDepartment::editRepBttnToggled() {
+    ui->repcombobox->setEnabled(!ui->repcombobox->isEnabled());
+    ui->toggleEditRepBttn->setIcon(QIcon(QString(":/breeze-icons/")
+        .append(ui->repcombobox->isEnabled()? "dialog-ok-apply" : "document-edit").append("-16.svg")));
+}
+
+
 void FightclubDepartment::updateOpponentModel(int index) {
     if((oppcomboboxinit == nullptr) || (index == 0)) return;
 
@@ -468,12 +529,25 @@ void FightclubDepartment::updateOpponentModel(int index) {
     oppcomboboxinit = nullptr;
 }
 
+void FightclubDepartment::editOppBttnToggled() {
+    ui->oppcombobox->setEnabled(!ui->oppcombobox->isEnabled());
+    ui->toggleEditOppBttn->setIcon(QIcon(QString(":/breeze-icons/")
+        .append(ui->oppcombobox->isEnabled()? "dialog-ok-apply" : "document-edit").append("-16.svg")));
+}
+
+
 void FightclubDepartment::updateReviewerModel(int index) {
     if((revcomboboxinit == nullptr) || (index == 0)) return;
 
     ui->revcombobox->setModel(teamadapt->getPerformersList(revcomboboxinit, false));
     ui->revcombobox->setCurrentIndex(index -1);
     revcomboboxinit = nullptr;
+}
+
+void FightclubDepartment::editRevBttnToggled() {
+    ui->revcombobox->setEnabled(!ui->revcombobox->isEnabled());
+    ui->toggleEditRevBttn->setIcon(QIcon(QString(":/breeze-icons/").append(ui->revcombobox->isEnabled()?
+                                                     "dialog-ok-apply" : "document-edit").append("-16.svg")));
 }
 
 
@@ -484,23 +558,139 @@ void FightclubDepartment::updateReviewerModel(int index) {
 
 // BROADCAST TAB ------------------------------------------------------------------------
 
-void FightclubDepartment::setBroadcastIP() {
-    QString bcastIP;
-    if(ui->localhost->isChecked())      bcastIP = "127.0.0.1";
-    else if(ui->everybody->isChecked()) bcastIP = "255.255.255.255";
-    else if(ui->customip->isChecked()) {
-        bcastIP = QString::number(ui->customippt1->value()) + "."
-                  + QString::number(ui->customippt2->value()) + "."
-                  + QString::number(ui->customippt3->value()) + "."
-                  + QString::number(ui->customippt4->value());
+void FightclubDepartment::toggleBroadcastLock() {
+    if(!bcastlocked) {
+        QString pwd1 = QInputDialog::getText(this, "Set password",
+                                             "Please set a password:", QLineEdit::Password);
+
+        if(pwd1 == nullptr) return;
+
+        QString pwd2 = QInputDialog::getText(this, "Set password",
+                                             "Please confirm the password:", QLineEdit::Password);
+
+        if(pwd2 == nullptr) return;
+        else if(pwd1 != pwd2) {
+            QMessageBox::critical(this, "Error", "The passwords are not identical");
+            return;
+        }
+
+        bcastlocked = true;
+        bcastlockedpwd = pwd1;
+    } else {
+        QString pwd = QInputDialog::getText(this, "Enter password",
+                                            "Please enter the password:", QLineEdit::Password);
+
+        if(pwd == nullptr) return;
+        else if(pwd != bcastlockedpwd) {
+            QMessageBox::critical(this, "Error", "Wrong password");
+            return;
+        }
+
+        bcastlocked = false;
     }
-    bcastsrv->setBroadcastAddress(bcastIP);
+
+    ui->bcastActivated->setEnabled(!bcastlocked);
+    ui->listOfBroadcasts->setEnabled(!bcastlocked);
+    ui->bcastConfigBox->setEnabled(!bcastlocked);
+    ui->lockBcastTabBttn->setText(bcastlocked? "Unlock" : "Lock");
+    ui->lockBcastTabBttn->setIcon(bcastlocked? QIcon(":/breeze-icons/object-unlocked-16.svg")
+                                             : QIcon(":/breeze-icons/object-locked-16.svg"));
 }
 
-void FightclubDepartment::setBroadcastPort() { bcastsrv->setBroadcastPort(ui->bcastportsel->value()); }
-void FightclubDepartment::setBroadcastID()   { bcastsrv->setSignature(ui->bcastidsel->value()); }
 
-void FightclubDepartment::checkCustomIPRbttn() { ui->customip->setChecked(true); }
+void FightclubDepartment::propagateBroadcastList(QSortFilterProxyModel* model) {
+    ui->listOfBroadcasts->setModel(model);
+    ui->listOfBroadcasts->sortByColumn(2,Qt::AscendingOrder);
+    ui->listOfBroadcasts->sortByColumn(1,Qt::AscendingOrder);
+    ui->listOfBroadcasts->sortByColumn(0,Qt::AscendingOrder);
+}
+
+void FightclubDepartment::bcastSelectionChanged(QItemSelection selected, QItemSelection deselected) {
+    Q_UNUSED(deselected);
+
+    int sel = -1;
+    if(selected.indexes().length() > 0) sel = selected.indexes().at(0).row();
+
+    if(sel < 0) {
+        // no item selected
+        ui->selectIPCombobox->setCurrentIndex(0);
+        ui->bcastportsel->setValue(45454);
+        ui->bcastidsel->setValue(12345);
+    } else {
+        // item selected
+        Broadcast bcast = bcastsrv->getBroadcast(selected.indexes().at(0));
+
+        QString ip = bcast.getAddress().toString();
+        if(ip == "255.255.255.255") ui->selectIPCombobox->setCurrentIndex(0);
+        else if(ip == "127.0.0.1")  ui->selectIPCombobox->setCurrentIndex(1);
+        else {
+            ui->selectIPCombobox->setCurrentIndex(2);
+
+            QStringList elementsOfIP = ip.split(".");
+            ui->customippt1->setValue(elementsOfIP.at(0).toInt());
+            ui->customippt2->setValue(elementsOfIP.at(1).toInt());
+            ui->customippt3->setValue(elementsOfIP.at(2).toInt());
+            ui->customippt4->setValue(elementsOfIP.at(3).toInt());
+        }
+
+        ui->bcastportsel->setValue(bcast.getPort());
+        ui->bcastidsel->setValue(bcast.getId());
+    }
+
+    ui->deleteBroadcast->setEnabled(!(sel < 0));
+    ui->applyBcastSettings->setEnabled(!(sel < 0));
+}
+
+
+void FightclubDepartment::updateBcastIPBoxes() {
+    ui->customippt1->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+    ui->customippt2->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+    ui->customippt3->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+    ui->customippt4->setEnabled(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt() == IP_CUSTOM);
+
+    int tmp1, tmp2, tmp3, tmp4;
+
+    switch(ui->selectIPCombobox->itemData(ui->selectIPCombobox->currentIndex()).toInt()) {
+        case IP_BCAST:  tmp1 = 255, tmp2 = 255, tmp3 = 255, tmp4 = 255; break;
+        case IP_LOCAL:  tmp1 = 127, tmp2 =   0, tmp3 =   0, tmp4 =   1; break;
+        case IP_CUSTOM: tmp1 = 192, tmp2 = 168, tmp3 =   0, tmp4 =   1; break;
+    }
+
+    ui->customippt1->setValue(tmp1);
+    ui->customippt2->setValue(tmp2);
+    ui->customippt3->setValue(tmp3);
+    ui->customippt4->setValue(tmp4);
+}
+
+
+void FightclubDepartment::addBcast() {
+    QString bcastIP = QString::number(ui->customippt1->value()) + "."
+                    + QString::number(ui->customippt2->value()) + "."
+                    + QString::number(ui->customippt3->value()) + "."
+                    + QString::number(ui->customippt4->value());
+
+    bcastsrv->addBroadcast(bcastIP, ui->bcastportsel->value(), ui->bcastidsel->value());
+
+    ui->selectIPCombobox->setCurrentIndex(0);
+    ui->bcastportsel->setValue(45454);
+    ui->bcastidsel->setValue(12345);
+}
+
+void FightclubDepartment::deleteBcast() {
+    QModelIndex selectedRow = ui->listOfBroadcasts->selectionModel()->selectedIndexes().value(0);
+    ui->listOfBroadcasts->clearSelection();
+    bcastsrv->deleteBroadcast(selectedRow);
+}
+
+void FightclubDepartment::applyBcastSettings() {
+    QString bcastIP = QString::number(ui->customippt1->value()) + "."
+                    + QString::number(ui->customippt2->value()) + "."
+                    + QString::number(ui->customippt3->value()) + "."
+                    + QString::number(ui->customippt4->value());
+
+    bcastsrv->editBroadcast(ui->listOfBroadcasts->selectionModel()->selectedIndexes().value(0), bcastIP,
+                            ui->bcastportsel->value(), ui->bcastidsel->value());
+}
 
 
 
@@ -688,7 +878,7 @@ void FightclubDepartment::closeEvent(QCloseEvent *event) {
             "Confirmation requested",
             "Do you really want to close Fightclub Department?",
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes) {
-        clockwindow->kill();
+        emit closeAllClockWindows();
         event->accept();
     } else event->ignore();
 }

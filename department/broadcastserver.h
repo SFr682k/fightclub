@@ -11,7 +11,7 @@
 ** GNU General Public License Usage
 ** This file may be used under the terms of the GNU
 ** General Public License version 3.0 as published by the Free Software
-** Foundation and appearing in the file LICENSE.GPL included in the
+** Foundation and appearing in the file LICENSE.md included in the
 ** packaging of this file.  Please review the following information to
 ** ensure the GNU General Public License version 3.0 requirements will be
 ** met: http://www.gnu.org/copyleft/gpl.html.
@@ -23,42 +23,53 @@
 #define BROADCASTSERVER_H
 
 #include <QObject>
-#include <QtNetwork/QUdpSocket>
+#include <QSortFilterProxyModel>
+#include <QUdpSocket>
+
+#include "broadcastlistmodel.h"
+
 
 class BroadcastServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit BroadcastServer(QObject *parent = 0, QHostAddress addr = QHostAddress::Broadcast, unsigned int port = 45454, unsigned int signature = 12345);
+    explicit BroadcastServer(QWidget *parentWidget = 0, QObject *parent = 0);
     ~BroadcastServer();
+    void emitModel();
+
+    Broadcast getBroadcast(QModelIndex);
+
+private:
+    QWidget *parent;
+
+    BroadcastListModel *broadcastlistmodel;
+    QSortFilterProxyModel *bcastproxymodel;
+
+    QUdpSocket *udpSocket;
+    QString phasename, problem, performers;
+    int elapsedTime, maximumTime;
+    bool roomclock;
 
 signals:
     void socketStatus();
     void bcastRequest();
+    void bcastTableModelChanged(QSortFilterProxyModel*);
 
 public slots:
-    void enableBroadcast(bool);
     void updatePhaseName(QString);
     void updateProblem(QString);
     void updatePerformers(QString);
     void updateElapsedTime(int);
     void updateMaximumTime(int);
     void updateRClockState(bool roomclock);
-    void setBroadcastAddress(QString);
-    void setBroadcastPort(unsigned int);
-    void setSignature(unsigned int);
+
+    void addBroadcast(QString, int, int);
+    void editBroadcast(QModelIndex, QString, int, int);
+    void deleteBroadcast(QModelIndex);
 
 private slots:
     void broadcast();
 
-private:
-    bool broadcastEnabled;
-    QUdpSocket *udpSocket;
-    QHostAddress broadcastAddress;
-    QString phasename, problem, performers;
-    int elapsedTime, maximumTime;
-    bool roomclock;
-    unsigned int port, signature;
 };
 
 #endif // BROADCASTSERVER_H

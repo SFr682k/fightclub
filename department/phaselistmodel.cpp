@@ -82,16 +82,19 @@ QVariant PhaseListModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
         Phase phase = listofphases.at(index.row());
 
-        if(index.column() == 0)      return phase.getName();
-        else if(index.column() == 1) return phase.getDuration().toString("H:mm:ss");
-        else if(index.column() == 2) return phase.getOvertime().toString("H:mm:ss");
-        else if(index.column() == 3) return phase.getRepPerform();
-        else if(index.column() == 4) return phase.getOppPerform();
-        else if(index.column() == 5) return phase.getRevPerform();
-        else if(index.column() == 6) return phase.getAutoadvance();
-        else if(index.column() == 7) return phase.getCarry();
-        else if(index.column() == 8) return phase.getOCarry();
-        else if(index.column() == 9) return phase.getRoomclock();
+        switch(index.column()) {
+            case 0:  return phase.getName();
+            case 1:  return phase.getDuration().toString("H:mm:ss");
+            case 2:  return phase.getOvertime().toString("H:mm:ss");
+            case 3:  return phase.getRepPerform();
+            case 4:  return phase.getOppPerform();
+            case 5:  return phase.getRevPerform();
+            case 6:  return phase.getAutoadvance();
+            case 7:  return phase.getCarry();
+            case 8:  return phase.getOCarry();
+            case 9:  return phase.getRoomclock();
+            default: return QVariant();
+        }
     }
 
     if (role == Qt::BackgroundRole) {

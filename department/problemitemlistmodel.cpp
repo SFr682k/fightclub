@@ -59,15 +59,9 @@ QVariant ProblemItemListModel::data(const QModelIndex &index, int role) const {
         Problem problem = listofproblems.at(index.row());
 
         switch(index.column()) {
-            default:
-                return QString::number(problem.getNumber()) + ". " + problem.getTitle();
-                break;
-            case 1:
-                return problem.getNumber();
-                break;
-            case 2:
-                return problem.getTitle();
-                break;
+            default: return QString::number(problem.getNumber()) + ". " + problem.getTitle();
+            case 1:  return problem.getNumber();
+            case 2:  return problem.getTitle();
         }
     }
 

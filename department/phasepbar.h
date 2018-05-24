@@ -21,8 +21,8 @@
 
 #include <QObject>
 #include <QMessageBox>
-#include <QtCore/QTime>
-#include <QtCore/QTimer>
+#include <QTime>
+#include <QTimer>
 
 class PhasePBar : public QObject
 {
@@ -42,7 +42,7 @@ private:
     QTimer *refreshTimer;
     bool running;
     bool roomclock;
-    int savedTime, lastSavedTime;
+    int savedTime, lastSavedTime, lastAutosavedTime;
     int maximumTime;
     int overtime;
     QString timeToString(int);
@@ -51,6 +51,7 @@ private:
 signals:
     void elapsedTimeUpdate(int);
     void elapsedTimeUpdate(QString);
+    void lastAutosavedTimeUpdate(int);
     void maximumTimeUpdate(QString);
     void phaseProgressUpdate(double);
     void timeRestarted(int);
@@ -64,10 +65,15 @@ public slots:
     void resetTimer();
     void saveCurrentTime();
     void getElapsedOvertime();
+
+    void timePlus10();
+    void timeMinus10();
+
     void setElapsedTime(int);
     void setMaximumTime(int);
     void setOvertime(int);
     void setRemainingTime(int);
+
     void setRoomclock(bool);
 };
 
