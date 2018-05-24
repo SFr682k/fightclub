@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/img">
-        <file>gpl-v3-logo.png</file>
+        <file>gpl-v3-logo.svg</file>
     </qresource>
     <qresource>
         <file>breeze-icons/application-exit-16.svg</file>

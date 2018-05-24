@@ -79,9 +79,6 @@ FORMS += \
     fightclubdepartment.ui \
     clkwindowsettings.ui
 
-OTHER_FILES += \
-    gpl_v3_logo.png
-
 RESOURCES += \
     resources.qrc
 

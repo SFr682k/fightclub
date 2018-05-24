@@ -61,14 +61,14 @@
       <item row="2" column="0">
        <widget class="QRadioButton" name="stimerbox">
         <property name="text">
-         <string>Last saved time</string>
+         <string>&amp;Last saved time</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QRadioButton" name="atimerbox">
         <property name="text">
-         <string>Last autosaved time</string>
+         <string>La&amp;st autosaved time</string>
         </property>
        </widget>
       </item>
@@ -190,7 +190,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

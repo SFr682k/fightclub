@@ -61,6 +61,9 @@ private:
 
     QString previousPath;
 
+    bool bcastlocked;
+    QString bcastlockedpwd;
+
     bool exitEnabled, toggleFscreenEnabled;
 
     QAbstractTableModel *bcasttablemodel;
@@ -101,6 +104,8 @@ private slots:
     void editOppBttnToggled();
     void updateReviewerModel(int);
     void editRevBttnToggled();
+
+    void toggleBroadcastLock();
 
     void propagateBroadcastList(QSortFilterProxyModel*);
     void bcastSelectionChanged(QItemSelection, QItemSelection);

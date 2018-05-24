@@ -23,6 +23,7 @@
 #include "filepropertyparser.h"
 
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QItemSelectionModel>
 #include <QMessageBox>
 #include <QModelIndex>
@@ -109,9 +110,6 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
     ui->deleteBroadcast->setEnabled(false);
     ui->applyBcastSettings->setEnabled(false);
-
-    // disable not implemented stuff
-    ui->lockBcastTabBttn->setEnabled(false);
 
 
     ui->bcastportsel->setValue(45454);
@@ -242,6 +240,8 @@ FightclubDepartment::FightclubDepartment(QWidget *parent) :
 
 
     // BROADCAST TAB --------------------------------------------------------------------
+
+    connect(ui->lockBcastTabBttn, SIGNAL(clicked(bool)), this, SLOT(toggleBroadcastLock()));
 
     connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->listOfBroadcasts, SLOT(setEnabled(bool)));
     connect(ui->bcastActivated, SIGNAL(clicked(bool)), ui->bcastConfigBox, SLOT(setEnabled(bool)));
@@ -557,6 +557,46 @@ void FightclubDepartment::editRevBttnToggled() {
 
 
 // BROADCAST TAB ------------------------------------------------------------------------
+
+void FightclubDepartment::toggleBroadcastLock() {
+    if(!bcastlocked) {
+        QString pwd1 = QInputDialog::getText(this, "Set password",
+                                             "Please set a password:", QLineEdit::Password);
+
+        if(pwd1 == nullptr) return;
+
+        QString pwd2 = QInputDialog::getText(this, "Set password",
+                                             "Please confirm the password:", QLineEdit::Password);
+
+        if(pwd2 == nullptr) return;
+        else if(pwd1 != pwd2) {
+            QMessageBox::critical(this, "Error", "The passwords are not identical");
+            return;
+        }
+
+        bcastlocked = true;
+        bcastlockedpwd = pwd1;
+    } else {
+        QString pwd = QInputDialog::getText(this, "Enter password",
+                                            "Please enter the password:", QLineEdit::Password);
+
+        if(pwd == nullptr) return;
+        else if(pwd != bcastlockedpwd) {
+            QMessageBox::critical(this, "Error", "Wrong password");
+            return;
+        }
+
+        bcastlocked = false;
+    }
+
+    ui->bcastActivated->setEnabled(!bcastlocked);
+    ui->listOfBroadcasts->setEnabled(!bcastlocked);
+    ui->bcastConfigBox->setEnabled(!bcastlocked);
+    ui->lockBcastTabBttn->setText(bcastlocked? "Unlock" : "Lock");
+    ui->lockBcastTabBttn->setIcon(bcastlocked? QIcon(":/breeze-icons/object-unlocked-16.svg")
+                                             : QIcon(":/breeze-icons/object-locked-16.svg"));
+}
+
 
 void FightclubDepartment::propagateBroadcastList(QSortFilterProxyModel* model) {
     ui->listOfBroadcasts->setModel(model);

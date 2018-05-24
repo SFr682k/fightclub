@@ -65,7 +65,7 @@ QAbstractTableModel* ProblemAdapter::getProblemList(int nr) {
     if(nr >= 0) {
         tmplist.append(problemlist->getProblem(nr));
         return new ProblemItemListModel(tmplist);
-    } else if(nr == -1) return problemlist; // FIXME: Do challenge stuff
+    } else if(nr == -1) return problemlist;
 
     return new ProblemItemListModel(tmplist);
 }
