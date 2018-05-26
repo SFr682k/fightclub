@@ -28,6 +28,20 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     ui(new Ui::FightclubTeleprinter) {
     ui->setupUi(this);
 
+    QMainWindow::setMouseTracking(true);
+    ui->centralwidget->setMouseTracking(true);
+    ui->fightclublogolabel->setMouseTracking(true);
+    ui->apptitle->setMouseTracking(true);
+    ui->versionlabel->setMouseTracking(true);
+    ui->qtadvertizing->setMouseTracking(true);
+    ui->gplv3logolabel->setMouseTracking(true);
+
+    ui->titlebttnssepline->setMouseTracking(true);
+    ui->openClockWindow->setMouseTracking(true);
+    ui->closeAllClockWindows->setMouseTracking(true);
+    ui->bttnssepline->setMouseTracking(true);
+    ui->openAboutDialog->setMouseTracking(true);
+    ui->openSettingsDialog->setMouseTracking(true);
 
 
     ui->apptitle->setText(QApplication::applicationName());
@@ -48,6 +62,10 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
 
     aboutDialogOpen = false, settingsDialogOpen = false;
 
+
+    hideCursorTimer = new QTimer();
+    hideCursorTimer->setInterval(5000);
+    connect(hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
 
 
     cachedPhaseName = "Waiting for a broadcast", cachedProblem = " ", cachedPerformers = " ";
@@ -73,11 +91,11 @@ FightclubTeleprinter::~FightclubTeleprinter() {
 void FightclubTeleprinter::openAboutDialog() {
     if(!aboutDialogOpen) {
         aboutDialogOpen = true;
-        //cursorMoved();
+        cursorMoved();
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
         aboutDialogOpen = false;
-        //cursorMoved();
+        cursorMoved();
     }
 }
 
@@ -85,13 +103,13 @@ void FightclubTeleprinter::openAboutDialog() {
 void FightclubTeleprinter::openSettingsDialog() {
     if(!settingsDialogOpen) {
         settingsDialogOpen = true;
-        //cursorMoved();
+        cursorMoved();
         if(settingsdial->exec()) {
             emit newPort(settingsdial->getBroadcastPort());
             emit newID(settingsdial->getBroadcastID());
         }
         settingsDialogOpen = false;
-        //cursorMoved();
+        cursorMoved();
     }
 }
 
@@ -142,6 +160,7 @@ void FightclubTeleprinter::openClockWindow() {
     clkwindow->setRclockBehavior(settingsdial->getRClkBehavior());
 
     connect(this, SIGNAL(closeAllClockWindows()), clkwindow, SLOT(close()));
+    connect(clkwindow, SIGNAL(cursorPosChanged()), this, SLOT(cursorMoved()));
 
     clkwindow->show();
 }
@@ -165,3 +184,26 @@ void FightclubTeleprinter::enterFullscreenMode() {
 }
 
 void FightclubTeleprinter::enterNoConfigMode()   { settingsdial->enterNoConfigMode(); }
+
+
+
+
+
+void FightclubTeleprinter::mouseMoveEvent(QMouseEvent *event) {
+    cursorMoved();
+    QWidget::mouseMoveEvent(event);
+}
+
+
+
+void FightclubTeleprinter::cursorMoved() {
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+
+    if(!settingsDialogOpen && !aboutDialogOpen) hideCursorTimer->start();
+    else                                        hideCursorTimer->stop();
+}
+
+void FightclubTeleprinter::hideCursor() {
+    hideCursorTimer->stop();
+    if(!settingsDialogOpen && !aboutDialogOpen) QApplication::setOverrideCursor(Qt::BlankCursor);
+}

@@ -55,14 +55,14 @@ private:
     QFont defaultFont;
     double fontScale;
 
-    QTimer *hideCursorTimer;
 
+signals:
+    void cursorPosChanged();
 
 private slots:
     void updateTime();
 
     void cursorMoved();
-    void hideCursor();
 
 public slots:
     void phaseNameChanged(QString);

@@ -21,9 +21,10 @@
 
 #include <QMainWindow>
 
-
 #include "broadcastclient.h"
 #include "teleprintersettings.h"
+
+#include <QTimer>
 
 
 namespace Ui {
@@ -55,14 +56,16 @@ private:
     BroadcastClient *bcastcli;
     TeleprinterSettings *settingsdial;
 
-    //int bcastPort, bcastID;
-
     QString cachedPhaseName, cachedProblem, cachedPerformers;
     int cachedElapsedTime, cachedMaximumTime;
     bool cachedRoomclock;
 
     bool aboutDialogOpen, settingsDialogOpen;
 
+    QTimer *hideCursorTimer;
+
+protected:
+    void mouseMoveEvent(QMouseEvent *event);
 
 
 signals:
@@ -89,6 +92,9 @@ private slots:
 
     void openClockWindow();
     void purgeClockWindows();
+
+    void cursorMoved();
+    void hideCursor();
 };
 
 #endif // FIGHTCLUBTELEPRINTER_H

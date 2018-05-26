@@ -37,9 +37,7 @@ ClockWindow::ClockWindow(QWidget *parent) :
     connect(ui->clockwidget, SIGNAL(mouseMoved()), this, SLOT(cursorMoved()));
     ui->lcdtimedisplay->setMouseTracking(true);
 
-    hideCursorTimer = new QTimer();
-    hideCursorTimer->setInterval(5000);
-    connect(hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
+
 
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
@@ -195,20 +193,5 @@ void ClockWindow::mouseMoveEvent(QMouseEvent *event) {
 }
 
 
+void ClockWindow::cursorMoved() { emit cursorPosChanged(); }
 
-
-void ClockWindow::cursorMoved() {
-    /*
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    if((windowState() == Qt::WindowFullScreen) && !aboutDialogOpen && !settingsDialogOpen)
-        hideCursorTimer->start();
-    else hideCursorTimer->stop();
-    */
-}
-
-void ClockWindow::hideCursor() {
-    /*
-    if(!aboutDialogOpen && !settingsDialogOpen)
-        QApplication::setOverrideCursor(Qt::BlankCursor);
-    */
-}
