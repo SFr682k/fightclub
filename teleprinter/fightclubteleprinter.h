@@ -66,6 +66,7 @@ private:
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
+    void closeEvent(QCloseEvent *event);
 
 
 signals:
@@ -93,7 +94,7 @@ private slots:
     void openClockWindow();
     void purgeClockWindows();
 
-    void cursorMoved();
+    void cursorMoved(bool);
     void hideCursor();
 };
 

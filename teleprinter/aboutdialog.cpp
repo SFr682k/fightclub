@@ -37,7 +37,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->qtadvertizing->setText(QString("Using Qt ") + qVersion() + QString(" on ") + platformName);
 }
 
-AboutDialog::~AboutDialog()
-{
+
+AboutDialog::~AboutDialog() {
     delete ui;
 }

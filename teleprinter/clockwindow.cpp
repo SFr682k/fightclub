@@ -21,9 +21,6 @@
 
 
 
-
-
-
 ClockWindow::ClockWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ClockWindow)
@@ -36,8 +33,6 @@ ClockWindow::ClockWindow(QWidget *parent) :
     ui->phaselabel->setMouseTracking(true);
     connect(ui->clockwidget, SIGNAL(mouseMoved()), this, SLOT(cursorMoved()));
     ui->lcdtimedisplay->setMouseTracking(true);
-
-
 
 
     if(ui->problabel->text().startsWith("<ApplicationName>"))
@@ -68,6 +63,8 @@ ClockWindow::ClockWindow(QWidget *parent) :
 
 ClockWindow::~ClockWindow() {
     delete ui;
+    delete refreshtimer;
+    this->deleteLater();
 }
 
 
@@ -193,5 +190,5 @@ void ClockWindow::mouseMoveEvent(QMouseEvent *event) {
 }
 
 
-void ClockWindow::cursorMoved() { emit cursorPosChanged(); }
+void ClockWindow::cursorMoved() { emit cursorPosChanged(windowState() == Qt::WindowFullScreen); }
 

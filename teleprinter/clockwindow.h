@@ -57,7 +57,7 @@ private:
 
 
 signals:
-    void cursorPosChanged();
+    void cursorPosChanged(bool);
 
 private slots:
     void updateTime();

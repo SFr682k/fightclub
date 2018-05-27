@@ -85,17 +85,21 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
 
 FightclubTeleprinter::~FightclubTeleprinter() {
     delete ui;
+    delete bcastcli;
+    delete settingsdial;
+    delete hideCursorTimer;
 }
 
 
 void FightclubTeleprinter::openAboutDialog() {
     if(!aboutDialogOpen) {
         aboutDialogOpen = true;
-        cursorMoved();
+        cursorMoved(false);
         AboutDialog *ad = new AboutDialog(this);
         ad->exec();
+        delete ad;
         aboutDialogOpen = false;
-        cursorMoved();
+        cursorMoved(false);
     }
 }
 
@@ -103,13 +107,13 @@ void FightclubTeleprinter::openAboutDialog() {
 void FightclubTeleprinter::openSettingsDialog() {
     if(!settingsDialogOpen) {
         settingsDialogOpen = true;
-        cursorMoved();
+        cursorMoved(false);
         if(settingsdial->exec()) {
             emit newPort(settingsdial->getBroadcastPort());
             emit newID(settingsdial->getBroadcastID());
         }
         settingsDialogOpen = false;
-        cursorMoved();
+        cursorMoved(false);
     }
 }
 
@@ -160,7 +164,8 @@ void FightclubTeleprinter::openClockWindow() {
     clkwindow->setRclockBehavior(settingsdial->getRClkBehavior());
 
     connect(this, SIGNAL(closeAllClockWindows()), clkwindow, SLOT(close()));
-    connect(clkwindow, SIGNAL(cursorPosChanged()), this, SLOT(cursorMoved()));
+    connect(clkwindow, SIGNAL(cursorPosChanged(bool)), this, SLOT(cursorMoved(bool)));
+
 
     clkwindow->show();
 }
@@ -190,20 +195,28 @@ void FightclubTeleprinter::enterNoConfigMode()   { settingsdial->enterNoConfigMo
 
 
 void FightclubTeleprinter::mouseMoveEvent(QMouseEvent *event) {
-    cursorMoved();
+    cursorMoved(false);
     QWidget::mouseMoveEvent(event);
 }
 
 
 
-void FightclubTeleprinter::cursorMoved() {
+void FightclubTeleprinter::cursorMoved(bool triggerHiding) {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-    if(!settingsDialogOpen && !aboutDialogOpen) hideCursorTimer->start();
-    else                                        hideCursorTimer->stop();
+    if(triggerHiding && !settingsDialogOpen && !aboutDialogOpen) hideCursorTimer->start();
+    else                                                         hideCursorTimer->stop();
 }
 
 void FightclubTeleprinter::hideCursor() {
     hideCursorTimer->stop();
     if(!settingsDialogOpen && !aboutDialogOpen) QApplication::setOverrideCursor(Qt::BlankCursor);
+}
+
+
+
+
+void FightclubTeleprinter::closeEvent(QCloseEvent *event) {
+    emit closeAllClockWindows();
+    event->accept();
 }
