@@ -46,6 +46,9 @@ TeleprinterSettings::TeleprinterSettings(QWidget *parent, unsigned int bcastport
     connect(ui->defaultSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(applyDefaultSettings(bool)));
     connect(ui->customSettingsRbttn, SIGNAL(toggled(bool)), this, SLOT(enableCustomSettings(bool)));
 
+    connect(ui->applyBroadcastSettings, SIGNAL(clicked(bool)), this, SLOT(applyBroadcastSettings()));
+
+
     connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
     connect(ui->chooseFontBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(selFontChanged(QString)));
 
@@ -60,7 +63,7 @@ TeleprinterSettings::TeleprinterSettings(QWidget *parent, unsigned int bcastport
 
 
     connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
-    connect(ui->applySettings, SIGNAL(clicked(bool)), this, SLOT(accept()));
+    connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
 
 
     setupSelections();
@@ -98,9 +101,6 @@ void TeleprinterSettings::setupSelections() {
     }
 }
 
-int TeleprinterSettings::getBroadcastPort() { return ui->selBcastPort->value(); }
-int TeleprinterSettings::getBroadcastID()   { return ui->selBcastID->value(); }
-
 
 void TeleprinterSettings::setPort(uint newport) {
     if(newport > 0) port = newport%65536;
@@ -127,6 +127,9 @@ void TeleprinterSettings::enableCustomSettings(bool enabled) {
     ui->bcastIDLabel->setEnabled(enabled);
     ui->selBcastID->setEnabled(enabled);
 }
+
+void TeleprinterSettings::applyBroadcastSettings()
+    { emit bcastAddressChanged(ui->selBcastPort->value(), ui->selBcastID->value()); }
 
 
 

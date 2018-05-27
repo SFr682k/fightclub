@@ -37,8 +37,6 @@ public:
 
     int exec();
 
-    int getBroadcastPort();
-    int getBroadcastID();
     QString getFontFamily();
     double  getFontScale();
     int     getRClkBehavior();
@@ -60,6 +58,8 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 signals:
+    void bcastAddressChanged(uint, uint);
+
     void fontChanged(QString);
     void fontScaleChanged(double);
 
@@ -74,6 +74,7 @@ public slots:
 private slots:
     void enableCustomSettings(bool);
     void applyDefaultSettings(bool);
+    void applyBroadcastSettings();
 
     void useCustomFont(bool);
     void selFontChanged(QString);

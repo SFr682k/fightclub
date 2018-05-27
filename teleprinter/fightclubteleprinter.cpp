@@ -58,7 +58,10 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
 
 
     bcastcli = new BroadcastClient(this);
+
     settingsdial = new TeleprinterSettings(this);
+    connect(settingsdial, SIGNAL(bcastAddressChanged(uint,uint)), this, SLOT(bcastAddressChanged(uint,uint)));
+
 
     aboutDialogOpen = false, settingsDialogOpen = false;
 
@@ -71,9 +74,6 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     cachedPhaseName = "Waiting for a broadcast", cachedProblem = " ", cachedPerformers = " ";
     cachedElapsedTime = 0, cachedMaximumTime = 1;
     cachedRoomclock = true;
-
-    connect(this, SIGNAL(newPort(uint)), bcastcli, SLOT(setListeningPort(uint)));
-    connect(this, SIGNAL(newID(uint)), bcastcli, SLOT(setSignature(uint)));
 
 
     connect(ui->openClockWindow, SIGNAL(clicked(bool)), this, SLOT(openClockWindow()));
@@ -108,29 +108,35 @@ void FightclubTeleprinter::openSettingsDialog() {
     if(!settingsDialogOpen) {
         settingsDialogOpen = true;
         cursorMoved(false);
-        if(settingsdial->exec()) {
-            emit newPort(settingsdial->getBroadcastPort());
-            emit newID(settingsdial->getBroadcastID());
-        }
+        settingsdial->setPort(bcastcli->getBcastPort());
+        settingsdial->setID(bcastcli->getBcastID());
+        settingsdial->exec();
         settingsDialogOpen = false;
         cursorMoved(false);
     }
 }
 
 
+
+
+
 void FightclubTeleprinter::setPort(uint newport) {
     settingsdial->setPort(newport);
-    emit newPort(newport);
+    bcastcli->setListeningPort(newport);
 }
 
 void FightclubTeleprinter::setID(uint newid) {
     settingsdial->setID(newid);
-    emit newID(newid);
+    bcastcli->setID(newid);
+}
+
+void FightclubTeleprinter::bcastAddressChanged(uint newport, uint newid) {
+    bcastcli->setListeningPort(newport);
+    bcastcli->setID(newid);
 }
 
 
-uint FightclubTeleprinter::getBcastPort() { return bcastcli->getBcastPort(); }
-uint FightclubTeleprinter::getBcastID()   { return bcastcli->getBcastSignature(); }
+
 
 
 
@@ -174,12 +180,15 @@ void FightclubTeleprinter::openClockWindow() {
 void FightclubTeleprinter::purgeClockWindows() { emit closeAllClockWindows(); }
 
 
+
+
 void FightclubTeleprinter::cachePhaseName(QString phasename)   { cachedPhaseName = phasename; }
 void FightclubTeleprinter::cacheElapsedTime(int elapsedTime)   { cachedElapsedTime = elapsedTime; }
 void FightclubTeleprinter::cacheMaximumTime(int maximumTime)   { cachedMaximumTime = maximumTime; }
 void FightclubTeleprinter::cacheRoomclock(bool roomclock)      { cachedRoomclock = roomclock; }
 void FightclubTeleprinter::cacheProblem(QString problem)       { cachedProblem = problem; }
 void FightclubTeleprinter::cachePerformers(QString performers) { cachedPerformers = performers; }
+
 
 
 
@@ -193,13 +202,10 @@ void FightclubTeleprinter::enterNoConfigMode()   { settingsdial->enterNoConfigMo
 
 
 
-
 void FightclubTeleprinter::mouseMoveEvent(QMouseEvent *event) {
     cursorMoved(false);
     QWidget::mouseMoveEvent(event);
 }
-
-
 
 void FightclubTeleprinter::cursorMoved(bool triggerHiding) {
     QApplication::setOverrideCursor(Qt::ArrowCursor);

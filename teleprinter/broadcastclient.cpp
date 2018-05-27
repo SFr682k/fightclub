@@ -25,13 +25,13 @@
 #include <QtNetwork>
 
 
-BroadcastClient::BroadcastClient(QObject *parent, unsigned int prt, unsigned int sig) :
+BroadcastClient::BroadcastClient(QObject *parent, unsigned int prt, unsigned int i) :
     QObject(parent)
 {
     if(prt > 0) port = prt%65536;
     else        port = 45454;
 
-    signature = sig;
+    id = i;
 
     elapsedTime = 0;
     maximumTime = 1;
@@ -60,12 +60,12 @@ void BroadcastClient::setListeningPort(unsigned int prt) {
     udpSocket->bind(port, QUdpSocket::ShareAddress);
 }
 
-void BroadcastClient::setSignature(unsigned int sig) { signature = sig; }
+void BroadcastClient::setID(unsigned int i) { id = i; }
 
 
 
 void BroadcastClient::processDatagrams() {
-    quint32 nsignature, nmaximumTime, nroomclock, nelapsedTime;
+    quint32 nid, nmaximumTime, nroomclock, nelapsedTime;
     QString nphasename, nproblem, nperformers;
 
     while (udpSocket->hasPendingDatagrams()) {
@@ -73,7 +73,7 @@ void BroadcastClient::processDatagrams() {
         datagram.resize(udpSocket->pendingDatagramSize());
         udpSocket->readDatagram(datagram.data(), datagram.size());
         QDataStream dgstream(&datagram, QIODevice::ReadOnly);
-        dgstream >> nsignature;
+        dgstream >> nid;
         dgstream >> nmaximumTime;
         dgstream >> nelapsedTime;
         dgstream >> nroomclock;
@@ -82,7 +82,7 @@ void BroadcastClient::processDatagrams() {
         dgstream >> nperformers;
     }
 
-    if(signature != nsignature) return;
+    if(id != nid) return;
 
     if(roomclock != nroomclock) {
         roomclock = nroomclock;
@@ -119,5 +119,5 @@ void BroadcastClient::processDatagrams() {
 
 
 
-uint BroadcastClient::getBcastPort()      { return port; }
-uint BroadcastClient::getBcastSignature() { return signature; }
+uint BroadcastClient::getBcastPort() { return port; }
+uint BroadcastClient::getBcastID()   { return id; }

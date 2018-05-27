@@ -47,8 +47,6 @@ public:
     void enterFullscreenMode();
     void enterNoConfigMode();
 
-    uint getBcastPort();
-    uint getBcastID();
 
 private:
     Ui::FightclubTeleprinter *ui;
@@ -74,9 +72,6 @@ signals:
     void updateElapsedTime(int);
     void updateTime();
 
-    void newPort(uint);
-    void newID(uint);
-
     void closeAllClockWindows();
 
 public slots:
@@ -84,6 +79,8 @@ public slots:
     void openSettingsDialog();
 
 private slots:
+    void bcastAddressChanged(uint, uint);
+
     void cachePhaseName(QString);
     void cacheElapsedTime(int);
     void cacheMaximumTime(int);
