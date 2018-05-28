@@ -64,7 +64,3 @@ RESOURCES += \
 
 include(departmentboxwidget.pri)
 
-
-win32 {
-    RC_FILE = fightclub-logo.rc
-}

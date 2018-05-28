@@ -84,6 +84,3 @@ RESOURCES += \
 
 include(themeclockwidget.pri)
 
-win32 {
-    RC_FILE = fightclub-logo.rc
-}
