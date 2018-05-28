@@ -75,11 +75,11 @@ signals:
 
     void closeAllClockWindows();
 
-public slots:
+
+private slots:
     void openAboutDialog();
     void openSettingsDialog();
 
-private slots:
     void bcastAddressChanged(uint, uint);
 
     void cachePhaseName(QString);

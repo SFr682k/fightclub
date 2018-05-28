@@ -40,9 +40,6 @@ int main(int argc, char *argv[])
     QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID of the Fightclub Department to listen to", "id [unsigned int]");
     cmdparser.addOption(idappoption);
 
-    QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
-    cmdparser.addOption(bmodeappoption);
-
     QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Open a clock window shown in fullscreen mode");
     cmdparser.addOption(fscreenoption);
 
@@ -56,7 +53,6 @@ int main(int argc, char *argv[])
     uint port = cmdparser.value(portappoption).toUInt();
     uint id = cmdparser.value(idappoption).toUInt();
 
-    bool batchmode = cmdparser.isSet(bmodeappoption);
     bool fscrmode  = cmdparser.isSet(fscreenoption);
     bool noconfig  = cmdparser.isSet(noconfoption);
 
@@ -70,9 +66,6 @@ int main(int argc, char *argv[])
     if(port > 0) w.setPort(port);
     if(id > 0)   w.setID(id);
 
-    if(!batchmode)                 w.openAboutDialog();
-    if((!(port > 0) || !(id > 0))
-       && !batchmode && !noconfig) w.openSettingsDialog();
 
     if(fscrmode) w.enterFullscreenMode();
 

@@ -33,7 +33,6 @@ FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
     ui->apptitle->setMouseTracking(true);
     ui->versionlabel->setMouseTracking(true);
     ui->qtadvertizing->setMouseTracking(true);
-    ui->gplv3logolabel->setMouseTracking(true);
 
     ui->titlebttnssepline->setMouseTracking(true);
     ui->openClockWindow->setMouseTracking(true);
