@@ -16,80 +16,85 @@
 ****************************************************************************/
 
 
-#ifndef TELEPRINTER_H
-#define TELEPRINTER_H
+#ifndef FIGHTCLUBTELEPRINTER_H
+#define FIGHTCLUBTELEPRINTER_H
 
 #include <QMainWindow>
 
-#include <QKeyEvent>
-#include <QMouseEvent>
-#include <QString>
-#include <QTime>
-#include <QTimer>
-
 #include "broadcastclient.h"
+#include "clockwindow.h"
 #include "teleprintersettings.h"
 
+#include <QTimer>
+
+
 namespace Ui {
-class FightclubTeleprinter;
+    class FightclubTeleprinter;
 }
 
-class FightclubTeleprinter : public QMainWindow
-{
+
+
+
+class FightclubTeleprinter : public QMainWindow {
     Q_OBJECT
 
 public:
     explicit FightclubTeleprinter(QWidget *parent = 0);
     ~FightclubTeleprinter();
+
     void setPort(uint);
     void setID(uint);
-    void openAboutDialog();
-    void openSettingsDialog();
-    uint getBcastPort();
-    uint getBcastID();
 
     void enterFullscreenMode();
     void enterNoConfigMode();
 
 
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-
 private:
     Ui::FightclubTeleprinter *ui;
+
     BroadcastClient *bcastcli;
     TeleprinterSettings *settingsdial;
 
+    QString cachedPhaseName, cachedProblem, cachedPerformers;
+    int cachedElapsedTime, cachedMaximumTime;
+    bool cachedRoomclock;
+
     bool aboutDialogOpen, settingsDialogOpen;
-
-    QFont defaultFont;
-    double fontScale;
-
-    QTimer *refreshtimer;
-    QString timeToString(int);
-    bool roomclock;
-
-    uint bcastPort, bcastID;
 
     QTimer *hideCursorTimer;
 
+protected:
+    void mouseMoveEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void closeEvent(QCloseEvent *event);
+
 
 signals:
-    void newPort(uint);
-    void newID(uint);
-
-private slots:
     void toggleRoomclock(bool);
     void updateElapsedTime(int);
     void updateTime();
 
-    void setWindowFont(QString);
-    void setFontScale(double);
+    void closeAllClockWindows();
 
-    void cursorMoved();
+
+private slots:
+    void openAboutDialog();
+    void openSettingsDialog();
+
+    void bcastAddressChanged(uint, uint);
+
+    void cachePhaseName(QString);
+    void cacheElapsedTime(int);
+    void cacheMaximumTime(int);
+    void cacheRoomclock(bool);
+    void cacheProblem(QString);
+    void cachePerformers(QString);
+
+    ClockWindow* openClockWindow();
+    void purgeClockWindows();
+
+    void cursorMoved(bool);
     void hideCursor();
 };
 
-#endif // TELEPRINTER_H
+#endif // FIGHTCLUBTELEPRINTER_H

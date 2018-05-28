@@ -24,7 +24,7 @@
 #define BROADCASTCLIENT_H
 
 #include <QObject>
-#include <QtNetwork/QUdpSocket>
+#include <QUdpSocket>
 
 class BroadcastClient : public QObject
 {
@@ -34,7 +34,7 @@ public:
     ~BroadcastClient();
     QString toString();
     uint getBcastPort();
-    uint getBcastSignature();
+    uint getBcastID();
 
 signals:
     void phaseNameChanged(QString);
@@ -46,7 +46,7 @@ signals:
 
 public slots:
     void setListeningPort(unsigned int);
-    void setSignature(unsigned int);
+    void setID(unsigned int);
 
 private slots:
     void processDatagrams();
@@ -54,13 +54,10 @@ private slots:
 private:
     QUdpSocket *udpSocket;
     unsigned int port;
-    QString phasename;
-    QString problem;
-    QString performers;
-    quint32 elapsedTime;
-    quint32 maximumTime;
-    quint32 roomclock;
-    quint32 signature;
+    quint32 id;
+
+    QString phasename, problem, performers;
+    quint32 elapsedTime, maximumTime, roomclock;
 };
 
 #endif // BROADCASTCLIENT_H
