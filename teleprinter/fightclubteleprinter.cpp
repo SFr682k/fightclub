@@ -222,6 +222,38 @@ void FightclubTeleprinter::hideCursor() {
 
 
 
+void FightclubTeleprinter::keyPressEvent(QKeyEvent *event) {
+    switch(event->key()) {
+        case Qt::Key_W:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
+                if(!(QApplication::keyboardModifiers() & Qt::ShiftModifier)) openClockWindow();
+                else closeAllClockWindows();
+            }
+            break;
+
+        case Qt::Key_F1:
+            openAboutDialog();
+            break;
+
+        case Qt::Key_S:
+            if((QApplication::keyboardModifiers() & Qt::ControlModifier)
+                    && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
+                openSettingsDialog();
+            break;
+
+        case Qt::Key_Q:
+            if(QApplication::keyboardModifiers() & Qt::ControlModifier)
+                this->close();
+            break;
+
+        default:
+            QWidget::keyPressEvent(event);
+    }
+}
+
+
+
+
 void FightclubTeleprinter::closeEvent(QCloseEvent *event) {
     emit closeAllClockWindows();
     event->accept();

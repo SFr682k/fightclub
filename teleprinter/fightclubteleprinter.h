@@ -65,6 +65,7 @@ private:
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
     void closeEvent(QCloseEvent *event);
 
 

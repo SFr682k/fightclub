@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
     QCommandLineOption portappoption(QStringList() << "p" << "port", "Port to listen on", "port [unsigned int]");
     cmdparser.addOption(portappoption);
 
-    QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID of the Fightclub Department to listen to", "id [unsigned int]");
+    QCommandLineOption idappoption(QStringList() << "i" << "id", "The ID to listen to", "id [unsigned int]");
     cmdparser.addOption(idappoption);
 
-    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Open a clock window shown in fullscreen mode");
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Open a clock window in fullscreen mode");
     cmdparser.addOption(fscreenoption);
 
     QCommandLineOption noconfoption("noconfig", "Disable configuration");

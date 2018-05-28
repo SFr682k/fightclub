@@ -274,7 +274,7 @@ void ThemeClockWidget::setRoomclockMode(int mode) {
 
     altSecondHand->setVisible((showSHand > 0) && (roomclockMode == 2));
 
-    actRoomclock();
+    if(roomclock) actRoomclock();
 }
 
 void ThemeClockWidget::showSecondHand(bool show) {
@@ -283,7 +283,7 @@ void ThemeClockWidget::showSecondHand(bool show) {
     secondRing->setVisible(show && (roomclockMode != 2));
     altSecondHand->setVisible(show && (roomclockMode == 2));
     showSHand = show? 1 : -1;
-    actRoomclock();
+    if(roomclock) actRoomclock();
 }
 
 
