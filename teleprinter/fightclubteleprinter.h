@@ -22,13 +22,14 @@
 #include <QMainWindow>
 
 #include "broadcastclient.h"
+#include "clockwindow.h"
 #include "teleprintersettings.h"
 
 #include <QTimer>
 
 
 namespace Ui {
-class FightclubTeleprinter;
+    class FightclubTeleprinter;
 }
 
 
@@ -88,7 +89,7 @@ private slots:
     void cacheProblem(QString);
     void cachePerformers(QString);
 
-    void openClockWindow();
+    ClockWindow* openClockWindow();
     void purgeClockWindows();
 
     void cursorMoved(bool);

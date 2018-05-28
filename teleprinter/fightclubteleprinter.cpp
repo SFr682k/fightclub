@@ -20,7 +20,6 @@
 #include "ui_fightclubteleprinter.h"
 
 #include "aboutdialog.h"
-#include "clockwindow.h"
 
 
 FightclubTeleprinter::FightclubTeleprinter(QWidget *parent) :
@@ -141,7 +140,7 @@ void FightclubTeleprinter::bcastAddressChanged(uint newport, uint newid) {
 
 
 
-void FightclubTeleprinter::openClockWindow() {
+ClockWindow* FightclubTeleprinter::openClockWindow() {
     ClockWindow *clkwindow = new ClockWindow();
 
     connect(bcastcli, SIGNAL(phaseNameChanged(QString)), clkwindow, SLOT(phaseNameChanged(QString)));
@@ -174,6 +173,8 @@ void FightclubTeleprinter::openClockWindow() {
 
 
     clkwindow->show();
+
+    return clkwindow;
 }
 
 
@@ -193,8 +194,8 @@ void FightclubTeleprinter::cachePerformers(QString performers) { cachedPerformer
 
 
 void FightclubTeleprinter::enterFullscreenMode() {
-    //setWindowState(Qt::WindowFullScreen);
-    //cursorMoved();
+    this->openClockWindow()->setWindowState(Qt::WindowFullScreen);
+    cursorMoved(true);
 }
 
 void FightclubTeleprinter::enterNoConfigMode()   { settingsdial->enterNoConfigMode(); }

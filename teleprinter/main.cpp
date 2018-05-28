@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     QCommandLineOption bmodeappoption(QStringList() << "b" << "batch", "Batch mode. Don't show popups.");
     cmdparser.addOption(bmodeappoption);
 
-    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Create a clock window displayed in fullscreen mode");
+    QCommandLineOption fscreenoption(QStringList() << "f" << "fullscreen", "Open a clock window shown in fullscreen mode");
     cmdparser.addOption(fscreenoption);
 
     QCommandLineOption noconfoption("noconfig", "Disable configuration");
@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
     w.show();
 
 
-    if(fscrmode) w.enterFullscreenMode();
     if(noconfig) w.enterNoConfigMode();
 
 
@@ -74,6 +73,9 @@ int main(int argc, char *argv[])
     if(!batchmode)                 w.openAboutDialog();
     if((!(port > 0) || !(id > 0))
        && !batchmode && !noconfig) w.openSettingsDialog();
+
+    if(fscrmode) w.enterFullscreenMode();
+
 
 
     return a.exec();

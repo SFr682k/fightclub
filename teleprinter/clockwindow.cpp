@@ -127,6 +127,11 @@ void ClockWindow::updateTime() {
 
 
 
+
+
+
+
+
 void ClockWindow::setWindowFont(QString family) { this->setFont((family == nullptr)? defaultFont : QFont(family)); }
 
 void ClockWindow::setFontScale(double newScale) {
