@@ -190,9 +190,6 @@
        <property name="verticalSpacing">
         <number>2</number>
        </property>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="tournName"/>
-       </item>
        <item row="0" column="0">
         <widget class="QCheckBox" name="dispTournamentNameCBox">
          <property name="text">
@@ -200,8 +197,32 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="tournName"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="dispCTimeCBox">
+         <property name="text">
+          <string>Display current time</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="customFontCBox">
+         <property name="text">
+          <string>Use custom font</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="1">
         <widget class="QFontComboBox" name="chooseFontBox"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="customScaleCBox">
+         <property name="text">
+          <string>Scale font size</string>
+         </property>
+        </widget>
        </item>
        <item row="3" column="1">
         <widget class="QSpinBox" name="chooseScaleBox">
@@ -222,20 +243,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="dispCTimeCBox">
-         <property name="text">
-          <string>Display current time</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="customFontCBox">
-         <property name="text">
-          <string>Use custom font</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
@@ -248,13 +255,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="customScaleCBox">
-         <property name="text">
-          <string>Scale font size</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
