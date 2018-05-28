@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Fightclub Teleprinter Clock Window</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/img/fightclub-logo.svg</normaloff>:/img/fightclub-logo.svg</iconset>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
@@ -184,6 +188,8 @@
    <header>themeclockwidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

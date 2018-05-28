@@ -22,6 +22,10 @@
   <property name="windowTitle">
    <string>Set Time of Current Phase</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/img/fightclub-logo.svg</normaloff>:/img/fightclub-logo.svg</iconset>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>

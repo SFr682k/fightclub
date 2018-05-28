@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Fightclub Nano Settings</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/img/fightclub-logo.svg</normaloff>:/img/fightclub-logo.svg</iconset>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
@@ -30,7 +34,7 @@
      </property>
      <widget class="QWidget" name="phasesTab">
       <attribute name="title">
-       <string>Departments</string>
+       <string>Phases</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
@@ -71,6 +75,9 @@
            </property>
            <property name="text">
             <string>Click the button to load a list of phases</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

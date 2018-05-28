@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Fightclub Teleprinter</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/img/fightclub-logo.svg</normaloff>:/img/fightclub-logo.svg</iconset>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
@@ -42,6 +46,9 @@
         </property>
         <property name="text">
          <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="resources.qrc">:/img/fightclub-logo.svg</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>

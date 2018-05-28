@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/img">
-        <file>gpl-v3-logo.png</file>
+        <file>fightclub-logo.svg</file>
+        <file>gpl-v3-logo.svg</file>
     </qresource>
     <qresource>
         <file>breeze-icons/chronometer-24.svg</file>

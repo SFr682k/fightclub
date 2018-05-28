@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Dashboard Settings</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/img/fightclub-logo.svg</normaloff>:/img/fightclub-logo.svg</iconset>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>

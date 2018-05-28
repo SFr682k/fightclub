@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/img">
+        <file>fightclub-logo.svg</file>
         <file>gpl-v3-logo.svg</file>
     </qresource>
     <qresource>
