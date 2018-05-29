@@ -25,6 +25,7 @@
 #include <QDataStream>
 #include <QtNetwork>
 
+
 SocketHelper::SocketHelper(unsigned int p, QObject *parent) :
     QObject(parent)
 {
@@ -49,7 +50,7 @@ SocketHelper::~SocketHelper() {
 
 void SocketHelper::setSignalHelper(unsigned int signature, SignalHelper* s) {
     if(sigmap.contains(signature)) {
-        // TODO: Emit warning (same port, same signature)
+        emit duplicatePortIDCombo(s->getTitle(), port, signature);
         sigmap[signature] = s;
     } else sigmap.insert(signature, s);
 }

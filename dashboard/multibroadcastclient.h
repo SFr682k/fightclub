@@ -37,15 +37,20 @@ public:
     explicit MultiBroadcastClient(QObject *parent = 0);
     ~MultiBroadcastClient();
 
+private:
+    QMap<unsigned int, SocketHelper*> mp;
+
 signals:
     void newClock(SignalHelper*);
+    void removeAllClocks();
+    void duplicatePortIDCombo(QString, uint, uint);
 
 public slots:
     void loadFromFile(QString path);
     void unloadList();
 
-private:
-    QMap<unsigned int, SocketHelper*> mp;
+private slots:
+    void onDuplicatePortIDCombo(QString, uint, uint);
 };
 
 #endif // MULTIBROADCASTCLIENT_H

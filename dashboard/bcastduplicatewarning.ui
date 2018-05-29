@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>200</height>
+    <height>240</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -28,75 +28,57 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>0</number>
+    <number>3</number>
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
+     <property name="rightMargin">
+      <number>15</number>
+     </property>
      <property name="horizontalSpacing">
       <number>12</number>
      </property>
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="2" column="2">
+     <item row="0" column="0" rowspan="10">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="dialogiconlabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item row="6" column="2">
       <widget class="QLabel" name="portnr">
        <property name="text">
         <string>&lt;port&gt;</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="portlabel">
-       <property name="text">
-        <string>Port</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QLabel" name="connlabel">
-       <property name="text">
-        <string>with</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="idlabel">
-       <property name="text">
-        <string>ID</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="1" colspan="3">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>There is already a Fightclub Department at</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="idnr">
-       <property name="text">
-        <string>&lt;id&gt;</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1" colspan="3">
+     <item row="9" column="1" colspan="3">
       <widget class="QLabel" name="pleaseresolvelabel">
        <property name="text">
         <string>Please resolve the conflict by editing the loaded Departments file.</string>
@@ -106,26 +88,74 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" rowspan="6">
-      <widget class="QLabel" name="dialogiconlabel">
-       <property name="minimumSize">
-        <size>
-         <width>64</width>
-         <height>64</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>64</width>
-         <height>64</height>
-        </size>
-       </property>
+     <item row="7" column="1">
+      <widget class="QLabel" name="idlabel">
        <property name="text">
-        <string/>
+        <string>ID</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" colspan="3">
+     <item row="0" column="1" colspan="3">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Found a conflict while creating a clock box for</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLabel" name="portlabel">
+       <property name="text">
+        <string>Port</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="3">
+      <widget class="QLabel" name="connlabel">
+       <property name="text">
+        <string>with</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <widget class="QLabel" name="idnr">
+       <property name="text">
+        <string>&lt;id&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="3">
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>12</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="8" column="1" colspan="3">
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>6</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="5" column="1" colspan="3">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -141,8 +171,44 @@
        </property>
       </spacer>
      </item>
+     <item row="2" column="1" colspan="3">
+      <widget class="QLabel" name="titlestring">
+       <property name="text">
+        <string>&lt;title&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="1" colspan="3">
-      <spacer name="verticalSpacer_3">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>There is already a Fightclub Department at</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="3">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="1" colspan="3">
+      <spacer name="verticalSpacer_6">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -152,7 +218,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>6</height>
+         <height>4</height>
         </size>
        </property>
       </spacer>
@@ -190,7 +256,7 @@
      <item>
       <widget class="QPushButton" name="closeButton">
        <property name="text">
-        <string>Close</string>
+        <string>Close [10]</string>
        </property>
        <property name="icon">
         <iconset resource="resources.qrc">
@@ -199,31 +265,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QProgressBar" name="progressBar">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>10</height>
-      </size>
-     </property>
-     <property name="maximum">
-      <number>15000</number>
-     </property>
-     <property name="value">
-      <number>15000</number>
-     </property>
-     <property name="textVisible">
-      <bool>false</bool>
-     </property>
-     <property name="invertedAppearance">
-      <bool>true</bool>
-     </property>
-     <property name="format">
-      <string/>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
