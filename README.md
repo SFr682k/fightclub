@@ -4,7 +4,7 @@
 
  - Department 0.6
  - Teleprinter 0.11
- - Dashboard 0.3
+ - Dashboard 0.4
  - Nano 0.1
 
 
