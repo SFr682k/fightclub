@@ -32,10 +32,10 @@ BcastDuplicateWarning::BcastDuplicateWarning(QString title, uint port, uint id, 
     ui->portnr->setText(QString::number(port));
     ui->idnr->setText(QString::number(id));
 
-    ui->closeButton->setText("Close [10]");
+    ui->closeButton->setText("Close [20]");
 
     closetimer = new QTimer();
-    closetimer->start(10000);
+    closetimer->start(20000);
 
     refreshtimer = new QTimer();
     refreshtimer->start(16);
