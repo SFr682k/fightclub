@@ -17,6 +17,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     else                                               platformName = QApplication::platformName();
 
     ui->qtadvertizing->setText(QString("Using Qt ") + qVersion() + QString(" on ") + platformName);
+
+
+    connect(ui->closeDialogBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
 }
 
 

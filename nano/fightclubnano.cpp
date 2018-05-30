@@ -187,6 +187,8 @@ void FightclubNano::toggleStartStopBttn() {
 }
 
 void FightclubNano::openSetTimeDialog() {
+    if(roomclock) return;
+
     settimedlg->resetValues();
     settimedlg->setMaximumRTime(clklgk->getMaxTime());
     settimedlg->setElapsedTime(clklgk->getElapsedTime());
