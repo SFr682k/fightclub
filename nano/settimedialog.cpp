@@ -28,6 +28,14 @@ ui(new Ui::SetTimeDialog) {
     connect(this, SIGNAL(accepted()), this, SLOT(setTime()));
     connect(ui->etimeselbox, SIGNAL(timeChanged(QTime)), this, SLOT(checkETimeRbttn()));
     connect(ui->rtimeselbox, SIGNAL(timeChanged(QTime)), this, SLOT(checkRTimeRbttn()));
+
+
+    // Wait until autosave is implemented
+    ui->atimerbox->setEnabled(false);
+
+
+    connect(ui->okBttn, SIGNAL(clicked(bool)), this, SLOT(accept()));
+    connect(ui->cancellationBttn, SIGNAL(clicked(bool)), this, SLOT(reject()));
 }
 
 
