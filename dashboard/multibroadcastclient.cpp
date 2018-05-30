@@ -30,8 +30,7 @@
 #include <QPair>
 
 MultiBroadcastClient::MultiBroadcastClient(QObject *parent) :
-    QObject(parent)
-{
+    QObject(parent) {
     mp.clear();
 }
 
@@ -48,7 +47,12 @@ void MultiBroadcastClient::loadFromFile(QString path) {
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
 
+
+    for(QMap<unsigned int,SocketHelper*>::Iterator i = mp.begin(); i != mp.end() ; i++)
+        delete i.value();
     mp.clear();
+    emit removeAllClocks();
+
 
     QTextStream in(&file);
     while (!in.atEnd()) {
@@ -63,7 +67,11 @@ void MultiBroadcastClient::loadFromFile(QString path) {
              if (mp.contains(port))
                  mp[port]->setSignalHelper(signature, sh);
              else {
-                 mp.insert(port, new SocketHelper(port));
+                 SocketHelper *socketHelper = new SocketHelper(port);
+                 mp.insert(port, socketHelper);
+                 connect(socketHelper, SIGNAL(duplicatePortIDCombo(QString, uint,uint)),
+                         this, SLOT(onDuplicatePortIDCombo(QString, uint, uint)));
+
                  mp[port]->setSignalHelper(signature, sh);
              }
 
@@ -75,4 +83,13 @@ void MultiBroadcastClient::loadFromFile(QString path) {
 }
 
 
-void MultiBroadcastClient::unloadList() { mp.clear(); }
+void MultiBroadcastClient::onDuplicatePortIDCombo(QString title, uint port, uint id)
+    { emit duplicatePortIDCombo(title, port, id); }
+
+
+
+void MultiBroadcastClient::unloadList() {
+    for(QMap<unsigned int,SocketHelper*>::Iterator i = mp.begin(); i != mp.end() ; i++)
+        delete i.value();
+    mp.clear();
+}

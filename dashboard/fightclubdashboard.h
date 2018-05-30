@@ -86,6 +86,8 @@ private slots:
     void setApplicationFont(QString);
     void setFontScale(double);
     
+    void openDuplicateBcastWarning(QString, uint, uint);
+
     void cursorMoved();
     void hideCursor();
 };

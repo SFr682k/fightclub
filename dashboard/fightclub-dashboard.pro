@@ -43,7 +43,8 @@ SOURCES += \
     signalhelper.cpp \
     sockethelper.cpp \
     settingsdialog.cpp \
-    filepropertyparser.cpp
+    filepropertyparser.cpp \
+    bcastduplicatewarning.cpp
 
 HEADERS += \
     fightclubdashboard.h \
@@ -52,12 +53,14 @@ HEADERS += \
     signalhelper.h \
     sockethelper.h \
     settingsdialog.h \
-    filepropertyparser.h
+    filepropertyparser.h \
+    bcastduplicatewarning.h
 
 FORMS += \
     fightclubdashboard.ui \
     aboutdialog.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    bcastduplicatewarning.ui
 
 RESOURCES += \
     resources.qrc

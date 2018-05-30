@@ -38,6 +38,7 @@ public:
     void setSignalHelper(unsigned int signature, SignalHelper* s);
 
 signals:
+    void duplicatePortIDCombo(QString, uint, uint);
 
 private slots:
     void processDatagrams();

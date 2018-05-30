@@ -73,6 +73,9 @@
            <property name="text">
             <string>Click the button to load a list of departments</string>
            </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -187,9 +190,6 @@
        <property name="verticalSpacing">
         <number>2</number>
        </property>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="tournName"/>
-       </item>
        <item row="0" column="0">
         <widget class="QCheckBox" name="dispTournamentNameCBox">
          <property name="text">
@@ -197,8 +197,32 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="tournName"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="dispCTimeCBox">
+         <property name="text">
+          <string>Display current time</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="customFontCBox">
+         <property name="text">
+          <string>Use custom font</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="1">
         <widget class="QFontComboBox" name="chooseFontBox"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="customScaleCBox">
+         <property name="text">
+          <string>Scale font size</string>
+         </property>
+        </widget>
        </item>
        <item row="3" column="1">
         <widget class="QSpinBox" name="chooseScaleBox">
@@ -219,20 +243,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="dispCTimeCBox">
-         <property name="text">
-          <string>Display current time</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="customFontCBox">
-         <property name="text">
-          <string>Use custom font</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
@@ -245,13 +255,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="customScaleCBox">
-         <property name="text">
-          <string>Scale font size</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -286,11 +289,11 @@
      <item>
       <widget class="QPushButton" name="closeDialogBttn">
        <property name="text">
-        <string>OK</string>
+        <string>Close</string>
        </property>
        <property name="icon">
         <iconset resource="resources.qrc">
-         <normaloff>:/breeze-icons/dialog-ok-apply-16.svg</normaloff>:/breeze-icons/dialog-ok-apply-16.svg</iconset>
+         <normaloff>:/breeze-icons/dialog-close-16.svg</normaloff>:/breeze-icons/dialog-close-16.svg</iconset>
        </property>
       </widget>
      </item>

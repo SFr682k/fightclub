@@ -21,6 +21,7 @@
 
 #include "aboutdialog.h"
 #include "departmentboxwidget.h"
+#include "bcastduplicatewarning.h"
 
 #include <QHBoxLayout>
 #include <QListIterator>
@@ -80,11 +81,14 @@ FightclubDashboard::FightclubDashboard(QWidget *parent) :
     connect(hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
 
     mbcastclient = new MultiBroadcastClient(this);
+    connect(mbcastclient, SIGNAL(duplicatePortIDCombo(QString,uint,uint)), this, SLOT(openDuplicateBcastWarning(QString,uint,uint)));
 
     connect(settingsdial, SIGNAL(loadListOfDepartments(QString)), mbcastclient, SLOT(loadFromFile(QString)));
     connect(settingsdial, SIGNAL(unloadListOfDepartments()), mbcastclient, SLOT(unloadList()));
     connect(settingsdial, SIGNAL(unloadListOfDepartments()), this, SLOT(removeAllDepartmentBoxes()));
+
     connect(mbcastclient, SIGNAL(newClock(SignalHelper*)), this, SLOT(addDepartmentBox(SignalHelper*)));
+    connect(mbcastclient, SIGNAL(removeAllClocks()), this, SLOT(removeAllDepartmentBoxes()));
 
 
     QTimer::singleShot(6000 - QTime::currentTime().msecsSinceStartOfDay() % 6000,
@@ -169,6 +173,15 @@ void FightclubDashboard::addDepartmentBox(SignalHelper* signalHelper) {
         ui->currentpagelabel->setText(QString::number(container->currentIndex() +1)
                                       .append("/").append(QString::number(container->count())));
 }
+
+
+void FightclubDashboard::openDuplicateBcastWarning(QString title, uint port, uint id) {
+    BcastDuplicateWarning *warningDial = new BcastDuplicateWarning(title, port, id, this);
+    warningDial->exec();
+    warningDial->deleteLater();
+}
+
+
 
 
 void FightclubDashboard::removeAllDepartmentBoxes() {

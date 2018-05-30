@@ -151,8 +151,8 @@ void DepartmentBoxWidget::updatePhaseProgress() {
 
     progressbar->setMaximum(2000);
 
-    QString lowerbborder;
-    QString upperbborder;
+    QString lowerbborder, upperbborder;
+    QString leftColor, rightColor;
 
     if(((int) (progress*2000.0) % 2000) == 0) {
         lowerbborder = "0";
@@ -162,14 +162,19 @@ void DepartmentBoxWidget::updatePhaseProgress() {
         upperbborder = QString::number(((int) (progress*2000.0) % 2000)/2000.0);
     }
 
-    if(progress < 0.75)      progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #32c81e;}");
-    else if(progress <= 1.0) progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #ffbe1e;}");
-    else if(progress <= 2.0) progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #c80000, stop: " + lowerbborder + " #c80000, stop: " + upperbborder + " #ffbe1e, stop: 1 #ffbe1e);}");
-    else if(progress <= 3.0) progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0, stop: 0 #641e64, stop: " + lowerbborder + " #641e64, stop: " + upperbborder + " #c80000, stop: 1 #c80000);}");
-    else if(progress > 3.0)  progressbar->setStyleSheet("QProgressBar::chunk{ border-radius: 3px; background-color: #641e64;}");
+    if(progress < 0.75)      leftColor = "#32c81e", rightColor = "#fff";
+    else if(progress <  1.0) leftColor = "#ffbe1e", rightColor = "#fff";
+    else if(progress <  2.0) leftColor = "#c80000", rightColor = "#ffbe1e";
+    else if(progress <  3.0) leftColor = "#641e64", rightColor = "#c80000";
+    else if(progress >= 3.0) leftColor = "#641e64", rightColor = "#641e64";
 
-    if(progress <= 1.0) progressbar->setValue(((int) (progress*2000)) % 2000);
-    else                progressbar->setValue(2000);
+
+    progressbar->setStyleSheet(QString("QProgressBar{ border: 1px solid #000; border-radius: 2px; }")
+                               .append("QProgressBar::chunk{border-radius: 2px;")
+                                   .append("background-color: QLinearGradient(x1: 0,y1: 0,x2: 1, y2: 0,")
+                                       .append("stop: 0 " + leftColor + ", stop: " + lowerbborder + " " + leftColor + ",")
+                                       .append("stop: " + upperbborder + " " + rightColor + ", stop: 1 " + rightColor + ");}"));
+    progressbar->setValue(2000);
 }
 
 
