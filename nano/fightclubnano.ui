@@ -119,6 +119,8 @@
    <addaction name="actionMinus10"/>
    <addaction name="actionSetTime"/>
    <addaction name="actionPlus10"/>
+   <addaction name="separator"/>
+   <addaction name="actionActivateShortcuts"/>
   </widget>
   <action name="actionBwd">
    <property name="icon">
@@ -187,6 +189,18 @@
    </property>
    <property name="text">
     <string>10 seconds forwards</string>
+   </property>
+  </action>
+  <action name="actionActivateShortcuts">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/input-keyboard-virtual-22.svg</normaloff>:/breeze-icons/input-keyboard-virtual-22.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Activate Keyboard Shortcuts</string>
    </property>
   </action>
  </widget>
