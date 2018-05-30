@@ -179,6 +179,8 @@ void FightclubNano::toggleStartStopBttn() {
         if(clklgk->isRoomclock() && ui->actionFwd->isEnabled()) lstadapt->nextPhase();
         else if(lstadapt->getCurrentPhase() == -1) lstadapt->nextPhase();
 
+        if(lstadapt->getNumberOfPhases() < 1) return;
+
         ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-pause-24.svg"));
     } else ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-start-24.svg"));
 

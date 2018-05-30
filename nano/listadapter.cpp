@@ -280,5 +280,5 @@ void ListAdapter::initialize() {
 
 
 
-int ListAdapter::getCurrentPhase() { return currentPhase; }
-
+int ListAdapter::getCurrentPhase()   { return currentPhase; }
+int ListAdapter::getNumberOfPhases() { return phaselistmodel->rowCount(); }
