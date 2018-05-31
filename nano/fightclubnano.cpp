@@ -113,8 +113,12 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(settingsdlg, SIGNAL(buttonScaleChanged(double)), this, SLOT(setButtonScale(double)));
 
 
+    connect(settingsdlg, SIGNAL(showRclockSecondHand(bool)), ui->clockwidget, SLOT(showSecondHand(bool)));
+    connect(settingsdlg, SIGNAL(rclockBehaviorChanged(int)), ui->clockwidget, SLOT(setRoomclockMode(int)));
+
+
     lstadapt->setUpPhaseSwitchingButtons();
-    refreshtimer->start(30);
+    refreshtimer->start(16);
 
     aboutDialogOpen = false, settingsDialogOpen = false;
 }

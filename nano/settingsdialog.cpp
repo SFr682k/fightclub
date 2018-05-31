@@ -46,6 +46,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui->phasesListDescr->setText(" ");
     ui->unloadPhasesList->setEnabled(false);
 
+    ui->showSHandCbox->setChecked(true);
+    ui->swissRclkRbttn->setChecked(true);
+
 
     connect(ui->customFontCBox, SIGNAL(toggled(bool)), this, SLOT(useCustomFont(bool)));
     connect(ui->chooseFontBox, SIGNAL(activated(QString)), this, SLOT(selFontChanged(QString)));
@@ -59,6 +62,13 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     connect(ui->loadPhasesList, SIGNAL(clicked(bool)), this, SLOT(loadPhasesList()));
     connect(ui->unloadPhasesList, SIGNAL(clicked(bool)), this, SLOT(unloadPhasesList()));
+
+
+    connect(ui->showSHandCbox, SIGNAL(toggled(bool)), this, SLOT(showSecondHand(bool)));
+
+    connect(ui->swissRclkRbttn, SIGNAL(clicked(bool)), this, SLOT(setSwissRClock(bool)));
+    connect(ui->smoothRclkRbttn, SIGNAL(clicked(bool)), this, SLOT(setSmoothRClock(bool)));
+    connect(ui->sharpRclkRbttn, SIGNAL(clicked(bool)), this, SLOT(setSharpRClock(bool)));
 
 
     connect(ui->lockSettings, SIGNAL(clicked(bool)), this, SLOT(toggleLockedState()));
@@ -174,6 +184,22 @@ void SettingsDialog::unloadPhasesList() {
     ui->phasesListTitle->setText("No list of phases loaded");
     ui->phasesListDescr->setText(" ");
 }
+
+
+
+
+void SettingsDialog::showSecondHand(bool show) {
+    ui->shandMvmtCaption->setEnabled(show);
+    ui->smoothRclkRbttn->setEnabled(show);
+    ui->sharpRclkRbttn->setEnabled(show);
+    ui->swissRclkRbttn->setEnabled(show);
+    emit showRclockSecondHand(show);
+}
+
+
+void SettingsDialog::setSwissRClock(bool set)  { if(set) emit rclockBehaviorChanged(0); }
+void SettingsDialog::setSmoothRClock(bool set) { if(set) emit rclockBehaviorChanged(1); }
+void SettingsDialog::setSharpRClock(bool set)  { if(set) emit rclockBehaviorChanged(2); }
 
 
 

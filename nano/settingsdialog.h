@@ -58,6 +58,9 @@ signals:
     void fontScaleChanged(double);
     void buttonScaleChanged(double);
 
+    void showRclockSecondHand(bool);
+    void rclockBehaviorChanged(int);
+
     void loadListOfPhases(QString);
     void loadListOfNanoPhases(QString);
     void unloadListOfPhases();
@@ -69,6 +72,11 @@ private slots:
     void scaleFactorChanged(int);
     void useCustomButtonScale(bool);
     void buttonScaleChanged(int);
+
+    void showSecondHand(bool);
+    void setSwissRClock(bool);
+    void setSmoothRClock(bool);
+    void setSharpRClock(bool);
 
     void loadPhasesList();
     void loadPhasesList(QString);
