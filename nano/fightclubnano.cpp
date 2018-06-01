@@ -189,7 +189,7 @@ void FightclubNano::toggleStartStopBttn() {
     } else ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-start-24.svg"));
 
     ui->actionStartPause->setText(clklgk->isRunning()? "Pause" : "Start");
-    ui->actionStartPause->setToolTip(clklgk->isRunning()? "Pause" : "Start");
+    ui->actionStartPause->setToolTip(QString(clklgk->isRunning()? "Pause" : "Start").append(" (Space)"));
 }
 
 void FightclubNano::openSetTimeDialog() {
