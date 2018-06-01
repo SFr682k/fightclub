@@ -57,9 +57,10 @@
 
 \title{\bfseries Fightclub: Requirements on files}
 \author{Sebastian Friedl}
-\date{\itshape Written to match the requirements of \\
+\date{\itshape Written to match the requirements of: \\
       Fightclub Department 0.6 \\
-      Fightclub Dashboard 0.4}
+      Fightclub Dashboard 0.4 \\
+      Fightclub Nano 0.2}
 
 \begin{document}
     \maketitle
@@ -219,7 +220,7 @@
     
     
     
-    \subsection{Files specifying phases}
+    \subsection{Files specifying phases}\label{sec:files-phases}
     \begin{center}
         \rowcolors{1}{black!20}{white}
         \begin{tabular}{lr}
@@ -441,6 +442,70 @@
         \end{tabular}
     \end{ttfamily}
     
+    
+    
+    
+    
+    \clearpage
+    \section{Files required by Fightclub Nano}
+    \subsection{Phases files for Fightclub Nano}
+    \begin{center}
+        \rowcolors{1}{black!20}{white}
+        \begin{tabular}{lr}
+            File extension              & ".fcnano" \\
+            "<FightclubExchangeFile>"   & "nano" \\
+            "<ExchangeProtocolVersion>" & "1"
+        \end{tabular}
+    \end{center}
+    
+    Although it is possible to use \enquote{normal} Fightclub Department phases files (see section~\ref{sec:files-phases}) with Fightclub Nano, this file format, boiled down to Fightclub Nano's capabilities, is provided.
+    
+    
+    \subsubsection*{General syntax}
+    \begin{center}\ttfamily
+        duration  \tab overtime  \tab title  \tab options
+    \end{center}
+    
+    
+    \paragraph{Key:}
+    \begin{itemize}
+        \item "duration": the maximum duration of the phase in seconds
+        \item "overtime": the maximum allowed overtime in seconds
+        \item "title": the title of the phase as displayed
+        \item "options": further configuration of the phase
+    \end{itemize}
+
+    \medskip
+    You may omit the "options" column.
+    
+    \smallskip
+    Note that -- compared to \enquote{normal} phases files -- the "performances" column is gone.
+    
+    \smallskip
+    Lines consisting of less than three tabular-separated columns are ignored.
+
+    
+    \subsubsection*{Allowed \texttt{options}}
+    \begin{itemize}
+        \item "a": autoadvance to the next phase if maximum duration \textit{and} allowed overtime elapsed
+        \item "c": carry the \textit{whole elapsed time} to the next phase
+        \item "o": carry the \textit{elapsed overtime} to the next phase
+        \item "r": roomclock phase; use this option only for phases where elapsed time and maximum duration are not relevant (e.g. breaks)
+        \item "n": do not use any \enquote{special} options and behave like a \enquote{normal} phase
+    \end{itemize}
+
+    You should specify \textit{at least one} of these values (including "n") or omit the column.
+    
+    
+    \subsubsection*{Example lines for a \texttt{nano} phases file}
+    \begin{ttfamily}
+        \begin{tabular}{@{}l*{3}{>{\tab}l}}%
+            720 & 0 & Presentation of the report               & n \\
+            240 & 0 & The Opponent takes the floor             & c \\
+            840 & 0 & Discussion between Reporter and Opponent & n \\
+            600 & 0 & Break                                    & r
+        \end{tabular}
+    \end{ttfamily}
     
     
     

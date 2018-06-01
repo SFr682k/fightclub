@@ -31,6 +31,9 @@ FightclubNano::FightclubNano(QWidget *parent) :
 
     ui->controlToolbar->setContextMenuPolicy(Qt::PreventContextMenu);
 
+    ui->actionActivateShortcuts->setChecked(true);
+    enableShortcuts = true;
+
     if(ui->phaselabel->text().startsWith("<ApplicationName>"))
             ui->phaselabel->setText(QApplication::applicationName().append(", Version ").append(QApplication::applicationVersion()));
 
@@ -46,7 +49,6 @@ FightclubNano::FightclubNano(QWidget *parent) :
     defaultFont = font();
     fontScale = 1.0, buttonScale = 1.0;
 
-    keyboardCtrl = true;
 
     clklgk = new ClockLogic();
     lstadapt = new ListAdapter();
@@ -65,6 +67,7 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(ui->actionPlus10, SIGNAL(triggered(bool)), this, SLOT(plusTenEvent()));
     connect(ui->actionSetTime, SIGNAL(triggered(bool)), this, SLOT(setTimeEvent()));
 
+    connect(ui->actionActivateShortcuts, SIGNAL(toggled(bool)), this, SLOT(activateShortcuts(bool)));
 
 
     connect(clklgk, SIGNAL(elapsedTimeUpdate(int)), ui->clockwidget, SLOT(setElapsedTime(int)));
@@ -110,8 +113,12 @@ FightclubNano::FightclubNano(QWidget *parent) :
     connect(settingsdlg, SIGNAL(buttonScaleChanged(double)), this, SLOT(setButtonScale(double)));
 
 
+    connect(settingsdlg, SIGNAL(showRclockSecondHand(bool)), ui->clockwidget, SLOT(showSecondHand(bool)));
+    connect(settingsdlg, SIGNAL(rclockBehaviorChanged(int)), ui->clockwidget, SLOT(setRoomclockMode(int)));
+
+
     lstadapt->setUpPhaseSwitchingButtons();
-    refreshtimer->start(30);
+    refreshtimer->start(16);
 
     aboutDialogOpen = false, settingsDialogOpen = false;
 }
@@ -176,14 +183,18 @@ void FightclubNano::toggleStartStopBttn() {
         if(clklgk->isRoomclock() && ui->actionFwd->isEnabled()) lstadapt->nextPhase();
         else if(lstadapt->getCurrentPhase() == -1) lstadapt->nextPhase();
 
+        if(lstadapt->getNumberOfPhases() < 1) return;
+
         ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-pause-24.svg"));
     } else ui->actionStartPause->setIcon(QIcon(":/breeze-icons/chronometer-start-24.svg"));
 
     ui->actionStartPause->setText(clklgk->isRunning()? "Pause" : "Start");
-    ui->actionStartPause->setToolTip(clklgk->isRunning()? "Pause" : "Start");
+    ui->actionStartPause->setToolTip(QString(clklgk->isRunning()? "Pause" : "Start").append(" (Space)"));
 }
 
 void FightclubNano::openSetTimeDialog() {
+    if(roomclock) return;
+
     settimedlg->resetValues();
     settimedlg->setMaximumRTime(clklgk->getMaxTime());
     settimedlg->setElapsedTime(clklgk->getElapsedTime());
@@ -213,6 +224,10 @@ void FightclubNano::setRoomclock(bool rclk) {
 }
 
 
+
+
+
+void FightclubNano::activateShortcuts(bool activate) { enableShortcuts = activate; }
 
 
 
@@ -248,23 +263,23 @@ void FightclubNano::resizeEvent(QResizeEvent *event) {
 void FightclubNano::keyPressEvent(QKeyEvent *event) {
     switch(event->key()) {
         case Qt::Key_Space:
-            if(keyboardCtrl) startstopEvent();
+            if(enableShortcuts) startstopEvent();
             break;
 
 
         case Qt::Key_B:
-            if(keyboardCtrl) bwdEvent();
+            if(enableShortcuts) bwdEvent();
             break;
 
         case Qt::Key_F:
             if(QApplication::keyboardModifiers() & Qt::ControlModifier)
                 setWindowState(Qt::WindowFullScreen);
-            else if(keyboardCtrl) fwdEvent();
+            else if(enableShortcuts) fwdEvent();
             break;
 
 
         case Qt::Key_R:
-            if(keyboardCtrl) resetTimeEvent();
+            if(enableShortcuts) resetTimeEvent();
             break;
 
 
@@ -272,15 +287,15 @@ void FightclubNano::keyPressEvent(QKeyEvent *event) {
             if((QApplication::keyboardModifiers() & Qt::ControlModifier)
                     && (QApplication::keyboardModifiers() & Qt::ShiftModifier))
                 openSettingsDialog();
-            else if(keyboardCtrl) setTimeEvent();
+            else if(enableShortcuts) setTimeEvent();
             break;
 
         case Qt::Key_Minus:
-            if(keyboardCtrl) minusTenEvent();
+            if(enableShortcuts) minusTenEvent();
             break;
 
         case Qt::Key_Plus:
-            if(keyboardCtrl) plusTenEvent();
+            if(enableShortcuts) plusTenEvent();
             break;
 
 

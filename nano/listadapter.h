@@ -33,6 +33,7 @@ public:
     explicit ListAdapter(QObject *parent = nullptr);
     void setUpPhaseSwitchingButtons();
     int getCurrentPhase();
+    int getNumberOfPhases();
 
 private:
     PhaseListModel* phaselistmodel;

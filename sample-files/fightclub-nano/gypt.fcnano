@@ -1,0 +1,10 @@
+<FightclubExchangeFile>nano</FightclubExchangeFile>
+<ExchangeProtocolVersion>1</ExchangeProtocolVersion>
+<ExchangeFileTitle>Phases for a regular GYPT match</ExchangeFileTitle>
+<ExchangeFileContentDescr>Phases for a match of the GYPT, the German IYPT selection tournament</ExchangeFileContentDescr>
+120	0	Preparation of the Reporter	n
+720	0	Presentation of the report	n
+120	0	Preparation of the discussion	n
+720	0	Discussion	n
+240	0	Questions of the Jury	n
+300	0	Grading and Feedback	n

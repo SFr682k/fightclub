@@ -60,7 +60,7 @@ private:
     QFont defaultFont;
     double fontScale, buttonScale;
 
-    bool keyboardCtrl;
+    bool enableShortcuts;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -82,6 +82,8 @@ private slots:
     void openSetTimeDialog();
     void updateLCDDisplay();
     void setRoomclock(bool);
+
+    void activateShortcuts(bool);
 
     void setApplicationFont(QString);
     void setFontScale(double);

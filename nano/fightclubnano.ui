@@ -119,6 +119,8 @@
    <addaction name="actionMinus10"/>
    <addaction name="actionSetTime"/>
    <addaction name="actionPlus10"/>
+   <addaction name="separator"/>
+   <addaction name="actionActivateShortcuts"/>
   </widget>
   <action name="actionBwd">
    <property name="icon">
@@ -128,6 +130,9 @@
    <property name="text">
     <string>Go Backward</string>
    </property>
+   <property name="toolTip">
+    <string>Go To Previous Phase (B)</string>
+   </property>
   </action>
   <action name="actionFwd">
    <property name="icon">
@@ -136,6 +141,9 @@
    </property>
    <property name="text">
     <string>Go Forward</string>
+   </property>
+   <property name="toolTip">
+    <string>Go To Next Phase (F)</string>
    </property>
   </action>
   <action name="actionStartPause">
@@ -147,7 +155,7 @@
     <string>Start</string>
    </property>
    <property name="toolTip">
-    <string>Start</string>
+    <string>Start (Space)</string>
    </property>
   </action>
   <action name="actionReset">
@@ -158,6 +166,9 @@
    <property name="text">
     <string>Reset</string>
    </property>
+   <property name="toolTip">
+    <string>Reset (R)</string>
+   </property>
   </action>
   <action name="actionSetTime">
    <property name="icon">
@@ -166,6 +177,9 @@
    </property>
    <property name="text">
     <string>Set Time</string>
+   </property>
+   <property name="toolTip">
+    <string>Set Time (S)</string>
    </property>
   </action>
   <action name="actionMinus10">
@@ -177,7 +191,7 @@
     <string>10 seconds backwards</string>
    </property>
    <property name="toolTip">
-    <string>10 seconds backwards</string>
+    <string>10 seconds backwards (-)</string>
    </property>
   </action>
   <action name="actionPlus10">
@@ -187,6 +201,24 @@
    </property>
    <property name="text">
     <string>10 seconds forwards</string>
+   </property>
+   <property name="toolTip">
+    <string>10 seconds forwards (+)</string>
+   </property>
+  </action>
+  <action name="actionActivateShortcuts">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/breeze-icons/input-keyboard-virtual-22.svg</normaloff>:/breeze-icons/input-keyboard-virtual-22.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Activate Keyboard Shortcuts</string>
+   </property>
+   <property name="toolTip">
+    <string>Enable Control Keys</string>
    </property>
   </action>
  </widget>
