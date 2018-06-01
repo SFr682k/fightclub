@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     a.setApplicationName("Fightclub Nano");
-    a.setApplicationVersion("0.2alpha");
+    a.setApplicationVersion("0.2");
 
     QCommandLineParser cmdparser;
 
